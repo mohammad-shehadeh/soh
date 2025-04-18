@@ -1,294 +1,168 @@
-// DOM elements
-const categoriesContainer = document.getElementById('categories-container');
-const productsContainer = document.getElementById('products-container');
-const productsTitle = document.getElementById('products-title');
-const cartButton = document.getElementById('cart-button');
-const cartModal = document.getElementById('cart-modal');
-const closeModal = document.querySelector('.close');
-const cartItemsContainer = document.getElementById('cart-items');
-const cartTotalPrice = document.getElementById('cart-total-price');
-const cartCount = document.getElementById('cart-count');
-const sendOrderBtn = document.getElementById('send-order-btn');
+// script.js
 
-// Shopping cart
-let cart = [];
-let categories = [];
-let products = [];
+// بيانات الفئات والمنتجات سيتم استيرادها من data.js
+document.addEventListener('DOMContentLoaded', () => {
+    // تهيئة المتغيرات
+    let currentCategory = null;
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    // عناصر DOM
+    const categoriesContainer = document.getElementById('categories-container');
+    const productsContainer = document.getElementById('products-container');
+    const cartCount = document.getElementById('cart-count');
+    const cartModal = document.getElementById('cart-modal');
+    const cartItems = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total-price');
+    const sendOrderBtn = document.getElementById('send-order-btn');
+    const closeCartBtn = document.querySelector('.close');
 
-// Strings for multilingual support
-const strings = {
-    addToCart: 'أضف إلى السلة',
-    currency: 'د.إ',
-    emptyCart: 'عربة التسوق فارغة',
-    noCategories: 'لا توجد تصنيفات متاحة',
-    noProducts: 'لا توجد منتجات في هذا التصنيف',
-    confirmSend: 'هل تريد إرسال الطلب الآن؟',
-    alertEmptyCart: 'عربة التسوق فارغة!',
-};
+    // وظائف إدارة الفئات
+    function loadCategories() {
+        categoriesContainer.innerHTML = '';
+        categories.forEach(category => {
+            const categoryElement = document.createElement('div');
+            categoryElement.className = 'category-card';
+            categoryElement.innerHTML = `
+                <img src="${category.image}" alt="${category.name}">
+                <h3>${category.name}</h3>
+            `;
+            categoryElement.addEventListener('click', () => filterProductsByCategory(category.name));
+            categoriesContainer.appendChild(categoryElement);
+        });
+    }
 
-// Initialize the page
-document.addEventListener('DOMContentLoaded', function () {
-    Promise.all([
-        fetch('Category.json').then(res => res.json()),
-        fetch('Server.json').then(res => res.json())
-    ])
-    .then(([categoryData, productData]) => {
-        categories = categoryData.categories || [];
-        products = productData.products || [];
-
-        loadCategories();
+    // تصفية المنتجات حسب الفئة
+    function filterProductsByCategory(categoryName) {
+        currentCategory = categoryName;
         loadProducts();
-        if (document.getElementsByClassName("mySlides").length > 0) {
-            initSlideshow();
+    }
+
+    // وظائف إدارة المنتجات
+    function loadProducts() {
+        productsContainer.innerHTML = '';
+        const filteredProducts = currentCategory ? 
+            products.filter(p => p.category === currentCategory) : 
+            products;
+
+        filteredProducts.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            productCard.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+                <h3>${product.name}</h3>
+                <p class="price">$${product.price.toFixed(2)}</p>
+                <button class="add-to-cart" data-id="${product.name}">Add to Cart</button>
+            `;
+            productCard.querySelector('.add-to-cart').addEventListener('click', () => addToCart(product));
+            productsContainer.appendChild(productCard);
+        });
+    }
+
+    // وظائف عربة التسوق
+    function addToCart(product) {
+        const existingItem = cart.find(item => item.name === product.name);
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.push({ ...product, quantity: 1 });
         }
-    })
-    .catch(error => {
-        console.error('Error loading data:', error);
-        categoriesContainer.innerHTML = `<p>${strings.noCategories}</p>`;
-        productsContainer.innerHTML = `<p>${strings.noProducts}</p>`;
+        updateCart();
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCart();
+    }
+
+    function updateCart() {
+        localStorage.setItem('cart', JSON.stringify(cart));
+        cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+        
+        // تحديث واجهة عربة التسوق
+        cartItems.innerHTML = '';
+        let total = 0;
+        
+        cart.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
+                </div>
+                <button class="remove-item" data-index="${index}">&times;</button>
+            `;
+            li.querySelector('.remove-item').addEventListener('click', () => removeFromCart(index));
+            cartItems.appendChild(li);
+            total += item.price * item.quantity;
+        });
+        
+        cartTotal.textContent = total.toFixed(2);
+    }
+
+    // أحداث الفتح/الإغلاق لعربة التسوق
+    document.getElementById('cart-button').addEventListener('click', () => {
+        cartModal.style.display = 'block';
     });
 
-    cartButton.addEventListener('click', openCartModal);
-    closeModal.addEventListener('click', closeCartModal);
-    sendOrderBtn.addEventListener('click', sendOrderViaWhatsApp);
+    closeCartBtn.addEventListener('click', () => {
+        cartModal.style.display = 'none';
+    });
 
-    window.addEventListener('click', function (event) {
-        if (event.target === cartModal) {
-            closeCartModal();
+    window.addEventListener('click', (e) => {
+        if (e.target === cartModal) {
+            cartModal.style.display = 'none';
         }
     });
-});
 
-function loadCategories() {
-    categoriesContainer.innerHTML = '';
+    // إرسال الطلب عبر واتساب
+    sendOrderBtn.addEventListener('click', () => {
+        const message = cart.map(item => 
+            `${item.name} - ${item.quantity} x $${item.price.toFixed(2)}`
+        ).join('%0A') + '%0A%0ATotal: $' + cartTotal.textContent;
 
-    if (!categories || categories.length === 0) {
-        categoriesContainer.innerHTML = `<p>${strings.noCategories}</p>`;
-        return;
-    }
-
-    categories.forEach(category => {
-        const el = document.createElement('div');
-        el.className = 'category-item';
-        el.innerHTML = `
-            <img src="${category.image}" alt="${category.name}" class="category-img">
-            <div class="category-name">${category.name}</div>
-        `;
-        el.addEventListener('click', () => filterProductsByCategory(category.name));
-        categoriesContainer.appendChild(el);
-    });
-}
-
-function loadProducts(category = null) {
-    productsContainer.innerHTML = '';
-
-    const filtered = category ? products.filter(p => p.category === category) : products;
-
-    if (filtered.length === 0) {
-        productsContainer.innerHTML = `<p>${strings.noProducts}</p>`;
-        return;
-    }
-
-    filtered.forEach(product => {
-        const el = document.createElement('div');
-        el.className = 'product-card';
-        el.innerHTML = `
-            <img src="${product.image}" alt="${product.name}" class="product-img">
-            <div class="product-info">
-                <h3 class="product-name">${product.name}</h3>
-                <div class="product-price">${strings.currency} ${product.price.toFixed(2)}</div>
-                <div class="quantity-controls">
-                    <button class="quantity-btn minus">-</button>
-                    <input type="number" class="quantity-input" value="1" min="1">
-                    <button class="quantity-btn plus">+</button>
-                </div>
-                <button class="add-to-cart" data-product='${JSON.stringify(product)}'>${strings.addToCart}</button>
-            </div>
-        `;
-        productsContainer.appendChild(el);
+        window.open(`https://wa.me/972569813333?text=${message}`, '_blank');
     });
 
-    document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const input = this.nextElementSibling;
-            if (parseInt(input.value) > 1) input.value--;
-        });
-    });
+    // تهيئة السلايدر
+    let slideIndex = 0;
+    showSlides();
 
-    document.querySelectorAll('.quantity-btn.plus').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const input = this.previousElementSibling;
-            input.value = parseInt(input.value) + 1;
-        });
-    });
-
-    document.querySelectorAll('.add-to-cart').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const product = JSON.parse(this.dataset.product);
-            const quantity = parseInt(this.closest('.product-card').querySelector('.quantity-input').value);
-            addToCart(product, quantity);
-        });
-    });
-}
-
-function filterProductsByCategory(category) {
-    productsTitle.textContent = category;
-    loadProducts(category);
-}
-
-function addToCart(product, quantity) {
-    const existing = cart.find(item => item.product.name === product.name);
-    if (existing) {
-        existing.quantity += quantity;
-    } else {
-        cart.push({ product, quantity });
-    }
-
-    updateCartCount();
-    showCartNotification();
-}
-
-function updateCartCount() {
-    cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-}
-
-function showCartNotification() {
-    cartButton.classList.add('pulse');
-    setTimeout(() => cartButton.classList.remove('pulse'), 500);
-}
-
-function openCartModal() {
-    renderCartItems();
-    cartModal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-}
-
-function closeCartModal() {
-    cartModal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-function renderCartItems() {
-    cartItemsContainer.innerHTML = '';
-
-    if (cart.length === 0) {
-        cartItemsContainer.innerHTML = `<p>${strings.emptyCart}</p>`;
-        cartTotalPrice.textContent = '0.00';
-        return;
-    }
-
-    let total = 0;
-
-    cart.forEach((item, index) => {
-        const el = document.createElement('div');
-        el.className = 'cart-item';
-        el.innerHTML = `
-            <img src="${item.product.image}" alt="${item.product.name}" class="cart-item-img">
-            <div class="cart-item-details">
-                <div class="cart-item-name">${item.product.name}</div>
-                <div class="cart-item-price">${strings.currency} ${(item.product.price * item.quantity).toFixed(2)}</div>
-                <div class="cart-item-quantity">
-                    <button class="quantity-btn minus">-</button>
-                    <input type="number" class="quantity-input" value="${item.quantity}" min="1">
-                    <button class="quantity-btn plus">+</button>
-                    <span class="remove-item"><i class="fas fa-trash"></i></span>
-                </div>
-            </div>
-        `;
-
-        const minusBtn = el.querySelector('.quantity-btn.minus');
-        const plusBtn = el.querySelector('.quantity-btn.plus');
-        const quantityInput = el.querySelector('.quantity-input');
-        const removeBtn = el.querySelector('.remove-item');
-
-        minusBtn.addEventListener('click', () => {
-            if (item.quantity > 1) {
-                item.quantity--;
-                quantityInput.value = item.quantity;
-                renderCartItems();
-            }
-        });
-
-        plusBtn.addEventListener('click', () => {
-            item.quantity++;
-            quantityInput.value = item.quantity;
-            renderCartItems();
-        });
-
-        quantityInput.addEventListener('change', () => {
-            const val = parseInt(quantityInput.value);
-            if (val >= 1) {
-                item.quantity = val;
-                renderCartItems();
-            }
-        });
-
-        removeBtn.addEventListener('click', () => {
-            cart.splice(index, 1);
-            renderCartItems();
-            updateCartCount();
-        });
-
-        cartItemsContainer.appendChild(el);
-        total += item.product.price * item.quantity;
-    });
-
-    cartTotalPrice.textContent = total.toFixed(2);
-}
-
-function sendOrderViaWhatsApp() {
-    if (cart.length === 0) {
-        alert(strings.alertEmptyCart);
-        return;
-    }
-
-    if (!confirm(strings.confirmSend)) return;
-
-    let message = 'مرحبًا، أرغب في طلب المنتجات التالية:\n\n';
-
-    cart.forEach(item => {
-        message += `- ${item.product.name} (الكمية: ${item.quantity}) - ${strings.currency} ${(item.product.price * item.quantity).toFixed(2)}\n`;
-    });
-
-    const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-    message += `\nالإجمالي: ${strings.currency} ${total.toFixed(2)}\n\nالرجاء تأكيد الطلب، وشكرًا.`;
-
-    const encoded = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/972569813333?text=${encoded}`;
-    window.open(whatsappUrl, '_blank');
-}
-
-// Slideshow
-function initSlideshow() {
-    let slideIndex = 1;
-    showSlides(slideIndex);
-
-    window.plusSlides = function (n) {
-        showSlides(slideIndex += n);
-    };
-
-    window.currentSlide = function (n) {
-        showSlides(slideIndex = n);
-    };
-
-    function showSlides(n) {
-        let slides = document.getElementsByClassName("mySlides");
-        let dots = document.getElementsByClassName("dot");
-
-        if (n > slides.length) slideIndex = 1;
-        if (n < 1) slideIndex = slides.length;
-
+    function showSlides() {
+        const slides = document.getElementsByClassName("mySlides");
+        const dots = document.getElementsByClassName("dot");
+        
         for (let i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
+            slides[i].style.display = "none";  
         }
-
+        
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        
         for (let i = 0; i < dots.length; i++) {
             dots[i].className = dots[i].className.replace(" active", "");
         }
-
-        slides[slideIndex - 1].style.display = "block";
-        dots[slideIndex - 1].className += " active";
+        
+        slides[slideIndex-1].style.display = "block";  
+        dots[slideIndex-1].className += " active";
+        setTimeout(showSlides, 5000); // تغيير الصورة كل 5 ثواني
     }
 
-    setInterval(() => plusSlides(1), 5000);
-}
+    // التهيئة الأولية
+    loadCategories();
+    loadProducts();
+    updateCart();
+
+    // أحداث السلايدر اليدوية
+    window.plusSlides = function(n) {
+        slideIndex += n;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        if (slideIndex < 1) {slideIndex = slides.length}
+        showSlides();
+    };
+
+    window.currentSlide = function(n) {
+        slideIndex = n;
+        showSlides();
+    };
+});
