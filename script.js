@@ -227,8 +227,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // وظائف السلايدر
     function startSlideInterval() {
-        slideInterval = setInterval(() => plusSlides(1), 2000);
-    }
+    // تغيير أول صورة بعد 500 مللي ثانية
+    setTimeout(() => {
+        plusSlides(1); // التبديل الأول
+        // بعد التبديل الأول، نبدأ التبديل كل 2000 مللي ثانية
+        slideInterval = setInterval(() => plusSlides(1), 3000);
+    }, 50);
+}
 
     function plusSlides(n) {
         slideIndex += n;
