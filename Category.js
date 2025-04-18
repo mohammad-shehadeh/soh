@@ -1,21 +1,16 @@
-```json
 {
   "categories": [
     {
-      "name": "LED Lights",
-      "image": "images/categories/led.jpg"
+      "name": "إنارة داخلية",
+      "image": "images/categories/interior.jpg"
     },
     {
-      "name": "Ceiling Lamps",
-      "image": "images/categories/ceiling.jpg"
+      "name": "إنارة خارجية",
+      "image": "images/categories/exterior.jpg"
     },
     {
-      "name": "Wall Lamps",
-      "image": "images/categories/wall.jpg"
-    },
-    {
-      "name": "Outdoor Lights",
-      "image": "images/categories/outdoor.jpg"
+      "name": "إكسسوارات كهربائية",
+      "image": "images/categories/accessories.jpg"
     }
   ]
 }
