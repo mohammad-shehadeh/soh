@@ -28,9 +28,9 @@ const categories = [
 const products = [
   {
     "category": "تريات",
-    "name": "ثريا ميرشال",
-    "price": 2800,
-    "image": "https://cdn.salla.sa/ZVKdn/oEOhLaPusqS5LOSUV5grY0aQDGKAKzetgYwA0Jco.jpg"
+    "name": "ثريا",
+    "price": 1909,
+    "image": ""
   },
   {
     "category": "مصابيح ليد",
