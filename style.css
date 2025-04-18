@@ -118,57 +118,81 @@ h1 {
 /* Categories Navigation */
 .categories-scroll {
   background-color: white;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 80px;
   z-index: 999;
-  transition: var(--transition);
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
+/* Hidden on scroll */
 .categories-hidden {
   transform: translateY(-100%);
   opacity: 0;
 }
 
+/* Container style */
 .categories-container {
   display: flex;
-  gap: 1.5rem;
-  padding: 1rem 5%;
+  gap: 1rem;
+  padding: 0.8rem 4%;
   max-width: 1400px;
   margin: 0 auto;
   overflow-x: auto;
   scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 
 .categories-container::-webkit-scrollbar {
   display: none;
 }
 
+/* Single category card */
 .category-card {
-  min-width: 120px;
+  flex-shrink: 0;
+  min-width: 100px;
+  max-width: 100px;
+  scroll-snap-align: start;
   text-align: center;
   cursor: pointer;
-  transition: var(--transition);
-  flex-shrink: 0;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  padding: 0.5rem;
+  border-radius: 12px;
 }
 
 .category-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
 }
 
+/* Category image */
 .category-card img {
-  width: 80px;
-  height: 80px;
+  width: 65px;
+  height: 65px;
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid var(--primary-color);
   padding: 3px;
-  margin-bottom: 0.5rem;
+  transition: transform 0.3s ease;
+  background-color: #f8f8f8;
 }
 
+/* Hover zoom */
+.category-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Category name */
 .category-card h3 {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
+  color: #333;
+  margin-top: 0.4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Hero Section */
@@ -793,7 +817,7 @@ footer {
   }
   
   .categories-scroll {
-    top: 70px;
+    top: 50px;
   }
   
   .mySlides img {
