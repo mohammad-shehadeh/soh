@@ -2,7 +2,7 @@
 const categories = [
     {
         name: "مصابيح ليد",
-        image: "https://example.com/led-category.jpg" // URL صورة الفئة
+        image: "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg" // URL صورة الفئة
     },
     {
         name: "إضاءة خارجية",
@@ -19,7 +19,7 @@ const products = [
         category: "مصابيح ليد",
         name: "مصباح ليد 10 واط",
         price: 15.99,
-        image: "https://example.com/led-bulb.jpg"
+        image: "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
     },
     {
         category: "إضاءة خارجية",
