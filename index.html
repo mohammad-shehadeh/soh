@@ -1,152 +1,151 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Premium lighting solutions for homes and businesses">
-    <title>Lighting Store - Premium Lighting Solutions</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="حلول إضاءة متميزة للمنازل والأعمال" />
+  <title>متجر الإضاءة - حلول إضاءة متميزة</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-    <header>
-        <div class="top-bar">
-            <div class="logo-container">
-                <img src="https://i.postimg.cc/v8kQXQg5/IMG-7211.png" alt="Lighting Store Logo" class="logo">
-                <h1>Lighting Store</h1>
-            </div>
+  <header>
+    <div class="top-bar">
+      <div class="logo-container">
+        <img src="https://i.postimg.cc/v8kQXQg5/IMG-7211.png" alt="شعار متجر الإضاءة" class="logo" />
+        <h1>متجر الإضاءة</h1>
+      </div>
 
-            <div class="cart-container">
-                <button id="cart-button" aria-label="Shopping Cart">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-count">0</span>
-                </button>
-            </div>
-        </div>
-
-        <nav class="categories-scroll" aria-label="Product categories">
-            <div class="categories-container" id="categories-container">
-                <!-- Categories will be loaded here by JavaScript -->
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        <br><br><br>
-        <!-- محتوى الصفحة الرئيسية فقط -->
-        <div id="home-section">
-            <section class="hero" aria-label="Featured products">
-                <div class="slideshow-container">
-                    <div class="mySlides fade">
-                        <img src="https://www.dostor.org/Upload/libfiles/470/4/458.jpg" alt="Premium lighting solutions" style="width:100%">
-                    </div>
-                    <div class="mySlides fade">
-                        <img src="https://i.postimg.cc/8zq2YkXv/lighting2.jpg" alt="Modern lighting designs" style="width:100%">
-                    </div>
-                    <div class="mySlides fade">
-                        <img src="https://i.postimg.cc/8PjN6v1V/lighting3.jpg" alt="Energy efficient products" style="width:100%">
-                    </div>
-                    <button class="prev" onclick="plusSlides(-1)" aria-label="Previous slide">&#10094;</button>
-                    <button class="next" onclick="plusSlides(1)" aria-label="Next slide">&#10095;</button>
-                </div>
-                <div class="dots-container">
-                    <span class="dot" onclick="currentSlide(1)" aria-label="Slide 1"></span>
-                    <span class="dot" onclick="currentSlide(2)" aria-label="Slide 2"></span>
-                    <span class="dot" onclick="currentSlide(3)" aria-label="Slide 3"></span>
-                </div>
-                <button class="details-btn">More Details</button>
-            </section>
-
-            <section class="about-section" aria-labelledby="about-heading">
-                <h2 id="about-heading">Who We Are</h2>
-                <p>Lighting Store is a premier destination for high-quality lighting solutions. With over 15 years of experience in the industry, we provide a wide range of lighting products for homes, offices, and commercial spaces. Our mission is to illuminate your spaces with style, efficiency, and innovation.</p>
-            </section>
-        </div>
-
-        <!-- منتجات -->
-        <section class="products-section" aria-labelledby="products-title">
-            <h2 id="products-title">Featured Products</h2>
-            <div class="products-container" id="products-container" role="list">
-                <!-- Products will be loaded here by JavaScript -->
-            </div>
-        </section>
-    </main>
-
-    <div class="cart-modal" id="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-title">
-        <div class="modal-content">
-            <button class="close" aria-label="Close cart">&times;</button>
-            <h2 id="cart-title">Your Cart</h2>
-            <div class="cart-items" id="cart-items" role="list">
-                <!-- Cart items will be loaded here -->
-            </div>
-            <div class="cart-total">
-                <strong>Total: $<span id="cart-total-price">0.00</span></strong>
-            </div>
-            <button class="send-order-btn" id="send-order-btn">
-                <i class="fab fa-whatsapp"></i> Send Order via WhatsApp
-            </button>
-        </div>
+      <div class="cart-container">
+        <button id="cart-button" aria-label="عربة التسوق">
+          <i class="fas fa-shopping-cart"></i>
+          <span id="cart-count">0</span>
+        </button>
+      </div>
     </div>
-</body>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Contact Us</h3>
-                <p><i class="fas fa-phone"></i> +972 56 981 3333</p>
-                <p><i class="fas fa-phone"></i> +972 56 981 3334</p>
-                <p><i class="fas fa-envelope"></i> info@lightingstore.com</p>
-                <p><i class="fas fa-map-marker-alt"></i> 123 Light Street, Tel Aviv, Israel</p>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Products</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="#">Shipping Policy</a></li>
-                    <li><a href="#">Returns &amp; Warranty</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Business Hours</h3>
-                <p>Sunday-Thursday: 9:00 - 19:00</p>
-                <p>Friday: 9:00 - 14:00</p>
-                <p>Saturday: Closed</p>
-            </div>
-            <div class="footer-section">
-                <h3>Follow Us</h3>
-                <div class="social-icons">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
-                </div>
-                <div class="newsletter">
-                    <h4>Subscribe to Newsletter</h4>
-                    <form>
-                        <input type="email" placeholder="Your email address">
-                        <button type="submit">Subscribe</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2023 Lighting Store. All Rights Reserved.</p>
-            <p class="payment-methods">
-                <i class="fab fa-cc-visa"></i>
-                <i class="fab fa-cc-mastercard"></i>
-                <i class="fab fa-cc-paypal"></i>
-                <i class="fab fa-cc-apple-pay"></i>
-            </p>
-        </div>
-    </footer>
+    <nav class="categories-scroll" aria-label="فئات المنتجات">
+      <div class="categories-container" id="categories-container">
+        <!-- يتم تحميل الفئات هنا باستخدام JavaScript -->
+      </div>
+    </nav>
+  </header>
 
-    <script src="data.js"></script>
-    <script src="script.js" defer></script>
+  <main>
+    <section class="hero" aria-label="منتجاتنا">
+      <div class="slideshow-container">
+        <div class="mySlides fade">
+          <img src="https://www.dostor.org/Upload/libfiles/470/4/458.jpg" alt="حلول إضاءة متميزة" style="width:100%" />
+        </div>
+        <div class="mySlides fade">
+          <img src="https://i.postimg.cc/8zq2YkXv/lighting2.jpg" alt="تصاميم إضاءة عصرية" style="width:100%" />
+        </div>
+        <div class="mySlides fade">
+          <img src="https://i.postimg.cc/8PjN6v1V/lighting3.jpg" alt="منتجات موفرة للطاقة" style="width:100%" />
+        </div>
+       
+      <br><br><br><br>
+      </div>
+
+      <div class="dots-container">
+        <span class="dot" onclick="currentSlide(1)" aria-label="الشريحة 1"></span>
+        <span class="dot" onclick="currentSlide(2)" aria-label="الشريحة 2"></span>
+        <span class="dot" onclick="currentSlide(3)" aria-label="الشريحة 3"></span>
+      </div>
+
+      <button class="details-btn">المزيد من التفاصيل</button>
+    </section>
+
+    <section class="about-section" aria-labelledby="about-heading">
+      <h2 id="about-heading">من نحن</h2>
+      <p>
+        متجر الإضاءة هو وجهتك المثالية لحلول الإضاءة عالية الجودة. بخبرة تزيد عن 15 عامًا في هذا المجال،
+        نقدم مجموعة واسعة من منتجات الإضاءة للمنازل والمكاتب والمساحات التجارية. مهمتنا هي إضاءة مساحاتكم بأناقة وكفاءة وابتكار.
+      </p>
+    </section>
+
+    <section class="products-section" aria-labelledby="products-title">
+      <h2 id="products-title">المنتجات المميزة</h2>
+      <div class="products-container" id="products-container" role="list">
+        <!-- سيتم تحميل المنتجات هنا باستخدام JavaScript -->
+      </div>
+    </section>
+  </main>
+
+  <div class="cart-modal" id="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+    <div class="modal-content">
+      <button class="close" aria-label="إغلاق العربة">&times;</button>
+      <h2 id="cart-title">عربة التسوق</h2>
+      <div class="cart-items" id="cart-items" role="list">
+        <!-- سيتم تحميل عناصر العربة هنا -->
+      </div>
+      <div class="cart-total">
+        <strong>المجموع: $<span id="cart-total-price">0.00</span></strong>
+      </div>
+      <button class="send-order-btn" id="send-order-btn">
+        <i class="fab fa-whatsapp"></i> إرسال الطلب عبر واتساب
+      </button>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>تواصل معنا</h3>
+        <p><i class="fas fa-phone"></i> +972 56 981 3333</p>
+        <p><i class="fas fa-phone"></i> +972 56 981 3334</p>
+        <p><i class="fas fa-envelope"></i> info@lightingstore.com</p>
+        <p><i class="fas fa-map-marker-alt"></i> 123 شارع الضوء، تل أبيب، إسرائيل</p>
+      </div>
+      <div class="footer-section">
+        <h3>روابط سريعة</h3>
+        <ul>
+          <li><a href="#">الرئيسية</a></li>
+          <li><a href="#">المنتجات</a></li>
+          <li><a href="#">من نحن</a></li>
+          <li><a href="#">اتصل بنا</a></li>
+          <li><a href="#">سياسة الشحن</a></li>
+          <li><a href="#">الاسترجاع والضمان</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>ساعات العمل</h3>
+        <p>الأحد - الخميس: 9:00 - 19:00</p>
+        <p>الجمعة: 9:00 - 14:00</p>
+        <p>السبت: مغلق</p>
+      </div>
+      <div class="footer-section">
+        <h3>تابعنا</h3>
+        <div class="social-icons">
+          <a href="#" aria-label="فيسبوك"><i class="fab fa-facebook"></i></a>
+          <a href="#" aria-label="إنستغرام"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="بينتيريست"><i class="fab fa-pinterest"></i></a>
+        </div>
+        <div class="newsletter">
+          <h4>اشترك في النشرة البريدية</h4>
+          <form>
+            <input type="email" placeholder="عنوان بريدك الإلكتروني" />
+            <button type="submit">اشتراك</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2023 متجر الإضاءة. جميع الحقوق محفوظة.</p>
+      <p class="payment-methods">
+        <i class="fab fa-cc-visa"></i>
+        <i class="fab fa-cc-mastercard"></i>
+        <i class="fab fa-cc-paypal"></i>
+        <i class="fab fa-cc-apple-pay"></i>
+      </p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
