@@ -6,16 +6,50 @@
   <title>مركز شحادة للإضاءة</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* نفس الأنماط السابقة مع تعديلات بسيطة */
-    .mode-switch {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3f37c9;
+      --success-color: #4cc9f0;
+      --danger-color: #f72585;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
     }
+
+    /* باقي الأنماط كما هي مع التعديلات التالية */
+    
+    .img-preview {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      margin-left: 10px;
+    }
+
+    .link-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    td[contenteditable="true"] {
+      padding: 8px;
+      min-width: 100px;
+    }
+
+    .mode-switch {
+      margin-bottom: 20px;
+      gap: 15px;
+    }
+
     .mode-btn {
       padding: 12px 25px;
-      border-radius: 25px;
+      border-radius: var(--border-radius);
     }
+
     .active-mode {
       background-color: var(--secondary-color) !important;
     }
@@ -48,13 +82,13 @@
     </div>
 
     <!-- جدول الفئات -->
-    <div class="table-container" id="categoriesTable" style="display: block;">
+    <div class="table-container" id="categoriesTable">
       <table>
         <thead>
           <tr>
             <th width="30%">اسم الفئة</th>
-            <th width="50%">رابط الصورة</th>
-            <th width="20%">الإجراءات</th>
+            <th width="60%">رابط الصورة</th>
+            <th width="10%">إجراءات</th>
           </tr>
         </thead>
         <tbody id="categoriesBody"></tbody>
@@ -70,7 +104,7 @@
             <th width="25%">اسم المنتج</th>
             <th width="15%">السعر</th>
             <th width="30%">صورة المنتج</th>
-            <th width="10%">الإجراءات</th>
+            <th width="10%">إجراءات</th>
           </tr>
         </thead>
         <tbody id="productsBody"></tbody>
@@ -85,6 +119,7 @@
 
   <script src="data.js"></script>
   <script>
+    const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN'; // ضع التوكن هنا
     const currentData = {
       categories: [...categories],
       products: [...products]
@@ -128,8 +163,9 @@
         nameCell.contentEditable = true;
         nameCell.textContent = cat.name;
         nameCell.addEventListener('input', () => {
-          currentData.categories[index].name = nameCell.textContent;
-          updateProductsCategories(cat.name, nameCell.textContent);
+          currentData.categories[index].name = nameCell.textContent.trim();
+          updateProductsCategories(cat.name, nameCell.textContent.trim());
+          updateOutput();
         });
         
         // صورة الفئة
@@ -146,9 +182,10 @@
         imgInput.contentEditable = true;
         imgInput.textContent = cat.image;
         imgInput.addEventListener('input', () => {
-          currentData.categories[index].image = imgInput.textContent;
-          imgPreview.src = imgInput.textContent;
+          currentData.categories[index].image = imgInput.textContent.trim();
+          imgPreview.src = imgInput.textContent.trim();
           imgPreview.style.display = 'inline-block';
+          updateOutput();
         });
         
         imgContainer.append(imgPreview, imgInput);
@@ -188,6 +225,7 @@
         });
         select.onchange = () => {
           currentData.products[index].category = select.value;
+          updateOutput();
         };
         catCell.appendChild(select);
         
@@ -196,7 +234,8 @@
         nameCell.contentEditable = true;
         nameCell.textContent = prod.name;
         nameCell.addEventListener('input', () => {
-          currentData.products[index].name = nameCell.textContent;
+          currentData.products[index].name = nameCell.textContent.trim();
+          updateOutput();
         });
         
         // السعر
@@ -204,7 +243,8 @@
         priceCell.contentEditable = true;
         priceCell.textContent = prod.price;
         priceCell.addEventListener('input', () => {
-          currentData.products[index].price = priceCell.textContent;
+          currentData.products[index].price = parseFloat(priceCell.textContent) || 0;
+          updateOutput();
         });
         
         // صورة المنتج
@@ -221,9 +261,10 @@
         imgInput.contentEditable = true;
         imgInput.textContent = prod.image;
         imgInput.addEventListener('input', () => {
-          currentData.products[index].image = imgInput.textContent;
-          imgPreview.src = imgInput.textContent;
+          currentData.products[index].image = imgInput.textContent.trim();
+          imgPreview.src = imgInput.textContent.trim();
           imgPreview.style.display = 'inline-block';
+          updateOutput();
         });
         
         imgContainer.append(imgPreview, imgInput);
@@ -250,10 +291,14 @@
           image: ''
         });
       } else {
+        if(currentData.categories.length === 0) {
+          alert('يجب إضافة فئة أولاً!');
+          return;
+        }
         currentData.products.unshift({
-          category: currentData.categories[0]?.name || '',
+          category: currentData.categories[0].name,
           name: 'منتج جديد',
-          price: '0.00',
+          price: 0,
           image: ''
         });
       }
@@ -291,22 +336,46 @@
       document.getElementById('outputText').value = dataString;
     }
 
-    // دالة الحفظ على GitHub (تتطلب تعديلات حسب إعداداتك)
     async function saveData() {
-      const content = btoa(unescape(encodeURIComponent(outputText.value)));
+      const content = btoa(unescape(encodeURIComponent(document.getElementById('outputText').value)));
       const path = 'data.js';
       const url = `https://api.github.com/repos/mohammad-shehadeh/soh/contents/${path}`;
 
       try {
-        // ... (نفس منطق الحفظ السابق مع تعديل المسار والمحتوى)
+        const shaRes = await fetch(url, {
+          headers: { Authorization: `token ${GITHUB_TOKEN}` }
+        });
+        const shaData = await shaRes.json();
+        const sha = shaData.sha;
+
+        const saveRes = await fetch(url, {
+          method: "PUT",
+          headers: {
+            "Authorization": `token ${GITHUB_TOKEN}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: "تحديث البيانات من المحرر",
+            content: content,
+            sha: sha
+          })
+        });
+        
+        const data = await saveRes.json();
+        if (data.content) {
+          alert("تم الحفظ بنجاح!");
+        } else {
+          console.error(data);
+          alert("حدث خطأ أثناء الحفظ.");
+        }
       } catch (err) {
         console.error(err);
-        alert('فشل في حفظ البيانات');
+        alert("فشل في الاتصال بخادم GitHub");
       }
     }
 
     // التحميل الأولي
-    updateOutput();
+    switchMode('categories');
   </script>
 </body>
 </html>
