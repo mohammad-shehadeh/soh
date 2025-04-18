@@ -1,22 +1,36 @@
-{
-  "products": [
+// data.js
+const categories = [
     {
-      "name": "لمبة LED 9W",
-      "price": 2.5,
-      "image": "images/products/led9w.jpg",
-      "category": "إنارة داخلية"
+        name: "مصابيح ليد",
+        image: "https://example.com/led-category.jpg" // URL صورة الفئة
     },
     {
-      "name": "كشاف خارجي 50W",
-      "price": 15.0,
-      "image": "images/products/floodlight50w.jpg",
-      "category": "إنارة خارجية"
+        name: "إضاءة خارجية",
+        image: "https://example.com/outdoor-category.jpg"
     },
     {
-      "name": "مفتاح كهرباء مزدوج",
-      "price": 1.8,
-      "image": "images/products/switch.jpg",
-      "category": "إكسسوارات كهربائية"
+        name: "إضاءة مكتبية",
+        image: "https://example.com/office-category.jpg"
     }
-  ]
-}
+];
+
+const products = [
+    {
+        category: "مصابيح ليد",
+        name: "مصباح ليد 10 واط",
+        price: 15.99,
+        image: "https://example.com/led-bulb.jpg"
+    },
+    {
+        category: "إضاءة خارجية",
+        name: "مصباح حديقة مقاوم للماء",
+        price: 34.50,
+        image: "https://example.com/garden-light.jpg"
+    },
+    {
+        category: "إضاءة مكتبية",
+        name: "مصباح مكتب LED",
+        price: 45.75,
+        image: "https://example.com/desk-lamp.jpg"
+    }
+];
