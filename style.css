@@ -367,8 +367,7 @@ h1 {
 
 .product-card img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* أو يمكن حتى حذفه */
 }
 
 .product-info {
