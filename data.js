@@ -1,7 +1,7 @@
 const categories = [
   {
-    "name": "تريات",
-    "image": ""
+    "name": "تريات كرستال",
+    "image": "https://m.media-amazon.com/images/I/71gTDrRvIOL._AC_UF1000,1000_QL80_.jpg"
   },
   {
     "name": "مصابيح ليد",
@@ -27,10 +27,10 @@ const categories = [
 
 const products = [
   {
-    "category": "تريات",
-    "name": "ثريا",
-    "price": 1909,
-    "image": ""
+    "category": "تريات كرستال",
+    "name": "ثريا كرستال طويل",
+    "price": 2800,
+    "image": "https://m.media-amazon.com/images/I/71nrcOr+VpL._AC_SL1500_.jpg"
   },
   {
     "category": "مصابيح ليد",
