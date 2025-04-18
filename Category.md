@@ -5,7 +5,7 @@
 {
   "categories": [
     {
-      "name": "Ceiling Lights",
+      "name": "حوليكن لايت ",
       "image": "https://via.placeholder.com/80x80?text=Ceiling+Lights"
     },
     {
