@@ -1,33 +1,22 @@
----
-
-### **Server.md**
-```md
-```json
 {
   "products": [
     {
-      "name": "LED Bulb 10W",
-      "price": 5.50,
-      "category": "LED Lights",
-      "image": "images/products/ledbulb10w.jpg"
+      "name": "لمبة LED 9W",
+      "price": 2.5,
+      "image": "images/products/led9w.jpg",
+      "category": "إنارة داخلية"
     },
     {
-      "name": "Modern Ceiling Lamp",
-      "price": 45.99,
-      "category": "Ceiling Lamps",
-      "image": "images/products/ceilinglamp.jpg"
+      "name": "كشاف خارجي 50W",
+      "price": 15.0,
+      "image": "images/products/floodlight50w.jpg",
+      "category": "إنارة خارجية"
     },
     {
-      "name": "Classic Wall Light",
-      "price": 22.75,
-      "category": "Wall Lamps",
-      "image": "images/products/walllight.jpg"
-    },
-    {
-      "name": "Solar Garden Lamp",
-      "price": 15.00,
-      "category": "Outdoor Lights",
-      "image": "images/products/solargardenlamp.jpg"
+      "name": "مفتاح كهرباء مزدوج",
+      "price": 1.8,
+      "image": "images/products/switch.jpg",
+      "category": "إكسسوارات كهربائية"
     }
   ]
 }
