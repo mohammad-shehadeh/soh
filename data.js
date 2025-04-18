@@ -35,7 +35,7 @@ const products = [
   {
     "category": "مصابيح ليد",
     "name": "مصباح ليد 10 واط",
-    "price": 15.99,
+    "price": 99.99,
     "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
   },
   {
