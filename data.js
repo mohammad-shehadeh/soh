@@ -1,5 +1,9 @@
 const categories = [
   {
+    "name": "تريات",
+    "image": ""
+  },
+  {
     "name": "مصابيح ليد",
     "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
   },
@@ -25,7 +29,7 @@ const products = [
   {
     "category": "مصابيح ليد",
     "name": "مصباح ليد 10 واط",
-    "price": 99.99,
+    "price": 15.99,
     "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
   },
   {
