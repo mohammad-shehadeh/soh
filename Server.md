@@ -44,10 +44,10 @@
       "image": "https://via.placeholder.com/300x200?text=Wi-Fi+Smart+Bulb"
     },
     {
-      "category": "LED Strips",
-      "name": "RGB LED Strip",
-      "price": 29.99,
-      "image": "https://via.placeholder.com/300x200?text=RGB+LED+Strip"
+      "category": "LED أشرطة",
+      "name": "LED حبل احمر",
+      "price": 55.99,
+      "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
     }
   ]
 }
