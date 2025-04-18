@@ -15,31 +15,39 @@ let cart = [];
 let categories = [];
 let products = [];
 
+// Strings for multilingual support
+const strings = {
+    addToCart: 'أضف إلى السلة',
+    currency: 'د.إ',
+    emptyCart: 'عربة التسوق فارغة',
+    noCategories: 'لا توجد تصنيفات متاحة',
+    noProducts: 'لا توجد منتجات في هذا التصنيف',
+    confirmSend: 'هل تريد إرسال الطلب الآن؟',
+    alertEmptyCart: 'عربة التسوق فارغة!',
+};
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function () {
-    // Load data from JSON files
     Promise.all([
-        fetch('Category.json').then(response => response.json()),
-        fetch('Server.json').then(response => response.json())
+        fetch('Category.json').then(res => res.json()),
+        fetch('Server.json').then(res => res.json())
     ])
-        .then(([categoryData, productData]) => {
-            categories = categoryData.categories;
-            products = productData.products;
+    .then(([categoryData, productData]) => {
+        categories = categoryData.categories || [];
+        products = productData.products || [];
 
-            loadCategories();
-            loadProducts();
+        loadCategories();
+        loadProducts();
+        if (document.getElementsByClassName("mySlides").length > 0) {
             initSlideshow();
-        })
-        .catch(error => {
-            console.error('Error loading data:', error);
-            categories = [];
-            products = [];
-            loadCategories();
-            loadProducts();
-            initSlideshow();
-        });
+        }
+    })
+    .catch(error => {
+        console.error('Error loading data:', error);
+        categoriesContainer.innerHTML = `<p>${strings.noCategories}</p>`;
+        productsContainer.innerHTML = `<p>${strings.noProducts}</p>`;
+    });
 
-    // Event listeners
     cartButton.addEventListener('click', openCartModal);
     closeModal.addEventListener('click', closeCartModal);
     sendOrderBtn.addEventListener('click', sendOrderViaWhatsApp);
@@ -54,60 +62,56 @@ document.addEventListener('DOMContentLoaded', function () {
 function loadCategories() {
     categoriesContainer.innerHTML = '';
 
-    if (categories.length === 0) {
-        categoriesContainer.innerHTML = '<p>No categories available.</p>';
+    if (!categories || categories.length === 0) {
+        categoriesContainer.innerHTML = `<p>${strings.noCategories}</p>`;
         return;
     }
 
     categories.forEach(category => {
-        const categoryElement = document.createElement('div');
-        categoryElement.className = 'category-item';
-        categoryElement.innerHTML = `
+        const el = document.createElement('div');
+        el.className = 'category-item';
+        el.innerHTML = `
             <img src="${category.image}" alt="${category.name}" class="category-img">
             <div class="category-name">${category.name}</div>
         `;
-        categoryElement.addEventListener('click', () => filterProductsByCategory(category.name));
-        categoriesContainer.appendChild(categoryElement);
+        el.addEventListener('click', () => filterProductsByCategory(category.name));
+        categoriesContainer.appendChild(el);
     });
 }
 
 function loadProducts(category = null) {
     productsContainer.innerHTML = '';
 
-    const filteredProducts = category
-        ? products.filter(product => product.category === category)
-        : products;
+    const filtered = category ? products.filter(p => p.category === category) : products;
 
-    if (filteredProducts.length === 0) {
-        productsContainer.innerHTML = '<p>No products found in this category.</p>';
+    if (filtered.length === 0) {
+        productsContainer.innerHTML = `<p>${strings.noProducts}</p>`;
         return;
     }
 
-    filteredProducts.forEach(product => {
-        const productElement = document.createElement('div');
-        productElement.className = 'product-card';
-        productElement.innerHTML = `
+    filtered.forEach(product => {
+        const el = document.createElement('div');
+        el.className = 'product-card';
+        el.innerHTML = `
             <img src="${product.image}" alt="${product.name}" class="product-img">
             <div class="product-info">
                 <h3 class="product-name">${product.name}</h3>
-                <div class="product-price">$${product.price.toFixed(2)}</div>
+                <div class="product-price">${strings.currency} ${product.price.toFixed(2)}</div>
                 <div class="quantity-controls">
                     <button class="quantity-btn minus">-</button>
                     <input type="number" class="quantity-input" value="1" min="1">
                     <button class="quantity-btn plus">+</button>
                 </div>
-                <button class="add-to-cart" data-product='${JSON.stringify(product)}'>Add to Cart</button>
+                <button class="add-to-cart" data-product='${JSON.stringify(product)}'>${strings.addToCart}</button>
             </div>
         `;
-        productsContainer.appendChild(productElement);
+        productsContainer.appendChild(el);
     });
 
     document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
         btn.addEventListener('click', function () {
             const input = this.nextElementSibling;
-            if (parseInt(input.value) > 1) {
-                input.value = parseInt(input.value) - 1;
-            }
+            if (parseInt(input.value) > 1) input.value--;
         });
     });
 
@@ -120,8 +124,8 @@ function loadProducts(category = null) {
 
     document.querySelectorAll('.add-to-cart').forEach(btn => {
         btn.addEventListener('click', function () {
-            const product = JSON.parse(this.getAttribute('data-product'));
-            const quantity = parseInt(this.parentElement.querySelector('.quantity-input').value);
+            const product = JSON.parse(this.dataset.product);
+            const quantity = parseInt(this.closest('.product-card').querySelector('.quantity-input').value);
             addToCart(product, quantity);
         });
     });
@@ -133,10 +137,9 @@ function filterProductsByCategory(category) {
 }
 
 function addToCart(product, quantity) {
-    const existingItem = cart.find(item => item.product.name === product.name);
-
-    if (existingItem) {
-        existingItem.quantity += quantity;
+    const existing = cart.find(item => item.product.name === product.name);
+    if (existing) {
+        existing.quantity += quantity;
     } else {
         cart.push({ product, quantity });
     }
@@ -146,15 +149,12 @@ function addToCart(product, quantity) {
 }
 
 function updateCartCount() {
-    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-    cartCount.textContent = totalItems;
+    cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
 }
 
 function showCartNotification() {
     cartButton.classList.add('pulse');
-    setTimeout(() => {
-        cartButton.classList.remove('pulse');
-    }, 500);
+    setTimeout(() => cartButton.classList.remove('pulse'), 500);
 }
 
 function openCartModal() {
@@ -172,21 +172,21 @@ function renderCartItems() {
     cartItemsContainer.innerHTML = '';
 
     if (cart.length === 0) {
-        cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+        cartItemsContainer.innerHTML = `<p>${strings.emptyCart}</p>`;
         cartTotalPrice.textContent = '0.00';
         return;
     }
 
-    let totalPrice = 0;
+    let total = 0;
 
     cart.forEach((item, index) => {
-        const cartItemElement = document.createElement('div');
-        cartItemElement.className = 'cart-item';
-        cartItemElement.innerHTML = `
+        const el = document.createElement('div');
+        el.className = 'cart-item';
+        el.innerHTML = `
             <img src="${item.product.image}" alt="${item.product.name}" class="cart-item-img">
             <div class="cart-item-details">
                 <div class="cart-item-name">${item.product.name}</div>
-                <div class="cart-item-price">$${(item.product.price * item.quantity).toFixed(2)}</div>
+                <div class="cart-item-price">${strings.currency} ${(item.product.price * item.quantity).toFixed(2)}</div>
                 <div class="cart-item-quantity">
                     <button class="quantity-btn minus">-</button>
                     <input type="number" class="quantity-input" value="${item.quantity}" min="1">
@@ -196,10 +196,10 @@ function renderCartItems() {
             </div>
         `;
 
-        const minusBtn = cartItemElement.querySelector('.quantity-btn.minus');
-        const plusBtn = cartItemElement.querySelector('.quantity-btn.plus');
-        const quantityInput = cartItemElement.querySelector('.quantity-input');
-        const removeBtn = cartItemElement.querySelector('.remove-item');
+        const minusBtn = el.querySelector('.quantity-btn.minus');
+        const plusBtn = el.querySelector('.quantity-btn.plus');
+        const quantityInput = el.querySelector('.quantity-input');
+        const removeBtn = el.querySelector('.remove-item');
 
         minusBtn.addEventListener('click', () => {
             if (item.quantity > 1) {
@@ -216,9 +216,9 @@ function renderCartItems() {
         });
 
         quantityInput.addEventListener('change', () => {
-            const newQuantity = parseInt(quantityInput.value);
-            if (newQuantity >= 1) {
-                item.quantity = newQuantity;
+            const val = parseInt(quantityInput.value);
+            if (val >= 1) {
+                item.quantity = val;
                 renderCartItems();
             }
         });
@@ -229,35 +229,36 @@ function renderCartItems() {
             updateCartCount();
         });
 
-        cartItemsContainer.appendChild(cartItemElement);
-        totalPrice += item.product.price * item.quantity;
+        cartItemsContainer.appendChild(el);
+        total += item.product.price * item.quantity;
     });
 
-    cartTotalPrice.textContent = totalPrice.toFixed(2);
+    cartTotalPrice.textContent = total.toFixed(2);
 }
 
 function sendOrderViaWhatsApp() {
     if (cart.length === 0) {
-        alert('Your cart is empty!');
+        alert(strings.alertEmptyCart);
         return;
     }
 
-    let message = 'Hello Lighting Store,\n\nI would like to order the following items:\n\n';
+    if (!confirm(strings.confirmSend)) return;
+
+    let message = 'مرحبًا، أرغب في طلب المنتجات التالية:\n\n';
 
     cart.forEach(item => {
-        message += `- ${item.product.name} (Qty: ${item.quantity}) - $${(item.product.price * item.quantity).toFixed(2)}\n`;
+        message += `- ${item.product.name} (الكمية: ${item.quantity}) - ${strings.currency} ${(item.product.price * item.quantity).toFixed(2)}\n`;
     });
 
-    message += `\nTotal: $${cart.reduce((total, item) => total + (item.product.price * item.quantity), 0).toFixed(2)}\n\n`;
-    message += 'Please let me know the next steps. Thank you!';
+    const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    message += `\nالإجمالي: ${strings.currency} ${total.toFixed(2)}\n\nالرجاء تأكيد الطلب، وشكرًا.`;
 
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/972569813333?text=${encodedMessage}`;
-
+    const encoded = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/972569813333?text=${encoded}`;
     window.open(whatsappUrl, '_blank');
 }
 
-// Slideshow functionality
+// Slideshow
 function initSlideshow() {
     let slideIndex = 1;
     showSlides(slideIndex);
@@ -271,18 +272,17 @@ function initSlideshow() {
     };
 
     function showSlides(n) {
-        let i;
-        const slides = document.getElementsByClassName("mySlides");
-        const dots = document.getElementsByClassName("dot");
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("dot");
 
-        if (n > slides.length) { slideIndex = 1; }
-        if (n < 1) { slideIndex = slides.length; }
+        if (n > slides.length) slideIndex = 1;
+        if (n < 1) slideIndex = slides.length;
 
-        for (i = 0; i < slides.length; i++) {
+        for (let i = 0; i < slides.length; i++) {
             slides[i].style.display = "none";
         }
 
-        for (i = 0; i < dots.length; i++) {
+        for (let i = 0; i < dots.length; i++) {
             dots[i].className = dots[i].className.replace(" active", "");
         }
 
@@ -290,7 +290,5 @@ function initSlideshow() {
         dots[slideIndex - 1].className += " active";
     }
 
-    setInterval(() => {
-        plusSlides(1);
-    }, 5000);
+    setInterval(() => plusSlides(1), 5000);
 }
