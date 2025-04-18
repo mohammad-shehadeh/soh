@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 productCard.innerHTML = `
                     <img src="${product.image}" alt="${product.name}">
                     <h3>${product.name}</h3>
-                    <p class="price">$${product.price.toFixed(2)}</p>
+                    <p class="price">₪${product.price.toFixed(2)}</p>
                     <button class="add-to-cart" data-id="${product.name}"></button>
                 `;
                 productCard.querySelector('.add-to-cart').addEventListener('click', () => Cart.addItem(product));
