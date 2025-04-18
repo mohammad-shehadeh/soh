@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <input type="number" value="${item.quantity}" min="1" class="quantity-input">
                             <button class="increment">+</button>
                         </div>
-                        <p class="item-total">₪${(item.price * item.quantity).toFixed(2)}</p>
+                        <p class="item-total">$${(item.price * item.quantity).toFixed(2)}</p>
                     </div>
                 </div>
                 <button class="remove-item">&times;</button>
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 total += item.price * item.quantity;
             });
             
-            elements.cartTotal.textContent = `₪${total.toFixed(2)}`;
+            elements.cartTotal.textContent = total.toFixed(2);
             UI.updateAddToCartButtons();
         }
     };
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 productCard.innerHTML = `
                     <img src="${product.image}" alt="${product.name}">
                     <h3>${product.name}</h3>
-                    <p class="price">₪${product.price.toFixed(2)}</p>
+                    <p class="price">$${product.price.toFixed(2)}</p>
                     <button class="add-to-cart" data-id="${product.name}"></button>
                 `;
                 productCard.querySelector('.add-to-cart').addEventListener('click', () => Cart.addItem(product));
@@ -202,7 +202,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // إرسال الطلب عبر واتسابelements.sendOrderBtn.addEventListener('click', () => {
+    // إرسال الطلب عبر واتساب
+    elements.sendOrderBtn.addEventListener('click', () => {
     const now = new Date();
     const date = now.toLocaleDateString('ar-EG');
     const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
