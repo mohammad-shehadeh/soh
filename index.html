@@ -18,7 +18,7 @@
                 <img src="https://i.postimg.cc/v8kQXQg5/IMG-7211.png" alt="Lighting Store Logo" class="logo">
                 <h1>Lighting Store</h1>
             </div>
-
+            
             <div class="cart-container">
                 <button id="cart-button" aria-label="Shopping Cart">
                     <i class="fas fa-shopping-cart"></i>
@@ -35,38 +35,34 @@
     </header>
 
     <main>
-        <br><br><br>
-        <!-- محتوى الصفحة الرئيسية فقط -->
-        <div id="home-section">
-            <section class="hero" aria-label="Featured products">
-                <div class="slideshow-container">
-                    <div class="mySlides fade">
-                        <img src="https://www.dostor.org/Upload/libfiles/470/4/458.jpg" alt="Premium lighting solutions" style="width:100%">
-                    </div>
-                    <div class="mySlides fade">
-                        <img src="https://i.postimg.cc/8zq2YkXv/lighting2.jpg" alt="Modern lighting designs" style="width:100%">
-                    </div>
-                    <div class="mySlides fade">
-                        <img src="https://i.postimg.cc/8PjN6v1V/lighting3.jpg" alt="Energy efficient products" style="width:100%">
-                    </div>
-                    <button class="prev" onclick="plusSlides(-1)" aria-label="Previous slide">&#10094;</button>
-                    <button class="next" onclick="plusSlides(1)" aria-label="Next slide">&#10095;</button>
+        <br><br><br><br>
+        <section class="hero" aria-label="Featured products">
+            <div class="slideshow-container">
+                <div class="mySlides fade">
+                    <img src="https://www.dostor.org/Upload/libfiles/470/4/458.jpg" alt="Premium lighting solutions" style="width:100%">
                 </div>
-                <div class="dots-container">
-                    <span class="dot" onclick="currentSlide(1)" aria-label="Slide 1"></span>
-                    <span class="dot" onclick="currentSlide(2)" aria-label="Slide 2"></span>
-                    <span class="dot" onclick="currentSlide(3)" aria-label="Slide 3"></span>
+                <div class="mySlides fade">
+                    <img src="https://i.postimg.cc/8zq2YkXv/lighting2.jpg" alt="Modern lighting designs" style="width:100%">
                 </div>
-                <button class="details-btn">More Details</button>
-            </section>
+                <div class="mySlides fade">
+                    <img src="https://i.postimg.cc/8PjN6v1V/lighting3.jpg" alt="Energy efficient products" style="width:100%">
+                </div>
+                <button class="prev" onclick="plusSlides(-1)" aria-label="Previous slide">&#10094;</button>
+                <button class="next" onclick="plusSlides(1)" aria-label="Next slide">&#10095;</button>
+            </div>
+            <div class="dots-container">
+                <span class="dot" onclick="currentSlide(1)" aria-label="Slide 1"></span>
+                <span class="dot" onclick="currentSlide(2)" aria-label="Slide 2"></span>
+                <span class="dot" onclick="currentSlide(3)" aria-label="Slide 3"></span>
+            </div>
+            <button class="details-btn">More Details</button>
+        </section>
 
-            <section class="about-section" aria-labelledby="about-heading">
-                <h2 id="about-heading">Who We Are</h2>
-                <p>Lighting Store is a premier destination for high-quality lighting solutions. With over 15 years of experience in the industry, we provide a wide range of lighting products for homes, offices, and commercial spaces. Our mission is to illuminate your spaces with style, efficiency, and innovation.</p>
-            </section>
-        </div>
+        <section class="about-section" aria-labelledby="about-heading">
+            <h2 id="about-heading">Who We Are</h2>
+            <p>Lighting Store is a premier destination for high-quality lighting solutions. With over 15 years of experience in the industry, we provide a wide range of lighting products for homes, offices, and commercial spaces. Our mission is to illuminate your spaces with style, efficiency, and innovation.</p>
+        </section>
 
-        <!-- منتجات -->
         <section class="products-section" aria-labelledby="products-title">
             <h2 id="products-title">Featured Products</h2>
             <div class="products-container" id="products-container" role="list">
@@ -90,7 +86,6 @@
             </button>
         </div>
     </div>
-</body>
 
     <footer>
         <div class="footer-content">
