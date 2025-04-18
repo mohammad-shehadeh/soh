@@ -1,53 +1,33 @@
+---
+
+### **Server.md**
+```md
 ```json
 {
   "products": [
     {
-      "category": "حوليكن لايت ",
-      "name": "Modern Flush 999",
-      "price": 89.99,
-      "image": "https://via.placeholder.com/300x200?text=Modern+Flush+Mount"
+      "name": "LED Bulb 10W",
+      "price": 5.50,
+      "category": "LED Lights",
+      "image": "images/products/ledbulb10w.jpg"
     },
     {
-      "category": "Ceiling Lights",
-      "name": "Crystal Chandelier",
-      "price": 199.99,
-      "image": "https://via.placeholder.com/300x200?text=Crystal+Chandelier"
+      "name": "Modern Ceiling Lamp",
+      "price": 45.99,
+      "category": "Ceiling Lamps",
+      "image": "images/products/ceilinglamp.jpg"
     },
     {
-      "category": "Wall Lights",
-      "name": "Sconce Wall Light",
-      "price": 49.99,
-      "image": "https://via.placeholder.com/300x200?text=Sconce+Wall+Light"
+      "name": "Classic Wall Light",
+      "price": 22.75,
+      "category": "Wall Lamps",
+      "image": "images/products/walllight.jpg"
     },
     {
-      "category": "Table Lamps",
-      "name": "Ceramic Table Lamp",
-      "price": 59.99,
-      "image": "https://via.placeholder.com/300x200?text=Ceramic+Table+Lamp"
-    },
-    {
-      "category": "Floor Lamps",
-      "name": "Arc Floor Lamp",
-      "price": 129.99,
-      "image": "https://via.placeholder.com/300x200?text=Arc+Floor+Lamp"
-    },
-    {
-      "category": "Outdoor Lighting",
-      "name": "Weatherproof Wall Light",
-      "price": 79.99,
-      "image": "https://via.placeholder.com/300x200?text=Weatherproof+Wall+Light"
-    },
-    {
-      "category": "Smart Lighting",
-      "name": "Wi-Fi Smart Bulb",
-      "price": 24.99,
-      "image": "https://via.placeholder.com/300x200?text=Wi-Fi+Smart+Bulb"
-    },
-    {
-      "category": "LED أشرطة",
-      "name": "LED حبل احمر",
-      "price": 55.99,
-      "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
+      "name": "Solar Garden Lamp",
+      "price": 15.00,
+      "category": "Outdoor Lights",
+      "image": "images/products/solargardenlamp.jpg"
     }
   ]
 }
