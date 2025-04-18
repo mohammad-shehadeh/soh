@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <input type="number" value="${item.quantity}" min="1" class="quantity-input">
                             <button class="increment">+</button>
                         </div>
-                        <p class="item-total">$${(item.price * item.quantity).toFixed(2)}</p>
+                        <p class="item-total">₪${(item.price * item.quantity).toFixed(2)}</p>
                     </div>
                 </div>
                 <button class="remove-item">&times;</button>
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 total += item.price * item.quantity;
             });
             
-            elements.cartTotal.textContent = total.toFixed(2);
+            elements.cartTotal.textContent = `₪${total.toFixed(2)}`;
             UI.updateAddToCartButtons();
         }
     };
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 productCard.innerHTML = `
                     <img src="${product.image}" alt="${product.name}">
                     <h3>${product.name}</h3>
-                    <p class="price">$${product.price.toFixed(2)}</p>
+                    <p class="price">₪${product.price.toFixed(2)}</p>
                     <button class="add-to-cart" data-id="${product.name}"></button>
                 `;
                 productCard.querySelector('.add-to-cart').addEventListener('click', () => Cart.addItem(product));
@@ -202,28 +202,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // إرسال الطلب عبر واتساب
-    elements.sendOrderBtn.addEventListener('click', () => {
-        const itemsList = cart.map(item => 
-            `%E2%9C%94%EF%B8%8F *${item.name}*%0A` +
-            `   - الكمية: ${item.quantity}%0A` +
-            `   - السعر: $${item.price.toFixed(2)}%0A` +
-            `   - الإجمالي: $${(item.price * item.quantity).toFixed(2)}`
-        ).join('%0A%0A');
+    // إرسال الطلب عبر واتسابelements.sendOrderBtn.addEventListener('click', () => {
+    const now = new Date();
+    const date = now.toLocaleDateString('ar-EG');
+    const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
 
-        const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        
-        const message = encodeURIComponent(
-            `مرحبا، أريد طلب المنتجات التالية:%0A%0A` +
-            `${itemsList}%0A%0A` +
-            `*المجموع الكلي: $${totalAmount.toFixed(2)}*%0A%0A` +
-            `الاسم: _________________%0A` +
-            `العنوان: _________________%0A` +
-            `ملاحظات: _________________`
-        );
+    const itemsList = cart.map((item, index) => 
+        `🔹 *${index + 1}. ${item.name}*\n` +
+        `   - الكمية: ${item.quantity}\n` +
+        `   - السعر: ₪${item.price.toFixed(2)}\n` +
+        `   - الإجمالي: ₪${(item.price * item.quantity).toFixed(2)}`
+    ).join('\n\n');
 
-        window.open(`https://wa.me/972569813333?text=${message}`, '_blank');
-    });
+    const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    const message = encodeURIComponent(
+        `*⭐ معرض أبو عالية ⭐*\n` +
+        `────────────────────────────\n` +
+        `🗓️ *التاريخ:* ${date}\n` +
+        `⏰ *الوقت:* ${time}\n` +
+        `────────────────────────────\n` +
+        `*تفاصيل الطلب:*\n\n` +
+        `${itemsList}\n\n` +
+        `💰 *المجموع الكلي:* ₪${totalAmount.toFixed(2)}\n` +
+        `────────────────────────────\n` +
+        `*الاسم:* ____________________\n` +
+        `*العنوان:* __________________\n` +
+        `*طريقة الدفع:* ______________\n` +
+        `*ملاحظات:* _________________`
+    );
+
+    window.open(`https://wa.me/972569813333?text=${message}`, '_blank');
+});
 
     // وظائف السلايدر
     function startSlideInterval() {
