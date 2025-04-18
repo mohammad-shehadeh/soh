@@ -221,6 +221,8 @@
     .url-input-cell {
   padding: 5px;
   position: relative;
+  direction: rtl;            /* الاتجاه العام للمحتوى من اليمين */
+  text-align: right;         /* محاذاة النص داخل العنصر */
 }
 
 .url-input {
@@ -230,8 +232,8 @@
   border-radius: 8px;
   font-family: inherit;
   font-size: 0.95rem;
-  text-align: right;   /* محاذاة النص لليمين */
-  direction: ltr;      /* اتجاه الكتابة من اليمين لليسار */
+  text-align: right;         /* محاذاة النص لليمين */
+  direction: rtl;            /* اتجاه الكتابة من اليمين لليسار */
   transition: var(--transition);
   background-color: white;
 }
@@ -241,36 +243,38 @@
   border-color: var(--primary-color);
   box-shadow: 0 0 0 2px var(--primary-light);
 }
-    
-    .img-cell {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 15px;
-    }
-    
-    .img-preview {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
-      transition: var(--transition);
-      flex-shrink: 0;
-    }
-    
-    .img-preview:hover {
-      transform: scale(1.8);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      z-index: 10;
-      position: relative;
-    }
-    
-    .link-container {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-    }
+
+.img-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* عرض الصورة على اليمين */
+  gap: 15px;
+  direction: rtl;
+}
+
+.img-preview {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.img-preview:hover {
+  transform: scale(1.8);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  z-index: 10;
+  position: relative;
+}
+
+.link-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* جعل الروابط تظهر على اليمين */
+  direction: rtl;
+}
     
     .action-btn {
       padding: 8px;
