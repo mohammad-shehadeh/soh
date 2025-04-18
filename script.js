@@ -225,44 +225,37 @@ document.addEventListener('DOMContentLoaded', () => {
         window.open(`https://wa.me/972569813333?text=${message}`, '_blank');
     });
 
-    // وظائف السلايدرfunction startSlideInterval() {
-    slideInterval = setInterval(() => plusSlides(1), 3000);
-}
+    // وظائف السلايدر
+    function startSlideInterval() {
+        slideInterval = setInterval(() => plusSlides(1), 2000);
+    }
 
-function plusSlides(n) {
-    slideIndex += n;
-    showSlides();
-}
+    function plusSlides(n) {
+        slideIndex += n;
+        showSlides();
+    }
 
-function currentSlide(n) {
-    slideIndex = n;
-    showSlides();
-}
+    function currentSlide(n) {
+        slideIndex = n;
+        showSlides();
+    }
 
-function showSlides() {
-    const slides = document.getElementsByClassName("mySlides");
-    const dots = document.getElementsByClassName("dot");
+    function showSlides() {
+        const slides = document.getElementsByClassName("mySlides");
+        const dots = document.getElementsByClassName("dot");
+        
+        slideIndex = slideIndex > slides.length ? 1 : slideIndex < 1 ? slides.length : slideIndex;
+        
+        Array.from(slides).forEach(slide => slide.style.display = "none");
+        Array.from(dots).forEach(dot => dot.classList.remove("active"));
+        
+        slides[slideIndex-1].style.display = "block";
+        dots[slideIndex-1].classList.add("active");
+    }
 
-    const totalSlides = slides.length;
-    if (totalSlides === 0) return;
-
-    // تأكد من أن slideIndex ضمن النطاق
-    if (slideIndex >= totalSlides) slideIndex = 0;
-    if (slideIndex < 0) slideIndex = totalSlides - 1;
-
-    // إخفاء جميع الشرائح وإزالة التفعيل عن النقاط
-    Array.from(slides).forEach(slide => slide.style.display = "none");
-    Array.from(dots).forEach(dot => dot.classList.remove("active"));
-
-    // عرض الشريحة الحالية وتفعيل النقطة المقابلة
-    slides[slideIndex].style.display = "block";
-    dots[slideIndex].classList.add("active");
-}
-
-// التهيئة الأولية
-Products.loadCategories();
-Products.loadProducts();
-Cart.update();
-showSlides();         // عرض أول شريحة فورًا
-startSlideInterval(); // ثم التبديل كل 5 ثوانٍ
+    // التهيئة الأولية
+    Products.loadCategories();
+    Products.loadProducts();
+    Cart.update();
+    startSlideInterval();
 });
