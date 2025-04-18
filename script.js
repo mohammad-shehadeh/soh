@@ -1,73 +1,3 @@
-// Data from Server.md and Category.md would be loaded here
-// For this example, we'll use sample data
-
-// Sample categories data (would come from Category.md)
-const categories = [
-    { name: "Ceiling Lights", image: "https://via.placeholder.com/80x80?text=Ceiling+Lights" },
-    { name: "Wall Lights", image: "https://via.placeholder.com/80x80?text=Wall+Lights" },
-    { name: "Table Lamps", image: "https://via.placeholder.com/80x80?text=Table+Lamps" },
-    { name: "Floor Lamps", image: "https://via.placeholder.com/80x80?text=Floor+Lamps" },
-    { name: "Outdoor Lighting", image: "https://via.placeholder.com/80x80?text=Outdoor+Lighting" },
-    { name: "Smart Lighting", image: "https://via.placeholder.com/80x80?text=Smart+Lighting" },
-    { name: "LED Strips", image: "https://via.placeholder.com/80x80?text=LED+Strips" },
-    { name: "Chandeliers", image: "https://via.placeholder.com/80x80?text=Chandeliers" }
-];
-
-// Sample products data (would come from Server.md)
-const products = [
-    {
-        category: "Ceiling Lights",
-        name: "Modern Flush Mount",
-        price: 89.99,
-        image: "https://via.placeholder.com/300x200?text=Modern+Flush+Mount"
-    },
-    {
-        category: "Ceiling Lights",
-        name: "Crystal Chandelier",
-        price: 199.99,
-        image: "https://via.placeholder.com/300x200?text=Crystal+Chandelier"
-    },
-    {
-        category: "Wall Lights",
-        name: "Sconce Wall Light",
-        price: 49.99,
-        image: "https://via.placeholder.com/300x200?text=Sconce+Wall+Light"
-    },
-    {
-        category: "Table Lamps",
-        name: "Ceramic Table Lamp",
-        price: 59.99,
-        image: "https://via.placeholder.com/300x200?text=Ceramic+Table+Lamp"
-    },
-    {
-        category: "Floor Lamps",
-        name: "Arc Floor Lamp",
-        price: 129.99,
-        image: "https://via.placeholder.com/300x200?text=Arc+Floor+Lamp"
-    },
-    {
-        category: "Outdoor Lighting",
-        name: "Weatherproof Wall Light",
-        price: 79.99,
-        image: "https://via.placeholder.com/300x200?text=Weatherproof+Wall+Light"
-    },
-    {
-        category: "Smart Lighting",
-        name: "Wi-Fi Smart Bulb",
-        price: 24.99,
-        image: "https://via.placeholder.com/300x200?text=Wi-Fi+Smart+Bulb"
-    },
-    {
-        category: "LED Strips",
-        name: "RGB LED Strip",
-        price: 29.99,
-        image: "https://via.placeholder.com/300x200?text=RGB+LED+Strip"
-    }
-];
-
-// Shopping cart
-let cart = [];
-
 // DOM elements
 const categoriesContainer = document.getElementById('categories-container');
 const productsContainer = document.getElementById('products-container');
@@ -80,11 +10,41 @@ const cartTotalPrice = document.getElementById('cart-total-price');
 const cartCount = document.getElementById('cart-count');
 const sendOrderBtn = document.getElementById('send-order-btn');
 
+// Shopping cart
+let cart = [];
+let categories = [];
+let products = [];
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
-    loadCategories();
-    loadProducts();
-    initSlideshow();
+    // Load data from markdown files
+    Promise.all([
+        fetch('Category.md').then(response => response.text()),
+        fetch('Server.md').then(response => response.text())
+    ])
+    .then(([categoryData, productData]) => {
+        // Parse categories from Category.md
+        const categoryJson = categoryData.match(/```json\n([\s\S]*?)\n```/)[1];
+        categories = JSON.parse(categoryJson).categories;
+        
+        // Parse products from Server.md
+        const productJson = productData.match(/```json\n([\s\S]*?)\n```/)[1];
+        products = JSON.parse(productJson).products;
+        
+        // Now that we have data, initialize the rest of the page
+        loadCategories();
+        loadProducts();
+        initSlideshow();
+    })
+    .catch(error => {
+        console.error('Error loading data:', error);
+        // Fallback to empty arrays if files can't be loaded
+        categories = [];
+        products = [];
+        loadCategories();
+        loadProducts();
+        initSlideshow();
+    });
     
     // Event listeners
     cartButton.addEventListener('click', openCartModal);
@@ -101,6 +61,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Load categories
 function loadCategories() {
+    categoriesContainer.innerHTML = '';
+    
+    if (categories.length === 0) {
+        categoriesContainer.innerHTML = '<p>No categories available.</p>';
+        return;
+    }
+    
     categories.forEach(category => {
         const categoryElement = document.createElement('div');
         categoryElement.className = 'category-item';
