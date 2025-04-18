@@ -19,15 +19,15 @@ let products = [];
 document.addEventListener('DOMContentLoaded', function() {
     // Load data from markdown files
     Promise.all([
-        fetch('Category.md').then(response => response.text()),
-        fetch('Server.md').then(response => response.text())
+        fetch('Category.js').then(response => response.text()),
+        fetch('Server.js').then(response => response.text())
     ])
     .then(([categoryData, productData]) => {
-        // Parse categories from Category.md
+        // Parse categories from Category.js
         const categoryJson = categoryData.match(/```json\n([\s\S]*?)\n```/)[1];
         categories = JSON.parse(categoryJson).categories;
         
-        // Parse products from Server.md
+        // Parse products from Server.js
         const productJson = productData.match(/```json\n([\s\S]*?)\n```/)[1];
         products = JSON.parse(productJson).products;
         
