@@ -2,8 +2,8 @@
 {
   "products": [
     {
-      "category": "Ceiling Lights",
-      "name": "Modern Flush Mount",
+      "category": "حوليكن لايت ",
+      "name": "Modern Flush 999",
       "price": 89.99,
       "image": "https://via.placeholder.com/300x200?text=Modern+Flush+Mount"
     },
