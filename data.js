@@ -6,11 +6,19 @@ const categories = [
     },
     {
         name: "إضاءة خارجية",
-        image: "https://example.com/outdoor-category.jpg"
+        image: "https://cdn.salla.sa/KjYjdb/0lYORcT8H8NPYnGNp1sQbYZfLT6DSnWdD2TFiPTD.jpg"
+    },
+    {
+        name: "إضاءة داخلية",
+        image: "https://cdn.salla.sa/WRneP/JIWbcJ7b4MZuYJMXNnp9ifrb18AmvbTGlDIEglI1.jpg"
+    },
+    {
+        name: "إضاءة شوارع",
+        image: "https://www.tarshid.com.sa/_next/image?url=https%3A%2F%2Fwww.tarshid.com.sa%2Fuploads%2Fmain_cover.jpg-nrps7n.jpeg&w=3840&q=75"
     },
     {
         name: "إضاءة مكتبية",
-        image: "https://example.com/office-category.jpg"
+        image: "https://m.media-amazon.com/images/I/61jl27ilxtL.jpg"
     }
 ];
 
