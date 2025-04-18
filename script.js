@@ -108,13 +108,13 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         decreaseQuantity: (index) => {
-            if (cart[index].quantity > 1) {
-                cart[index].quantity--;
-            } else {
-                this.removeItem(index);
-            }
-            Cart.update();
-        },
+    if (cart[index].quantity > 1) {
+        cart[index].quantity--;
+        Cart.update();
+    } else {
+        Cart.removeItem(index);
+    }
+},
 
         updateQuantity: (index, newQuantity) => {
             newQuantity = Math.max(1, parseInt(newQuantity) || 1);
