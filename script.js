@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <input type="number" value="${item.quantity}" min="1" class="quantity-input">
                             <button class="increment">+</button>
                         </div>
-                        <p class="item-total">$${(item.price * item.quantity).toFixed(2)}</p>
+                        <p class="item-total">₪${(item.price * item.quantity).toFixed(2)}</p>
                     </div>
                 </div>
                 <button class="remove-item">&times;</button>
