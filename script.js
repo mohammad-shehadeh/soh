@@ -259,3 +259,25 @@ document.addEventListener('DOMContentLoaded', () => {
     Cart.update();
     startSlideInterval();
 });
+
+
+
+// عند اختيار فئة، أخفِ القسم الرئيسي
+function onCategorySelect(categoryId) {
+    document.getElementById('home-section').style.display = 'none';
+
+    // هنا تنفذ أي تحميل للمنتجات حسب الفئة مثلاً
+    loadProductsByCategory(categoryId);
+}
+
+// مثال على ربط هذا الحدث بالأزرار داخل الفئات
+document.addEventListener('DOMContentLoaded', () => {
+    const categoriesContainer = document.getElementById('categories-container');
+
+    categoriesContainer.addEventListener('click', function(e) {
+        if (e.target.classList.contains('category-btn')) {
+            const categoryId = e.target.dataset.id;
+            onCategorySelect(categoryId);
+        }
+    });
+});
