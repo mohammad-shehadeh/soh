@@ -857,16 +857,18 @@ footer {
   }
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@700&display=swap');
+
 .luxury-title {
-  font-family: 'Tajawal', sans-serif;
-  font-size: 2.8rem;
+  font-family: 'Amiri', serif; /* أو 'Cairo' إن أحببت شكلًا عصريًا أكثر */
+  font-size: 3rem;
   font-weight: 700;
-  color: #bfa36f; /* لون ذهبي أنيق */
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  color: #1e3a8a; /* أزرق ملكي */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
   letter-spacing: 1px;
-  margin: 30px 0;
   text-align: center;
-  border-bottom: 2px solid #bfa36f;
+  border-bottom: 2px solid #1e3a8a;
   display: inline-block;
   padding-bottom: 10px;
+  margin-top: 20px;
 }
