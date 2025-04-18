@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مركز شحادة للإضاءة</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* نفس الأنماط السابقة مع تعديلات بسيطة */
+    .mode-switch {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .mode-btn {
+      padding: 12px 25px;
+      border-radius: 25px;
+    }
+    .active-mode {
+      background-color: var(--secondary-color) !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-lightbulb"></i> إدارة بيانات المتجر</h1>
+      <p>نظام إدارة الفئات والمنتجات</p>
+    </div>
+
+    <div class="controls">
+      <div class="mode-switch">
+        <button class="btn-primary mode-btn active-mode" onclick="switchMode('categories')">
+          <i class="fas fa-list"></i> الفئات
+        </button>
+        <button class="btn-primary mode-btn" onclick="switchMode('products')">
+          <i class="fas fa-cube"></i> المنتجات
+        </button>
+      </div>
+
+      <button class="btn-success" onclick="addNewItem()">
+        <i class="fas fa-plus-circle"></i> إضافة جديد
+      </button>
+      
+      <button class="btn-primary" onclick="saveData()">
+        <i class="fas fa-save"></i> حفظ التعديلات
+      </button>
+    </div>
+
+    <!-- جدول الفئات -->
+    <div class="table-container" id="categoriesTable" style="display: block;">
+      <table>
+        <thead>
+          <tr>
+            <th width="30%">اسم الفئة</th>
+            <th width="50%">رابط الصورة</th>
+            <th width="20%">الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody id="categoriesBody"></tbody>
+      </table>
+    </div>
+
+    <!-- جدول المنتجات -->
+    <div class="table-container" id="productsTable" style="display: none;">
+      <table>
+        <thead>
+          <tr>
+            <th width="20%">الفئة</th>
+            <th width="25%">اسم المنتج</th>
+            <th width="15%">السعر</th>
+            <th width="30%">صورة المنتج</th>
+            <th width="10%">الإجراءات</th>
+          </tr>
+        </thead>
+        <tbody id="productsBody"></tbody>
+      </table>
+    </div>
+
+    <div class="output-container">
+      <h3><i class="fas fa-code"></i> البيانات الحالية:</h3>
+      <textarea id="outputText" readonly></textarea>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    const currentData = {
+      categories: [...categories],
+      products: [...products]
+    };
+
+    let currentMode = 'categories';
+    
+    function switchMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.mode-btn').forEach(btn => 
+        btn.classList.remove('active-mode'));
+      document.querySelectorAll(`[onclick="switchMode('${mode}')"]`)
+        .forEach(btn => btn.classList.add('active-mode'));
+      
+      document.getElementById('categoriesTable').style.display = 
+        mode === 'categories' ? 'block' : 'none';
+      document.getElementById('productsTable').style.display = 
+        mode === 'products' ? 'block' : 'none';
+      
+      renderTable();
+      updateOutput();
+    }
+
+    function renderTable() {
+      if (currentMode === 'categories') {
+        renderCategories();
+      } else {
+        renderProducts();
+      }
+    }
+
+    function renderCategories() {
+      const body = document.getElementById('categoriesBody');
+      body.innerHTML = '';
+      
+      currentData.categories.forEach((cat, index) => {
+        const row = document.createElement('tr');
+        
+        // اسم الفئة
+        const nameCell = document.createElement('td');
+        nameCell.contentEditable = true;
+        nameCell.textContent = cat.name;
+        nameCell.addEventListener('input', () => {
+          currentData.categories[index].name = nameCell.textContent;
+          updateProductsCategories(cat.name, nameCell.textContent);
+        });
+        
+        // صورة الفئة
+        const imgCell = document.createElement('td');
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'link-container';
+        
+        const imgPreview = document.createElement('img');
+        imgPreview.className = 'img-preview';
+        imgPreview.src = cat.image;
+        imgPreview.onerror = () => imgPreview.style.display = 'none';
+        
+        const imgInput = document.createElement('span');
+        imgInput.contentEditable = true;
+        imgInput.textContent = cat.image;
+        imgInput.addEventListener('input', () => {
+          currentData.categories[index].image = imgInput.textContent;
+          imgPreview.src = imgInput.textContent;
+          imgPreview.style.display = 'inline-block';
+        });
+        
+        imgContainer.append(imgPreview, imgInput);
+        imgCell.appendChild(imgContainer);
+        
+        // زر الحذف
+        const actionCell = document.createElement('td');
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn-danger action-btn';
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteBtn.onclick = () => deleteCategory(index);
+        
+        actionCell.appendChild(deleteBtn);
+        
+        row.append(nameCell, imgCell, actionCell);
+        body.appendChild(row);
+      });
+    }
+
+    function renderProducts() {
+      const body = document.getElementById('productsBody');
+      body.innerHTML = '';
+      
+      currentData.products.forEach((prod, index) => {
+        const row = document.createElement('tr');
+        
+        // اختيار الفئة
+        const catCell = document.createElement('td');
+        const select = document.createElement('select');
+        select.className = 'category-select';
+        currentData.categories.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat.name;
+          option.textContent = cat.name;
+          if (cat.name === prod.category) option.selected = true;
+          select.appendChild(option);
+        });
+        select.onchange = () => {
+          currentData.products[index].category = select.value;
+        };
+        catCell.appendChild(select);
+        
+        // اسم المنتج
+        const nameCell = document.createElement('td');
+        nameCell.contentEditable = true;
+        nameCell.textContent = prod.name;
+        nameCell.addEventListener('input', () => {
+          currentData.products[index].name = nameCell.textContent;
+        });
+        
+        // السعر
+        const priceCell = document.createElement('td');
+        priceCell.contentEditable = true;
+        priceCell.textContent = prod.price;
+        priceCell.addEventListener('input', () => {
+          currentData.products[index].price = priceCell.textContent;
+        });
+        
+        // صورة المنتج
+        const imgCell = document.createElement('td');
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'link-container';
+        
+        const imgPreview = document.createElement('img');
+        imgPreview.className = 'img-preview';
+        imgPreview.src = prod.image;
+        imgPreview.onerror = () => imgPreview.style.display = 'none';
+        
+        const imgInput = document.createElement('span');
+        imgInput.contentEditable = true;
+        imgInput.textContent = prod.image;
+        imgInput.addEventListener('input', () => {
+          currentData.products[index].image = imgInput.textContent;
+          imgPreview.src = imgInput.textContent;
+          imgPreview.style.display = 'inline-block';
+        });
+        
+        imgContainer.append(imgPreview, imgInput);
+        imgCell.appendChild(imgContainer);
+        
+        // زر الحذف
+        const actionCell = document.createElement('td');
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn-danger action-btn';
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteBtn.onclick = () => deleteProduct(index);
+        
+        actionCell.appendChild(deleteBtn);
+        
+        row.append(catCell, nameCell, priceCell, imgCell, actionCell);
+        body.appendChild(row);
+      });
+    }
+
+    function addNewItem() {
+      if (currentMode === 'categories') {
+        currentData.categories.unshift({
+          name: 'فئة جديدة',
+          image: ''
+        });
+      } else {
+        currentData.products.unshift({
+          category: currentData.categories[0]?.name || '',
+          name: 'منتج جديد',
+          price: '0.00',
+          image: ''
+        });
+      }
+      renderTable();
+      updateOutput();
+    }
+
+    function deleteCategory(index) {
+      if (confirm('هل أنت متأكد من حذف الفئة؟')) {
+        const catName = currentData.categories[index].name;
+        currentData.categories.splice(index, 1);
+        currentData.products = currentData.products.filter(p => p.category !== catName);
+        renderTable();
+        updateOutput();
+      }
+    }
+
+    function deleteProduct(index) {
+      if (confirm('هل أنت متأكد من حذف المنتج؟')) {
+        currentData.products.splice(index, 1);
+        renderTable();
+        updateOutput();
+      }
+    }
+
+    function updateProductsCategories(oldName, newName) {
+      currentData.products.forEach(prod => {
+        if (prod.category === oldName) prod.category = newName;
+      });
+    }
+
+    function updateOutput() {
+      const dataString = `const categories = ${JSON.stringify(currentData.categories, null, 2)};\n\n`
+        + `const products = ${JSON.stringify(currentData.products, null, 2)};`;
+      document.getElementById('outputText').value = dataString;
+    }
+
+    // دالة الحفظ على GitHub (تتطلب تعديلات حسب إعداداتك)
+    async function saveData() {
+      const content = btoa(unescape(encodeURIComponent(outputText.value)));
+      const path = 'data.js';
+      const url = `https://api.github.com/repos/mohammad-shehadeh/soh/contents/${path}`;
+
+      try {
+        // ... (نفس منطق الحفظ السابق مع تعديل المسار والمحتوى)
+      } catch (err) {
+        console.error(err);
+        alert('فشل في حفظ البيانات');
+      }
+    }
+
+    // التحميل الأولي
+    updateOutput();
+  </script>
+</body>
+</html>
