@@ -29,8 +29,8 @@
       "image": "https://via.placeholder.com/80x80?text=Smart+Lighting"
     },
     {
-      "name": "LED Strips",
-      "image": "https://via.placeholder.com/80x80?text=LED+Strips"
+      "name": "LED أشرطة",
+      "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
     },
     {
       "name": "Chandeliers",
