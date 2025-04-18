@@ -1,37 +1,21 @@
-
+```json
 {
   "categories": [
     {
-      "name": " car ",
-      "image": "https://via.placeholder.com/80x80?text=Ceiling+Lights"
+      "name": "LED Lights",
+      "image": "images/categories/led.jpg"
     },
     {
-      "name": "Wall Lights",
-      "image": "https://via.placeholder.com/80x80?text=Wall+Lights"
+      "name": "Ceiling Lamps",
+      "image": "images/categories/ceiling.jpg"
     },
     {
-      "name": "Table Lamps",
-      "image": "https://via.placeholder.com/80x80?text=Table+Lamps"
+      "name": "Wall Lamps",
+      "image": "images/categories/wall.jpg"
     },
     {
-      "name": "Floor Lamps",
-      "image": "https://via.placeholder.com/80x80?text=Floor+Lamps"
-    },
-    {
-      "name": "Outdoor Lighting",
-      "image": "https://via.placeholder.com/80x80?text=Outdoor+Lighting"
-    },
-    {
-      "name": "Smart Lighting",
-      "image": "https://via.placeholder.com/80x80?text=Smart+Lighting"
-    },
-    {
-      "name": "LED أشرطة",
-      "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
-    },
-    {
-      "name": "Chandeliers",
-      "image": "https://via.placeholder.com/80x80?text=Chandeliers"
+      "name": "Outdoor Lights",
+      "image": "images/categories/outdoor.jpg"
     }
   ]
 }
