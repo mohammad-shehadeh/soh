@@ -8,14 +8,19 @@
   <style>
     :root {
       --primary-color: #4361ee;
+      --primary-light: #e0e7ff;
       --secondary-color: #3f37c9;
-      --success-color: #4cc9f0;
-      --danger-color: #f72585;
+      --success-color: #10b981;
+      --success-light: #d1fae5;
+      --danger-color: #ef4444;
+      --danger-light: #fee2e2;
+      --warning-color: #f59e0b;
       --light-color: #f8f9fa;
-      --dark-color: #212529;
-      --border-radius: 8px;
-      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      --transition: all 0.3s ease;
+      --dark-color: #1e293b;
+      --gray-color: #64748b;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     * {
@@ -25,64 +30,153 @@
     }
     
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f0f2f5;
+      font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fafc;
       color: var(--dark-color);
       line-height: 1.6;
-      padding: 20px;
+      padding: 0;
       direction: rtl;
     }
     
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 30px;
     }
     
     .header {
       text-align: center;
-      margin-bottom: 30px;
-      padding: 20px;
+      margin-bottom: 40px;
+      padding: 30px;
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
       border-radius: var(--border-radius);
       box-shadow: var(--box-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+      transform: rotate(30deg);
     }
     
     .header h1 {
-      font-size: 2.2rem;
-      margin-bottom: 10px;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      position: relative;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
     .header p {
       opacity: 0.9;
+      font-size: 1.1rem;
+      position: relative;
+    }
+    
+    .header i {
+      margin-left: 15px;
+      font-size: 1.8rem;
+      vertical-align: middle;
     }
     
     .controls {
       background-color: white;
-      padding: 20px;
+      padding: 25px;
       border-radius: var(--border-radius);
       box-shadow: var(--box-shadow);
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       display: flex;
       flex-wrap: wrap;
-      gap: 15px;
+      gap: 20px;
       align-items: center;
+      border: 1px solid rgba(0,0,0,0.05);
     }
     
     .mode-switch {
       display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
+      gap: 15px;
+      margin-bottom: 0;
+      background: var(--primary-light);
+      padding: 8px;
+      border-radius: 50px;
     }
     
     .mode-btn {
       padding: 12px 25px;
-      border-radius: var(--border-radius);
+      border-radius: 50px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--primary-color);
+    }
+    
+    .mode-btn:hover {
+      background: rgba(255,255,255,0.7);
     }
     
     .active-mode {
-      background-color: var(--secondary-color) !important;
+      background-color: white !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      color: var(--primary-color);
+    }
+    
+    button {
+      border: none;
+      border-radius: 50px;
+      padding: 12px 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+    }
+    
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background-color: #0d9e6f;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background-color: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
     
     .table-container {
@@ -91,17 +185,19 @@
       box-shadow: var(--box-shadow);
       overflow-x: auto;
       margin-bottom: 30px;
+      border: 1px solid rgba(0,0,0,0.05);
     }
     
     table {
       width: 100%;
       border-collapse: collapse;
+      min-width: 600px;
     }
     
     th, td {
-      padding: 12px;
+      padding: 15px;
       text-align: center;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #f1f5f9;
     }
     
     th {
@@ -110,30 +206,46 @@
       font-weight: 600;
       position: sticky;
       top: 0;
+      font-size: 0.95rem;
     }
     
     tr:nth-child(even) {
-      background-color: #f9f9f9;
+      background-color: #f8fafc;
     }
     
     tr:hover {
-      background-color: #f1f1f1;
+      background-color: #f1f5f9;
     }
     
     td[contenteditable="true"] {
-      background-color: #ffff;
-      border-radius: 4px;
-      padding: 10px;
+      background-color: white;
+      border-radius: 8px;
+      padding: 12px;
       outline: none;
+      border: 1px solid #e2e8f0;
+      transition: var(--transition);
+    }
+    
+    td[contenteditable="true"]:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px var(--primary-light);
     }
     
     .img-preview {
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       object-fit: cover;
-      border-radius: 4px;
-      border: 1px solid #ddd;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
       margin-left: 10px;
+      transition: var(--transition);
+    }
+    
+    .img-preview:hover {
+      transform: scale(1.8);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      z-index: 10;
+      position: relative;
     }
     
     .link-container {
@@ -143,7 +255,7 @@
     }
     
     .action-btn {
-      padding: 8px 12px;
+      padding: 8px;
       border-radius: 50%;
       width: 36px;
       height: 36px;
@@ -152,64 +264,133 @@
       justify-content: center;
       cursor: pointer;
       transition: var(--transition);
+      background: transparent;
+      border: none;
+      color: var(--gray-color);
+      font-size: 1rem;
+    }
+    
+    .action-btn:hover {
+      background-color: #f1f5f9;
+      color: var(--primary-color);
+      transform: rotate(15deg);
+    }
+    
+    .action-btn.delete:hover {
+      color: var(--danger-color);
+      background-color: var(--danger-light);
     }
     
     .output-container {
       background-color: white;
       border-radius: var(--border-radius);
       box-shadow: var(--box-shadow);
-      padding: 20px;
+      padding: 25px;
+      border: 1px solid rgba(0,0,0,0.05);
     }
     
     .output-container h3 {
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       color: var(--primary-color);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      font-size: 1.3rem;
     }
     
     textarea {
       width: 100%;
       height: 200px;
-      padding: 15px;
+      padding: 18px;
       border-radius: var(--border-radius);
-      border: 1px solid #ddd;
+      border: 1px solid #e2e8f0;
       font-family: 'Courier New', Courier, monospace;
       font-size: 0.9rem;
       resize: vertical;
       direction: ltr;
+      transition: var(--transition);
+      line-height: 1.7;
     }
     
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+    
+    /* تأثيرات للتفاعل */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .table-container, .output-container {
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    /* تحسينات للجوال */
     @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .header {
+        padding: 20px;
+        margin-bottom: 25px;
+      }
+      
+      .header h1 {
+        font-size: 1.8rem;
+      }
+      
       .controls {
         flex-direction: column;
         align-items: stretch;
+        gap: 15px;
+        padding: 20px;
       }
       
       .mode-switch {
-        flex-direction: column;
+        width: 100%;
+        justify-content: center;
       }
       
-      select, button {
+      button {
         width: 100%;
+        justify-content: center;
       }
+      
+      th, td {
+        padding: 12px 10px;
+        font-size: 0.9rem;
+      }
+    }
+    
+    /* تأثيرات عند الحفظ */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .saved-effect {
+      animation: pulse 0.5s ease;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1><i class="fas fa-lightbulb"></i> إدارة بيانات المتجر</h1>
-      <p>نظام إدارة الفئات والمنتجات</p>
+      <h1><i class="fas fa-lightbulb"></i> مركز شحادة للإضاءة</h1>
+      <p>نظام إدارة الفئات والمنتجات المتكامل</p>
     </div>
 
     <div class="controls">
       <div class="mode-switch">
-        <button class="btn-primary mode-btn active-mode" onclick="switchMode('categories')">
+        <button class="mode-btn active-mode" onclick="switchMode('categories')">
           <i class="fas fa-list"></i> الفئات
         </button>
-        <button class="btn-primary mode-btn" onclick="switchMode('products')">
+        <button class="mode-btn" onclick="switchMode('products')">
           <i class="fas fa-cube"></i> المنتجات
         </button>
       </div>
