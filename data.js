@@ -27,6 +27,12 @@ const categories = [
 
 const products = [
   {
+    "category": "تريات",
+    "name": "ثريا ميرشال",
+    "price": 2800,
+    "image": ""
+  },
+  {
     "category": "مصابيح ليد",
     "name": "مصباح ليد 10 واط",
     "price": 15.99,
