@@ -856,3 +856,17 @@ footer {
     margin-bottom: 1rem;
   }
 }
+
+.luxury-title {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #bfa36f; /* لون ذهبي أنيق */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  letter-spacing: 1px;
+  margin: 30px 0;
+  text-align: center;
+  border-bottom: 2px solid #bfa36f;
+  display: inline-block;
+  padding-bottom: 10px;
+}
