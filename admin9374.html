@@ -217,26 +217,36 @@
       background-color: #f1f5f9;
     }
     
-    td[contenteditable="true"] {
-      background-color: white;
-      border-radius: 8px;
-      padding: 12px;
-      outline: none;
-      border: 1px solid #e2e8f0;
-      transition: var(--transition);
+    /* التعديلات الجديدة لحقول إدخال الروابط */
+    .url-input-cell {
+      padding: 5px;
+      position: relative;
     }
     
-    td[contenteditable="true"]:focus {
+    .url-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      text-align: right;
+      direction: ltr;
+      transition: var(--transition);
+      background-color: white;
+    }
+    
+    .url-input:focus {
+      outline: none;
       border-color: var(--primary-color);
       box-shadow: 0 0 0 2px var(--primary-light);
     }
     
-    /* التعديلات الجديدة لمحاذاة الصور */
     .img-cell {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
+      justify-content: flex-end;
+      gap: 15px;
     }
     
     .img-preview {
@@ -254,15 +264,6 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       z-index: 10;
       position: relative;
-    }
-    
-    .img-url {
-      flex-grow: 1;
-      text-align: right;
-      padding: 10px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     
     .link-container {
@@ -382,15 +383,14 @@
         font-size: 0.9rem;
       }
       
-      /* تعديلات الجوال للخلايا الجديدة */
       .img-cell {
-        flex-direction: column;
+        flex-direction: column-reverse;
         align-items: flex-end;
+        gap: 10px;
       }
       
-      .img-url {
+      .url-input {
         width: 100%;
-        text-align: right;
       }
     }
     
@@ -442,7 +442,23 @@
             <th width="10%">إجراءات</th>
           </tr>
         </thead>
-        <tbody id="categoriesBody"></tbody>
+        <tbody id="categoriesBody">
+          <!-- مثال لعنصر الفئة -->
+          <tr>
+            <td contenteditable="true">إضاءة LED</td>
+            <td class="url-input-cell">
+              <div class="img-cell">
+                <img src="https://via.placeholder.com/60" class="img-preview" alt="Preview">
+                <input type="text" class="url-input" value="https://example.com/image1.jpg" dir="ltr">
+              </div>
+            </td>
+            <td>
+              <div class="link-container">
+                <button class="action-btn delete" title="حذف"><i class="fas fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
@@ -458,7 +474,25 @@
             <th width="10%">إجراءات</th>
           </tr>
         </thead>
-        <tbody id="productsBody"></tbody>
+        <tbody id="productsBody">
+          <!-- مثال لعنصر المنتج -->
+          <tr>
+            <td contenteditable="true">إضاءة LED</td>
+            <td contenteditable="true">لمبة LED 10 واط</td>
+            <td contenteditable="true">25.00 ر.س</td>
+            <td class="url-input-cell">
+              <div class="img-cell">
+                <img src="https://via.placeholder.com/60" class="img-preview" alt="Preview">
+                <input type="text" class="url-input" value="https://example.com/product1.jpg" dir="ltr">
+              </div>
+            </td>
+            <td>
+              <div class="link-container">
+                <button class="action-btn delete" title="حذف"><i class="fas fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
