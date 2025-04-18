@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // وظائف السلايدر
     function startSlideInterval() {
-        slideInterval = setInterval(() => plusSlides(1), 2000);
+        slideInterval = setInterval(() => plusSlides(1), 5000);
     }
 
     function plusSlides(n) {
