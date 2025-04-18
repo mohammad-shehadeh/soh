@@ -1,11 +1,8 @@
 
-### 5. Category.md
-```markdown
-```json
 {
   "categories": [
     {
-      "name": "حوليكن لايت ",
+      "name": " car ",
       "image": "https://via.placeholder.com/80x80?text=Ceiling+Lights"
     },
     {
