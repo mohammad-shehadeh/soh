@@ -18,7 +18,114 @@
       --transition: all 0.3s ease;
     }
 
-    /* باقي الأنماط كما هي مع التعديلات التالية */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      color: var(--dark-color);
+      line-height: 1.6;
+      padding: 20px;
+      direction: rtl;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+    
+    .header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      opacity: 0.9;
+    }
+    
+    .controls {
+      background-color: white;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+    }
+    
+    .mode-switch {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .mode-btn {
+      padding: 12px 25px;
+      border-radius: var(--border-radius);
+    }
+    
+    .active-mode {
+      background-color: var(--secondary-color) !important;
+    }
+    
+    .table-container {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow-x: auto;
+      margin-bottom: 30px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+    
+    th {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    
+    td[contenteditable="true"] {
+      background-color: #ffff;
+      border-radius: 4px;
+      padding: 10px;
+      outline: none;
+    }
     
     .img-preview {
       width: 50px;
@@ -28,30 +135,65 @@
       border: 1px solid #ddd;
       margin-left: 10px;
     }
-
+    
     .link-container {
       display: flex;
       align-items: center;
       justify-content: flex-end;
     }
-
-    td[contenteditable="true"] {
-      padding: 8px;
-      min-width: 100px;
+    
+    .action-btn {
+      padding: 8px 12px;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
     }
-
-    .mode-switch {
-      margin-bottom: 20px;
-      gap: 15px;
-    }
-
-    .mode-btn {
-      padding: 12px 25px;
+    
+    .output-container {
+      background-color: white;
       border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 20px;
     }
-
-    .active-mode {
-      background-color: var(--secondary-color) !important;
+    
+    .output-container h3 {
+      margin-bottom: 15px;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      border: 1px solid #ddd;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9rem;
+      resize: vertical;
+      direction: ltr;
+    }
+    
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .mode-switch {
+        flex-direction: column;
+      }
+      
+      select, button {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -118,8 +260,16 @@
   </div>
 
   <script src="data.js"></script>
+  <script src="config.js"></script>
   <script>
-    const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN'; // ضع التوكن هنا
+    // دالة لدمج أجزاء التوكن
+    function getGitHubToken() {
+      if (typeof TOKEN_PART1 !== 'undefined' && typeof TOKEN_PART2 !== 'undefined') {
+        return TOKEN_PART1 + TOKEN_PART2;
+      }
+      throw new Error("لم يتم العثور على أجزاء التوكن في ملف config.js");
+    }
+
     const currentData = {
       categories: [...categories],
       products: [...products]
@@ -307,7 +457,7 @@
     }
 
     function deleteCategory(index) {
-      if (confirm('هل أنت متأكد من حذف الفئة؟')) {
+      if (confirm('هل أنت متأكد من حذف الفئة؟ سيتم حذف جميع المنتجات المرتبطة بها أيضاً')) {
         const catName = currentData.categories[index].name;
         currentData.categories.splice(index, 1);
         currentData.products = currentData.products.filter(p => p.category !== catName);
@@ -337,21 +487,25 @@
     }
 
     async function saveData() {
-      const content = btoa(unescape(encodeURIComponent(document.getElementById('outputText').value)));
-      const path = 'data.js';
-      const url = `https://api.github.com/repos/mohammad-shehadeh/soh/contents/${path}`;
-
       try {
+        const token = getGitHubToken();
+        const content = btoa(unescape(encodeURIComponent(document.getElementById('outputText').value)));
+        const path = 'data.js';
+        const url = `https://api.github.com/repos/mohammad-shehadeh/soh/contents/${path}`;
+
         const shaRes = await fetch(url, {
-          headers: { Authorization: `token ${GITHUB_TOKEN}` }
+          headers: { Authorization: `token ${token}` }
         });
+        
+        if (!shaRes.ok) throw new Error("فشل في جلب بيانات الملف من GitHub");
+        
         const shaData = await shaRes.json();
         const sha = shaData.sha;
 
         const saveRes = await fetch(url, {
           method: "PUT",
           headers: {
-            "Authorization": `token ${GITHUB_TOKEN}`,
+            "Authorization": `token ${token}`,
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
@@ -361,16 +515,18 @@
           })
         });
         
+        if (!saveRes.ok) throw new Error("فشل في حفظ التغييرات على GitHub");
+        
         const data = await saveRes.json();
         if (data.content) {
-          alert("تم الحفظ بنجاح!");
+          alert("تم الحفظ بنجاح على GitHub!");
         } else {
           console.error(data);
-          alert("حدث خطأ أثناء الحفظ.");
+          alert("حدث خطأ غير متوقع أثناء الحفظ.");
         }
       } catch (err) {
         console.error(err);
-        alert("فشل في الاتصال بخادم GitHub");
+        alert(`خطأ: ${err.message}`);
       }
     }
 
