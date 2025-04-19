@@ -176,11 +176,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const buttonClass = isAvailable ? 'add-to-cart' : 'add-to-cart unavailable';
         
         productCard.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <h3>${product.name}</h3>
-            <p class="price">${isAvailable ? `₪${product.price.toFixed(2)}` : 'غير متوفر حالياً'}</p>
-            <button class="${buttonClass}" data-id="${product.name}" ${isAvailable ? '' : 'disabled'}>${buttonText}</button>
-        `;
+    <img src="${product.image}" alt="${product.name}">
+    <h3>${product.name}</h3>
+    <p class="price ${isAvailable ? '' : 'unavailable'}" ${isAvailable ? '' : 'data-unavailable="true"'}>
+        ${isAvailable ? `₪${product.price.toFixed(2)}` : 'غير متوفر حالياً'}
+    </p>
+    <button class="${buttonClass}" data-id="${product.name}" ${isAvailable ? '' : 'disabled'}>${buttonText}</button>
+`;
         
         if (isAvailable) {
             productCard.querySelector('.add-to-cart').addEventListener('click', () => Cart.addItem(product));
