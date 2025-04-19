@@ -22,20 +22,50 @@ document.addEventListener('DOMContentLoaded', () => {
     let slideInterval;
 
     // وظائف إدارة الواجهة
-    const UI = {
-        updateAddToCartButtons: () => {
-            document.querySelectorAll('.add-to-cart').forEach(button => {
-                const productName = button.dataset.id;
-                const cartItem = cart.find(item => item.name === productName);
-                button.innerHTML = cartItem ? 
-                    `<span class="quantity-controls">
-                        <button class="decrement">-</button>
-                        <span class="quantity">${cartItem.quantity}</span>
-                        <button class="decrement">+</button>
-                    </span>` : 
-                    'Add to Cart';
+    updateAddToCartButtons: () => {
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        const productName = button.dataset.id;
+        const cartItem = cart.find(item => item.name === productName);
+
+        if (cartItem) {
+            button.innerHTML = `
+                <span class="quantity-controls">
+                    <button class="decrement">-</button>
+                    <span class="quantity">${cartItem.quantity}</span>
+                    <button class="increment">+</button>
+                </span>
+            `;
+
+            const decrementBtn = button.querySelector('.decrement');
+            const incrementBtn = button.querySelector('.increment');
+
+            decrementBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // منع تفعيل حدث الزر الأساسي
+                const index = cart.findIndex(item => item.name === productName);
+                if (index !== -1) {
+                    Cart.decreaseQuantity(index);
+                }
             });
-        },
+
+            incrementBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // منع تفعيل حدث الزر الأساسي
+                const index = cart.findIndex(item => item.name === productName);
+                if (index !== -1) {
+                    Cart.increaseQuantity(index);
+                }
+            });
+
+        } else {
+            button.textContent = 'Add to Cart';
+            button.addEventListener('click', () => {
+                const product = products.find(p => p.name === productName);
+                if (product) {
+                    Cart.addItem(product);
+                }
+            });
+        }
+    });
+}
 
         showToast: (message) => {
             const toast = document.createElement('div');
