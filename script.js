@@ -317,28 +317,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // التهيئة الأولية
     Products.loadCategories();
-    Products.loadProducts();
+    //Products.loadProducts();
     Cart.update();
     startSlideInterval();
 });
 
-// أضف هذه الوظيفة في مكان ما في الكود
-function getRandomProducts(count) {
-    const shuffled = [...products].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
-}
-
-// ثم استخدمها في loadProducts
-loadProducts: () => {
-    elements.productsContainer.innerHTML = '';
-    let filteredProducts = [];
-    
-    if (currentCategory) {
-        filteredProducts = products.filter(p => p.category === currentCategory);
-    } else {
-        // عرض 3 منتجات عشوائية عند التحميل الأولي
-        filteredProducts = getRandomProducts(3);
-    }
-    
-    // باقي الكود كما هو...
-}
+ 
