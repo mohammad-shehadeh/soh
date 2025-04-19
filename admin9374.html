@@ -350,6 +350,53 @@
       animation: fadeIn 0.5s ease-out;
     }
     
+    /* تحسينات للجوال */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .header {
+        padding: 20px;
+        margin-bottom: 25px;
+      }
+      
+      .header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+        padding: 20px;
+      }
+      
+      .mode-switch {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      th, td {
+        padding: 12px 10px;
+        font-size: 0.9rem;
+      }
+      
+      .img-cell {
+        flex-direction: column-reverse;
+        align-items: flex-end;
+        gap: 10px;
+      }
+      
+      .url-input {
+        width: 100%;
+      }
+    }
     
     /* تأثيرات عند الحفظ */
     @keyframes pulse {
@@ -376,6 +423,24 @@
 .btn-orange:hover {
   background-color: #e67600; /* أغمق قليلاً عند المرور */
 }
+
+.image-column {
+  width: 30%;
+  min-width: 120px;
+}
+
+@media (max-width: 768px) {
+  .image-column {
+    width: 50%;
+  }
+}
+
+@media (max-width: 480px) {
+  .image-column {
+    width: 100%;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -447,7 +512,7 @@
             <th width="20%">الفئة</th>
             <th width="60%">اسم المنتج</th>
             <th width="15%">السعر</th>
-            <th width="20%">صورة المنتج</th>
+            <th class="image-column">رابط الصورة</th>
             <th width="10%">إجراءات</th>
           </tr>
         </thead>
