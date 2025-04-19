@@ -160,7 +160,7 @@ h1 {
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   padding: 0.5rem;
   border-radius: 12px;
-  background-color: #3a3a3a; /* رمادي غامق نوعاً ما */
+  background-color: #ebebeb; /* رمادي غامق نوعاً ما */
 }
 
 .category-card:hover {
@@ -177,7 +177,7 @@ h1 {
   border: 2px solid var(--primary-color);
   padding: 3px;
   transition: transform 0.3s ease;
-  background-color: #dbdbdb;
+  background-color: #f8f8f8;
 }
 
 /* Hover zoom */
