@@ -889,17 +889,3 @@ footer {
   100% { transform: scaleX(0.9); opacity: 0.7; }
 }
 
-.btn-orange {
-  background-color: #ff8800; /* برتقالي عادي */
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.btn-orange:hover {
-  background-color: #e67600; /* أغمق قليلاً عند المرور */
-}
