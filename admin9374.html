@@ -425,57 +425,22 @@
 }
 
 @media (max-width: 768px) {
-  /* جدول الفئات */
-  #categoriesTable th:nth-child(1),
-  #categoriesTable td:nth-child(1) {
-    width: 50% !important; /* اسم الفئة يأخذ نصف المساحة */
-  }
-  
-  #categoriesTable th:nth-child(2),
-  #categoriesTable td:nth-child(2) {
-    width: 30% !important; /* رابط الصورة يأخذ 30% */
-  }
-  
-  #categoriesTable th:nth-child(3),
-  #categoriesTable td:nth-child(3) {
-    width: 20% !important; /* الإجراءات 20% */
-  }
-
-  /* جدول المنتجات */
-  #productsTable th:nth-child(1),
-  #productsTable td:nth-child(1) {
-    width: 20% !important; /* الفئة */
-  }
-  
+  /* تكبير عمود "اسم المنتج" في جدول المنتجات */
   #productsTable th:nth-child(2),
   #productsTable td:nth-child(2) {
-    width: 30% !important; /* اسم المنتج */
-  }
-  
-  #productsTable th:nth-child(3),
-  #productsTable td:nth-child(3) {
-    width: 15% !important; /* السعر */
-  }
-  
-  #productsTable th:nth-child(4),
-  #productsTable td:nth-child(4) {
-    width: 25% !important; /* صورة المنتج */
-  }
-  
-  #productsTable th:nth-child(5),
-  #productsTable td:nth-child(5) {
-    width: 10% !important; /* الإجراءات */
+    width: 45% !important;  /* زيادة العرض إلى 45% */
+    min-width: 120px;      /* أدنى عرض مضمون */
   }
 
-  /* تحسين عرض حقل الرابط */
-  .url-input {
-    max-width: 100%;
-    padding: 8px;
+  /* تقليص الأعمدة الأخرى لتعويض المساحة */
+  #productsTable th:nth-child(1),
+  #productsTable td:nth-child(1) {
+    width: 15% !important;  /* تقليل عرض عمود الفئة */
   }
-  
-  .img-preview {
-    width: 30px;
-    height: 30px;
+
+  #productsTable th:nth-child(4),
+  #productsTable td:nth-child(4) {
+    width: 20% !important;  /* تقليل عرض عمود الصورة */
   }
 }
   </style>
