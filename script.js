@@ -27,47 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.add-to-cart').forEach(button => {
         const productName = button.dataset.id;
         const cartItem = cart.find(item => item.name === productName);
-
-        if (cartItem) {
-            button.innerHTML = `
-                <div class="quantity-controls">
-                    <button class="decrement">-</button>
-                    <input type="number" value="${cartItem.quantity}" min="1" class="quantity-input">
-                    <button class="increment">+</button>
-                </div>
-            `;
-
-            const index = cart.findIndex(item => item.name === productName);
-            const decrementBtn = button.querySelector('.decrement');
-            const incrementBtn = button.querySelector('.increment');
-            const quantityInput = button.querySelector('.quantity-input');
-
-            decrementBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                Cart.decreaseQuantity(index);
-            });
-
-            incrementBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                Cart.increaseQuantity(index);
-            });
-
-            quantityInput.addEventListener('change', (e) => {
-                e.stopPropagation();
-                Cart.updateQuantity(index, e.target.value);
-            });
-
-        } else {
-            button.textContent = 'Add to Cart';
-            button.addEventListener('click', () => {
-                const product = products.find(p => p.name === productName);
-                if (product) {
-                    Cart.addItem(product);
-                }
-            });
-        }
+        button.innerHTML = cartItem ? 
+            `<span class="quantity-controls">
+                <button class="decrement">-</button>
+                <input type="number" value="${cartItem.quantity}" min="1" class="quantity-input">
+                <button class="increment">+</button>
+            </span>` : 
+            'Add to Cart';
     });
-}
+},
 
         showToast: (message) => {
             const toast = document.createElement('div');
