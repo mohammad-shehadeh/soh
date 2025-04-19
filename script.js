@@ -162,26 +162,35 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         loadProducts: () => {
-            elements.productsContainer.innerHTML = '';
-            const filteredProducts = currentCategory ? 
-                products.filter(p => p.category === currentCategory) : 
-                products;
+    elements.productsContainer.innerHTML = '';
+    const filteredProducts = currentCategory ? 
+        products.filter(p => p.category === currentCategory) : 
+        products;
 
-            filteredProducts.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p class="price">₪${product.price.toFixed(2)}</p>
-                    <button class="add-to-cart" data-id="${product.name}"></button>
-                `;
-                productCard.querySelector('.add-to-cart').addEventListener('click', () => Cart.addItem(product));
-                elements.productsContainer.appendChild(productCard);
-            });
-            
-            UI.updateAddToCartButtons();
+    filteredProducts.forEach(product => {
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        
+        const isAvailable = product.price > 0;
+        const buttonText = isAvailable ? '' : 'غير متوفر';
+        const buttonClass = isAvailable ? 'add-to-cart' : 'add-to-cart unavailable';
+        
+        productCard.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <h3>${product.name}</h3>
+            <p class="price">${isAvailable ? `₪${product.price.toFixed(2)}` : 'غير متوفر حالياً'}</p>
+            <button class="${buttonClass}" data-id="${product.name}" ${isAvailable ? '' : 'disabled'}>${buttonText}</button>
+        `;
+        
+        if (isAvailable) {
+            productCard.querySelector('.add-to-cart').addEventListener('click', () => Cart.addItem(product));
         }
+        
+        elements.productsContainer.appendChild(productCard);
+    });
+    
+    UI.updateAddToCartButtons();
+}
     };
 
     // أحداث السلة
