@@ -24,58 +24,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // وظائف إدارة الواجهة
     const UI = {
         updateAddToCartButtons: () => {
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        const productName = button.dataset.id;
-        const cartItem = cart.find(item => item.name === productName);
-
-        if (cartItem) {
-            button.innerHTML = `
-                <span class="quantity-controls">
-                    <button class="decrement">-</button>
-                    <input type="number" value="${cartItem.quantity}" min="1" class="quantity-input">
-                    <button class="increment">+</button>
-                </span>`;
-
-            setTimeout(() => {
-                const decrementBtn = button.querySelector('.decrement');
-                const incrementBtn = button.querySelector('.increment');
-                const quantityInput = button.querySelector('.quantity-input');
-
-                if (decrementBtn && incrementBtn && quantityInput) {
-                    decrementBtn.addEventListener('click', () => {
-                        const item = cart.find(i => i.name === productName);
-                        if (item && item.quantity > 1) {
-                            item.quantity--;
-                        } else if (item) {
-                            cart = cart.filter(i => i.name !== productName);
-                        }
-                        Cart.update(); // فقط نستدعي التحديث العام هنا
-                    });
-
-                    incrementBtn.addEventListener('click', () => {
-                        const item = cart.find(i => i.name === productName);
-                        if (item) {
-                            item.quantity++;
-                            Cart.update();
-                        }
-                    });
-
-                    quantityInput.addEventListener('change', (e) => {
-                        const value = parseInt(e.target.value) || 1;
-                        const item = cart.find(i => i.name === productName);
-                        if (item) {
-                            item.quantity = Math.max(1, value);
-                            Cart.update();
-                        }
-                    });
-                }
-            }, 0);
-
-        } else {
-            button.innerHTML = 'Add to Cart';
-        }
-    });
-}
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                const productName = button.dataset.id;
+                const cartItem = cart.find(item => item.name === productName);
+                button.innerHTML = cartItem ? 
+                    `<span class="quantity-controls">
+                        <button class="decrement">-</button>
+                        <span class="quantity">${cartItem.quantity}</span>
+                        <button class="increment">+</button>
+                    </span>` : 
+                    'Add to Cart';
+            });
+        },
 
         showToast: (message) => {
             const toast = document.createElement('div');
