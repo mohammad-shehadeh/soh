@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="quantity">${cartItem.quantity}</span>
                         <button class="increment">+</button>
                     </span>` : 
-                    'Add to Cart';
+                    'إضافة للسلة';
             });
         },
 
