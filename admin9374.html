@@ -428,7 +428,7 @@
   /* تكبير عمود "اسم المنتج" في جدول المنتجات */
   #productsTable th:nth-child(2),
   #productsTable td:nth-child(2) {
-    width: 45% !important;  /* زيادة العرض إلى 45% */
+    width: 55% !important;  /* زيادة العرض إلى 45% */
     min-width: 120px;      /* أدنى عرض مضمون */
   }
 
@@ -441,6 +441,17 @@
   #productsTable th:nth-child(4),
   #productsTable td:nth-child(4) {
     width: 20% !important;  /* تقليل عرض عمود الصورة */
+  }
+}
+
+@media (max-width: 768px) {
+  /* تكبير عمود "اسم الفئة" فقط */
+  #categoriesTable th:nth-child(1),
+  #categoriesTable td:nth-child(1) {
+    width: 70% !important;  /* زيادة العرض إلى 70% */
+    min-width: 160px;      /* أدنى عرض مضمون */
+    font-size: 1.1rem;     /* تكبير الخط قليلاً */
+    padding-right: 15px;   /* زيادة المساحة الداخلية */
   }
 }
   </style>
