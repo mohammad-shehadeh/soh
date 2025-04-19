@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
         plusSlides(1); // التبديل الأول
         // بعد التبديل الأول، نبدأ التبديل كل 2000 مللي ثانية
         slideInterval = setInterval(() => plusSlides(1), 3000);
-    }, 50);
+    }, 3000);
 }
 
     function plusSlides(n) {
