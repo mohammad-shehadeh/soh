@@ -417,6 +417,15 @@ h1 {
   margin-bottom: 1rem;
 }
 
+
+.product-card .price {
+  font-size: 1.6rem; /* كبرنا الخط */
+  font-weight: 800; /* جعلناه أعرض */
+  color: green; /* غيرنا اللون إلى أخضر */
+  font-family: 'Cairo', sans-serif; /* خط جميل يناسب السعر */
+  margin-bottom: 1rem;
+}
+
 .add-to-cart {
   width: 100%;
   padding: 0.8rem;
