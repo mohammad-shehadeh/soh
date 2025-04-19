@@ -36,34 +36,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="increment">+</button>
                 </span>`;
 
-            // ربط أحداث الإنقاص والزيادة
-            const decrementBtn = button.querySelector('.decrement');
-            const incrementBtn = button.querySelector('.increment');
-            const quantityInput = button.querySelector('.quantity-input');
+            // لازم ننتظر شوي لين الـ innerHTML تنضاف للـ DOM
+            setTimeout(() => {
+                const decrementBtn = button.querySelector('.decrement');
+                const incrementBtn = button.querySelector('.increment');
+                const quantityInput = button.querySelector('.quantity-input');
 
-            decrementBtn.addEventListener('click', () => {
-                const item = cart.find(i => i.name === productName);
-                if (item && item.quantity > 1) {
-                    item.quantity--;
-                    quantityInput.value = item.quantity;
-                }
-                // يمكنك هنا تحديث السلة بشكل عام
-            });
+                if (decrementBtn && incrementBtn && quantityInput) {
+                    decrementBtn.addEventListener('click', () => {
+                        const item = cart.find(i => i.name === productName);
+                        if (item && item.quantity > 1) {
+                            item.quantity--;
+                            updateAddToCartButtons(); // إعادة التحديث
+                            renderCart(); // إذا عندك دالة تعرض السلة
+                        }
+                    });
 
-            incrementBtn.addEventListener('click', () => {
-                const item = cart.find(i => i.name === productName);
-                if (item) {
-                    item.quantity++;
-                    quantityInput.value = item.quantity;
+                    incrementBtn.addEventListener('click', () => {
+                        const item = cart.find(i => i.name === productName);
+                        if (item) {
+                            item.quantity++;
+                            updateAddToCartButtons();
+                            renderCart();
+                        }
+                    });
                 }
-                // يمكنك هنا تحديث السلة بشكل عام
-            });
+            }, 0);
 
         } else {
             button.innerHTML = 'Add to Cart';
         }
     });
-},
+}
 
         showToast: (message) => {
             const toast = document.createElement('div');
