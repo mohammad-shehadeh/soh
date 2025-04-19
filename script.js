@@ -21,21 +21,48 @@ document.addEventListener('DOMContentLoaded', () => {
     let slideIndex = 0;
     let slideInterval;
 
-    // وظائف إدارة الواجهة
-    const UI = {
-        updateAddToCartButtons: () => {
-            document.querySelectorAll('.add-to-cart').forEach(button => {
-                const productName = button.dataset.id;
-                const cartItem = cart.find(item => item.name === productName);
-                button.innerHTML = cartItem ? 
-                    `<span class="quantity-controls">
-                        <button class="decrement">-</button>
+    // وظائف إدارة الواجهةconst UI = {
+    updateAddToCartButtons: () => {
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            const productName = button.dataset.id;
+            const cartItem = cart.find(item => item.name === productName);
+            
+            if (cartItem) {
+                button.innerHTML = `
+                    <span class="quantity-controls">
+                        <button class="decrement" data-id="${productName}">-</button>
                         <span class="quantity">${cartItem.quantity}</span>
-                        <button class="increment">+</button>
-                    </span>` : 
-                    'Add to Cart';
-            });
-        },
+                        <button class="increment" data-id="${productName}">+</button>
+                    </span>
+                `;
+                
+                // إضافة event listeners للأزرار الجديدة
+                button.querySelector('.decrement').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const itemIndex = cart.findIndex(item => item.name === productName);
+                    if (itemIndex !== -1) {
+                        Cart.decreaseQuantity(itemIndex);
+                    }
+                });
+                
+                button.querySelector('.increment').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const itemIndex = cart.findIndex(item => item.name === productName);
+                    if (itemIndex !== -1) {
+                        Cart.increaseQuantity(itemIndex);
+                    }
+                });
+            } else {
+                button.textContent = 'Add to Cart';
+                // إزالة أي event listeners قديمة
+                button.replaceWith(button.cloneNode(true));
+            }
+        });
+    },
+    // ... باقي دوال UI
+};
 
         showToast: (message) => {
             const toast = document.createElement('div');
