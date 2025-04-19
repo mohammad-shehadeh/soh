@@ -410,9 +410,10 @@ h1 {
 }
 
 .product-price {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--primary-color);
+  font-size: 1.6rem; /* كبرنا الخط */
+  font-weight: 800; /* جعلناه أعرض */
+  color: green; /* غيرنا اللون إلى أخضر */
+  font-family: 'Cairo', sans-serif; /* خط جميل يناسب السعر */
   margin-bottom: 1rem;
 }
 
