@@ -226,7 +226,7 @@
 }
 
 .url-input {
-  width: 50%;
+  width: 100%;
   padding: 12px 15px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
@@ -422,6 +422,48 @@
 
 .btn-orange:hover {
   background-color: #e67600; /* أغمق قليلاً عند المرور */
+}
+
+@media (max-width: 768px) {
+  /* ... الأكواد السابقة ... */
+  
+  .url-input-cell {
+    max-width: 150px; /* تحديد عرض أقصى للحقل */
+    overflow: hidden;
+  }
+  
+  .url-input {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 8px 10px;
+  }
+  
+  .img-cell {
+    flex-direction: row; /* إبقاء الصورة بجانب الحقل */
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  
+  .img-preview {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* ... الأكواد السابقة ... */
+  
+  #categoriesTable th:nth-child(2),
+  #categoriesTable td:nth-child(2) {
+    width: 40% !important;
+  }
+  
+  #productsTable th:nth-child(4),
+  #productsTable td:nth-child(4) {
+    width: 30% !important;
+  }
 }
   </style>
 </head>
