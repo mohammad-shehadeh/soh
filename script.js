@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         const firstProduct = document.querySelector('.product-card:first-child');
         if (firstProduct) {
-            const yOffset = 100;
+            const yOffset = 150;
             const y = firstProduct.getBoundingClientRect().top + window.pageYOffset - yOffset;
             
             window.scrollTo({
@@ -335,4 +335,11 @@ document.addEventListener('DOMContentLoaded', () => {
     startSlideInterval();
 });
 
+window.onload = function () {
+    window.scrollTo(0, 0); // يبدأ من الأعلى
+    Products.loadCategories();
+    //Products.loadProducts();
+    Cart.update();
+    startSlideInterval();
+};
  
