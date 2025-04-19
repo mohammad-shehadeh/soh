@@ -428,18 +428,33 @@ h1 {
 
 .add-to-cart {
   width: 100%;
-  padding: 0.8rem;
-  background-color: var(--primary-color);
+  padding: 0.9rem 1.2rem;
+  background: linear-gradient(135deg, #4361ee, #5f27cd, #3f37c9);
   color: white;
   border: none;
-  border-radius: 0.5rem;
-  font-size: 1rem;
+  border-radius: 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.4);
+  background-size: 200% 200%;
+  animation: gradientShift 5s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.add-to-cart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(67, 97, 238, 0.6);
 }
 
 .add-to-cart:hover {
