@@ -177,7 +177,7 @@ h1 {
   border: 2px solid var(--primary-color);
   padding: 3px;
   transition: transform 0.3s ease;
-  background-color: #f8f8f8;
+  background-color: #dbdbdb;
 }
 
 /* Hover zoom */
