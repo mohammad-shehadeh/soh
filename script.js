@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     `<span class="quantity-controls">
                         <button class="decrement">-</button>
                         <span class="quantity">${cartItem.quantity}</span>
-                        <button class="increment">+</button>
+                        <button class="decrement">+</button>
                     </span>` : 
                     'Add to Cart';
             });
