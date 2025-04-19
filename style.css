@@ -929,3 +929,87 @@ footer {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     margin: 8px 0;
 }
+
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f8f8f8;
+    border-radius: 30px;
+    padding: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 120px;
+    height: 40px;
+}
+
+.quantity {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    min-width: 30px;
+    text-align: center;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.quantity-controls button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+}
+
+.quantity-controls button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.quantity-controls button:active {
+    transform: scale(0.95);
+}
+
+.quantity-controls .decrement {
+    background-color: #f44336;
+}
+
+.quantity-controls .decrement:hover {
+    background-color: #d32f2f;
+}
+
+/* تأثيرات إضافية للتفاعل */
+.quantity-controls button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+}
+
+.quantity-controls .decrement:focus {
+    box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.3);
+}
+
+/* تصميم متجاوب */
+@media (max-width: 480px) {
+    .quantity-controls {
+        width: 100px;
+        height: 36px;
+    }
+    
+    .quantity-controls button {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+    }
+    
+    .quantity {
+        font-size: 16px;
+    }
+}
