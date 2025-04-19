@@ -342,4 +342,8 @@ window.onload = function () {
     Cart.update();
     startSlideInterval();
 };
+
+window.addEventListener('load', () => {
+    startSlideInterval();
+});
  
