@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         const firstProduct = document.querySelector('.product-card:first-child');
         if (firstProduct) {
-            const yOffset = 250;
+            const yOffset = 270;
             const y = firstProduct.getBoundingClientRect().top + window.pageYOffset - yOffset;
             
             window.scrollTo({
