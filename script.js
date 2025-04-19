@@ -192,9 +192,22 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         filterByCategory: (categoryName) => {
-            currentCategory = categoryName;
-            Products.loadProducts();
-        },
+    currentCategory = categoryName;
+    Products.loadProducts();
+    
+    setTimeout(() => {
+        const firstProduct = document.querySelector('.product-card:first-child');
+        if (firstProduct) {
+            const yOffset = 50;
+            const y = firstProduct.getBoundingClientRect().top + window.pageYOffset - yOffset;
+            
+            window.scrollTo({
+                top: y,
+                behavior: 'smooth'
+            });
+        }
+    }, 100);
+},
 
         loadProducts: () => {
     elements.productsContainer.innerHTML = '';
