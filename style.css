@@ -856,18 +856,20 @@ footer {
   }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo+Play:wght@800&display=swap');
 
 .luxury-title {
-  font-family: 'Tajawal', sans-serif;
-  font-size: 3rem;
-  font-weight: 700;
-  color: #0d47a1; /* أزرق ملكي داكن */
+  font-family: 'Cairo Play', sans-serif;
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: #0d47a1;
   text-align: center;
-  letter-spacing: 1px;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  border-bottom: 2px solid #0d47a1;
+  letter-spacing: 1.2px;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.25);
   display: inline-block;
-  padding-bottom: 8px;
-  margin-top: 30px;
+  padding-bottom: 10px;
+  margin-top: 40px;
+  border-bottom: 4px solid transparent;
+  border-image: linear-gradient(to right, #0d47a1, #8e24aa, #d81b60);
+  border-image-slice: 1;
 }
