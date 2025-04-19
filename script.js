@@ -237,38 +237,120 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
     // وظائف السلايدر
-    function startSlideInterval() {
-    // تغيير أول صورة بعد 500 مللي ثانية
-    setTimeout(() => {
-        plusSlides(1); // التبديل الأول
-        // بعد التبديل الأول، نبدأ التبديل كل 2000 مللي ثانية
-        slideInterval = setInterval(() => plusSlides(1), 3000);
-    }, 50);
+    let slideIndex = 1;
+let slideInterval;
+
+document.addEventListener("DOMContentLoaded", () => {
+  // تحميل روابط الصور من advertisement.md
+  fetch("advertisement.md")
+    .then((response) => response.text())
+    .then((data) => {
+      const urls = data
+        .split("\n")
+        .map((line) => line.trim().split("-")[1])
+        .filter((url) => url?.startsWith("http"));
+
+      const slideshowContainer = document.querySelector(".slideshow-container");
+      const dotsContainer = document.querySelector(".dots-container");
+
+      urls.forEach((url, index) => {
+        // إنشاء شريحة
+        const slide = document.createElement("div");
+        slide.className = "mySlides fade";
+        slide.innerHTML = `<img src="${url}" alt="شريحة ${index + 1}" style="width:100%" />`;
+        slideshowContainer.appendChild(slide);
+
+        // إنشاء نقطة
+        const dot = document.createElement("span");
+        dot.className = "dot";
+        dot.setAttribute("aria-label", `الشريحة ${index + 1}`);
+        dot.setAttribute("onclick", `currentSlide(${index + 1})`);
+        dotsContainer.appendChild(dot);
+      });
+
+      showSlides(slideIndex);
+      startSlideInterval();
+      enableTouchAndMouseSwipe(slideshowContainer);
+    });
+
+  Products.loadCategories();
+  Products.loadProducts();
+  Cart.update();
+});
+
+// عرض شريحة محددة
+function showSlides() {
+  const slides = document.getElementsByClassName("mySlides");
+  const dots = document.getElementsByClassName("dot");
+
+  if (slides.length === 0) return;
+
+  slideIndex = slideIndex > slides.length ? 1 : slideIndex < 1 ? slides.length : slideIndex;
+
+  Array.from(slides).forEach((slide) => (slide.style.display = "none"));
+  Array.from(dots).forEach((dot) => dot.classList.remove("active"));
+
+  slides[slideIndex - 1].style.display = "block";
+  dots[slideIndex - 1].classList.add("active");
 }
 
-    function plusSlides(n) {
-        slideIndex += n;
-        showSlides();
-    }
+function plusSlides(n) {
+  slideIndex += n;
+  showSlides();
+}
 
-    function currentSlide(n) {
-        slideIndex = n;
-        showSlides();
-    }
+function currentSlide(n) {
+  slideIndex = n;
+  showSlides();
+}
 
-    function showSlides() {
-        const slides = document.getElementsByClassName("mySlides");
-        const dots = document.getElementsByClassName("dot");
-        
-        slideIndex = slideIndex > slides.length ? 1 : slideIndex < 1 ? slides.length : slideIndex;
-        
-        Array.from(slides).forEach(slide => slide.style.display = "none");
-        Array.from(dots).forEach(dot => dot.classList.remove("active"));
-        
-        slides[slideIndex-1].style.display = "block";
-        dots[slideIndex-1].classList.add("active");
-    }
+function startSlideInterval() {
+  clearInterval(slideInterval);
+  setTimeout(() => {
+    plusSlides(1);
+    slideInterval = setInterval(() => plusSlides(1), 3000);
+  }, 50);
+}
 
+// دعم اللمس والفأرة
+function enableTouchAndMouseSwipe(container) {
+  let startX = 0;
+  let isMouseDown = false;
+
+  // للموبايل
+  container.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  });
+
+  container.addEventListener("touchend", (e) => {
+    const endX = e.changedTouches[0].clientX;
+    handleSwipe(startX, endX);
+  });
+
+  // للماوس
+  container.addEventListener("mousedown", (e) => {
+    isMouseDown = true;
+    startX = e.clientX;
+  });
+
+  container.addEventListener("mouseup", (e) => {
+    if (!isMouseDown) return;
+    isMouseDown = false;
+    const endX = e.clientX;
+    handleSwipe(startX, endX);
+  });
+
+  function handleSwipe(start, end) {
+    const diff = start - end;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        plusSlides(1); // سحب لليسار
+      } else {
+        plusSlides(-1); // سحب لليمين
+      }
+    }
+  }
+}
     // التهيئة الأولية
     Products.loadCategories();
     Products.loadProducts();
