@@ -454,6 +454,7 @@
     padding-right: 15px;   /* زيادة المساحة الداخلية */
   }
 }
+
   </style>
 </head>
 <body>
@@ -561,7 +562,19 @@
 
   <script src="data.js"></script>
   <script src="config.js"></script>
+  <script src="password.html"></script>
+
   <script>
+      // تحقق من حالة المصادقة
+  if (localStorage.getItem('isAuthenticated') !== 'true') {
+    window.location.href = 'password.html';
+  }
+  
+  // دالة للخروج من النظام
+  function logout() {
+    localStorage.removeItem('isAuthenticated');
+    window.location.href = 'password.html';
+  }
     // دالة لدمج أجزاء التوكن
     function getGitHubToken() {
       if (typeof TOKEN_PART1 !== 'undefined' && typeof TOKEN_PART2 !== 'undefined') {
