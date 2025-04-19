@@ -856,20 +856,33 @@ footer {
   }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Cairo+Play:wght@800&display=swap');
-
 .luxury-title {
-  font-family: 'Cairo Play', sans-serif;
+  font-family: 'Playfair Display', 'Noto Naskh Arabic', serif;
   font-size: 3.2rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #0d47a1;
   text-align: center;
-  letter-spacing: 1.2px;
-  text-shadow: 0 2px 5px rgba(0,0,0,0.25);
   display: inline-block;
-  padding-bottom: 10px;
+  padding-bottom: 8px;
   margin-top: 40px;
-  border-bottom: 4px solid transparent;
-  border-image: linear-gradient(to right, #0d47a1, #8e24aa, #d81b60);
-  border-image-slice: 1;
+  position: relative;
+}
+
+.luxury-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, #0d47a1, #8e24aa, #d81b60, transparent);
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; height: 2px; }
+  50% { opacity: 1; height: 3px; }
+  100% { opacity: 0.6; height: 2px; }
 }
