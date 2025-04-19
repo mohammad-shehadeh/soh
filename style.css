@@ -267,21 +267,49 @@ h1 {
 
 .details-btn {
   display: block;
-  margin: 1.5rem auto 0;
-  padding: 0.8rem 2rem;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  font-size: 1rem;
+  margin: 2rem auto;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #9d50bb, #6e48aa); /* ألوان ملكية */
+  color: #fff;
+  border: 2px solid #ffffff33;
+  border-radius: 60px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
   cursor: pointer;
-  transition: var(--transition);
-  box-shadow: var(--shadow);
+  box-shadow: 0 0 15px #9d50bb, 0 0 30px #6e48aa;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px #fff;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.details-btn::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.2), transparent 70%);
+  animation: shine 3s infinite linear;
+  z-index: -1;
+}
+
+@keyframes shine {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .details-btn:hover {
-  background-color: var(--secondary-color);
-  transform: translateY(-3px);
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #9d50bb, 0 0 45px #6e48aa;
+  background: linear-gradient(135deg, #a770ef, #cf8bf3, #fdb99b);
 }
 
 /* About Section */
