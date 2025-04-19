@@ -22,37 +22,39 @@ document.addEventListener('DOMContentLoaded', () => {
     let slideInterval;
 
     // وظائف إدارة الواجهة
-    updateAddToCartButtons: () => {
+    const UI = {
+        updateAddToCartButtons: () => {
     document.querySelectorAll('.add-to-cart').forEach(button => {
         const productName = button.dataset.id;
         const cartItem = cart.find(item => item.name === productName);
 
         if (cartItem) {
             button.innerHTML = `
-                <span class="quantity-controls">
+                <div class="quantity-controls">
                     <button class="decrement">-</button>
-                    <span class="quantity">${cartItem.quantity}</span>
+                    <input type="number" value="${cartItem.quantity}" min="1" class="quantity-input">
                     <button class="increment">+</button>
-                </span>
+                </div>
             `;
 
+            const index = cart.findIndex(item => item.name === productName);
             const decrementBtn = button.querySelector('.decrement');
             const incrementBtn = button.querySelector('.increment');
+            const quantityInput = button.querySelector('.quantity-input');
 
             decrementBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // منع تفعيل حدث الزر الأساسي
-                const index = cart.findIndex(item => item.name === productName);
-                if (index !== -1) {
-                    Cart.decreaseQuantity(index);
-                }
+                e.stopPropagation();
+                Cart.decreaseQuantity(index);
             });
 
             incrementBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // منع تفعيل حدث الزر الأساسي
-                const index = cart.findIndex(item => item.name === productName);
-                if (index !== -1) {
-                    Cart.increaseQuantity(index);
-                }
+                e.stopPropagation();
+                Cart.increaseQuantity(index);
+            });
+
+            quantityInput.addEventListener('change', (e) => {
+                e.stopPropagation();
+                Cart.updateQuantity(index, e.target.value);
             });
 
         } else {
