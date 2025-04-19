@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="increment">+</button>
                 </span>`;
 
-            // لازم ننتظر شوي لين الـ innerHTML تنضاف للـ DOM
             setTimeout(() => {
                 const decrementBtn = button.querySelector('.decrement');
                 const incrementBtn = button.querySelector('.increment');
@@ -47,17 +46,26 @@ document.addEventListener('DOMContentLoaded', () => {
                         const item = cart.find(i => i.name === productName);
                         if (item && item.quantity > 1) {
                             item.quantity--;
-                            updateAddToCartButtons(); // إعادة التحديث
-                            renderCart(); // إذا عندك دالة تعرض السلة
+                        } else if (item) {
+                            cart = cart.filter(i => i.name !== productName);
                         }
+                        Cart.update(); // فقط نستدعي التحديث العام هنا
                     });
 
                     incrementBtn.addEventListener('click', () => {
                         const item = cart.find(i => i.name === productName);
                         if (item) {
                             item.quantity++;
-                            updateAddToCartButtons();
-                            renderCart();
+                            Cart.update();
+                        }
+                    });
+
+                    quantityInput.addEventListener('change', (e) => {
+                        const value = parseInt(e.target.value) || 1;
+                        const item = cart.find(i => i.name === productName);
+                        if (item) {
+                            item.quantity = Math.max(1, value);
+                            Cart.update();
                         }
                     });
                 }
