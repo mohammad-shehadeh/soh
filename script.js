@@ -22,65 +22,89 @@ document.addEventListener('DOMContentLoaded', () => {
     let slideInterval;
 
     // وظائف إدارة الواجهة
-    const UI = {
-        updateAddToCartButtons: () => {
-            document.querySelectorAll('.add-to-cart').forEach(button => {
-                const productName = button.dataset.id;
-                const cartItem = cart.find(item => item.name === productName);
-                button.innerHTML = cartItem ? 
-                    `<span class="quantity-controls">
-                        <button class="decrement">-</button>
-                        <span class="quantity">${cartItem.quantity}</span>
-                        <button class="increment">+</button>
-                    </span>` : 
-                    'إضافة للسلة';
-            });
-        },
-
-        showToast: (message) => {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.textContent = message;
-            document.body.appendChild(toast);
+  const UI = {
+    updateAddToCartButtons: () => {
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            const productName = button.dataset.id;
+            const cartItem = cart.find(item => item.name === productName);
+            button.innerHTML = cartItem ? 
+                `<span class="quantity-controls">
+                    <button class="decrement">-</button>
+                    <span class="quantity">${cartItem.quantity}</span>
+                    <button class="increment">+</button>
+                </span>` : 
+                'إضافة للسلة';
             
+            // إعادة ربط الأحداث للأزرار الجديدة
+            if (cartItem) {
+                button.querySelector('.decrement').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    Cart.decreaseQuantity(cart.indexOf(cartItem));
+                });
+                
+                button.querySelector('.increment').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    Cart.increaseQuantity(cart.indexOf(cartItem));
+                });
+            }
+        });
+    },
+
+    showToast: (message) => {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.classList.add('show');
             setTimeout(() => {
-                toast.classList.add('show');
-                setTimeout(() => {
-                    toast.remove();
-                }, 3000);
-            }, 100);
-        },
+                toast.remove();
+            }, 3000);
+        }, 100);
+    },
 
-        createCartItemElement: (item, index) => {
-            const li = document.createElement('li');
-            li.className = 'cart-item';
-            li.innerHTML = `
-                <div class="item-image">
-                    <img src="${item.image}" alt="${item.name}">
-                </div>
-                <div class="item-details">
-                    <h4>${item.name}</h4>
-                    <div class="price-controls">
-                        <div class="quantity-controls">
-                            <button class="decrement">-</button>
-                            <input type="number" value="${item.quantity}" min="1" class="quantity-input">
-                            <button class="increment">+</button>
-                        </div>
-                        <p class="item-total">₪${(item.price * item.quantity).toFixed(2)}</p>
+    createCartItemElement: (item, index) => {
+        const li = document.createElement('li');
+        li.className = 'cart-item';
+        li.innerHTML = `
+            <div class="item-image">
+                <img src="${item.image}" alt="${item.name}">
+            </div>
+            <div class="item-details">
+                <h4>${item.name}</h4>
+                <div class="price-controls">
+                    <div class="quantity-controls">
+                        <button class="decrement">-</button>
+                        <input type="number" value="${item.quantity}" min="1" class="quantity-input">
+                        <button class="increment">+</button>
                     </div>
+                    <p class="item-total">₪${(item.price * item.quantity).toFixed(2)}</p>
                 </div>
-                <button class="remove-item">&times;</button>
-            `;
-            
-            // إضافة الأحداث
-            li.querySelector('.decrement').addEventListener('click', () => Cart.decreaseQuantity(index));
-            li.querySelector('.increment').addEventListener('click', () => Cart.increaseQuantity(index));
-            li.querySelector('.quantity-input').addEventListener('change', (e) => Cart.updateQuantity(index, e.target.value));
-            li.querySelector('.remove-item').addEventListener('click', () => Cart.removeItem(index));
-            
-            return li;
-        }
-    };
+            </div>
+            <button class="remove-item">&times;</button>
+        `;
+        
+        // إضافة الأحداث
+        li.querySelector('.decrement').addEventListener('click', () => {
+            Cart.decreaseQuantity(index);
+        });
+        
+        li.querySelector('.increment').addEventListener('click', () => {
+            Cart.increaseQuantity(index);
+        });
+        
+        li.querySelector('.quantity-input').addEventListener('change', (e) => {
+            Cart.updateQuantity(index, parseInt(e.target.value));
+        });
+        
+        li.querySelector('.remove-item').addEventListener('click', () => {
+            Cart.removeItem(index);
+        });
+        
+        return li;
+    }
+};
 
     // وظائف عربة التسوق
     const Cart = {
