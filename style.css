@@ -1031,9 +1031,9 @@ footer {
 }
 
 /* تصميم متجاوب */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .quantity-controls {
-        width: 110px;
+        width: 130px;
         height: 38px;
         padding: 4px 8px;
     }
