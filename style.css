@@ -889,8 +889,8 @@ footer {
   100% { transform: scaleX(0.9); opacity: 0.7; }
 }
 
-.btn-yellow-dark {
-  background-color: #c9a000; /* أصفر غامق */
+.btn-orange {
+  background-color: #ff8800; /* برتقالي عادي */
   color: white;
   border: none;
   padding: 10px 20px;
@@ -900,6 +900,6 @@ footer {
   transition: background-color 0.3s ease;
 }
 
-.btn-yellow-dark:hover {
-  background-color: #b38f00; /* أغمق قليلاً عند المرور */
+.btn-orange:hover {
+  background-color: #e67600; /* أغمق قليلاً عند المرور */
 }
