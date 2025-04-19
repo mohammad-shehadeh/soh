@@ -51,18 +51,29 @@ document.addEventListener('DOMContentLoaded', () => {
     },
 
     showToast: (message) => {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        
+    // تحويل الرسائل الإنجليزية إلى العربية
+    const arabicMessages = {
+        'added': 'تمت الإضافة إلى السلة',
+        'removed': 'تم الحذف من السلة',
+        'added to cart': 'تمت الإضافة إلى السلة',
+        'removed from cart': 'تم الحذف من السلة'
+    };
+
+    // إذا كانت الرسالة موجودة في القاموس، نستخدم الترجمة العربية، وإلا نستخدم الرسالة كما هي
+    const toastMessage = arabicMessages[message.toLowerCase()] || message;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = toastMessage;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
         setTimeout(() => {
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }, 100);
-    },
+            toast.remove();
+        }, 3000);
+    }, 100);
+},
 
     createCartItemElement: (item, index) => {
         const li = document.createElement('li');
