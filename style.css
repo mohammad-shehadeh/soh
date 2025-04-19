@@ -1049,3 +1049,16 @@ footer {
         margin: 0 6px;
     }
 }
+
+.payment-methods {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      font-size: 2em;
+      direction: rtl;
+    }
+
+    .payment-methods img {
+      height: 32px;
+      object-fit: contain;
+    }
