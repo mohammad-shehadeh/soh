@@ -382,11 +382,6 @@ slider.addEventListener('touchend', (e) => {
             plusSlides(-1); // سحب لليمين (شريحة سابقة)
         }
 
-        // أعد تشغيل التبديل التلقائي بعد تأخير بسيط لمنع التعارض
-        setTimeout(() => {
-            startSlideInterval();
-        }, 2000); // انتظر 2 ثانية قبل إعادة التشغيل
-    }
 });
     
     
