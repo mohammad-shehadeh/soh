@@ -1169,37 +1169,39 @@ footer {
 .product-card {
   position: relative;
 }
-    .discount-label {
-      position: absolute;
-      top: 20px;
-      right: -40px; /* نحرّكها قليلاً لليمين لأن الدوران سيُخرجها */
-      background: linear-gradient(135deg, #e74c3c, #c0392b);
-      color: white;
-      padding: 10px 0;
-      font-size: 1em;
-      font-weight: bold;
-      z-index: 2;
-      text-align: center;
-      width: 160px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-transform: uppercase;
-      animation: pulse 1.5s infinite ease-in-out;
-      box-shadow: 0 0 10px rgba(231, 76, 60, 0.4);
-      border: 2px dashed white;
-      transform: rotate(45deg);
-      transform-origin: center;
-    }
 
-    @keyframes pulse {
-      0%, 100% {
-        box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
-        transform: rotate(45deg) scale(1);
-      }
-      50% {
-        box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
-        transform: rotate(45deg) scale(1.05);
-      }
-    }
+.discount-label {
+  position: absolute;
+  top: 20px;
+  right: -40px;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+  padding: 12px 0;
+  font-size: 1.6em;
+  font-weight: 900;
+  font-family: 'Bebas Neue', sans-serif;
+  z-index: 2;
+  text-align: center;
+  width: 160px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  animation: pulse 1.5s infinite ease-in-out;
+  box-shadow: 0 0 15px rgba(231, 76, 60, 0.6);
+  border: 2px dashed white;
+  transform: rotate(45deg);
+  transform-origin: center;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+    transform: rotate(45deg) scale(1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.9);
+    transform: rotate(45deg) scale(1.08);
+  }
+}
