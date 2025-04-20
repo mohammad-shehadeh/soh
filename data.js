@@ -37,13 +37,14 @@ const products = [
     "name": "مصباح ليد 10 واط",
     "price": 15,
     "discountedPrice": 20,
-    "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg",
+    "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
   },
   {
     "category": "إضاءة خارجية",
     "name": "مصباح حديقة مقاوم للماء",
-    "price": 34.5,
-    "image": "https://example.com/garden-light.jpg"
+    "price": 44.5,
+    "image": "https://example.com/garden-light.jpg",
+    "discountedPrice": 50
   },
   {
     "category": "إضاءة مكتبية",
