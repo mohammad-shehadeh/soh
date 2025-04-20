@@ -219,10 +219,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
         
-        // تحليل السعر لمعرفة إذا كان هناك عرض
-        const priceParts = String(product.price).split('/');
-        const originalPrice = parseFloat(priceParts[0]);
-        const discountedPrice = priceParts.length > 1 ? parseFloat(priceParts[1]) : null;
+        // تحليل السعر باستخدام الفاصلة
+        const priceStr = String(product.price);
+        const priceParts = priceStr.includes(',') ? 
+            priceStr.split(',').map(part => parseFloat(part.trim())) : 
+            [parseFloat(priceStr)];
+        
+        const originalPrice = priceParts[0];
+        const discountedPrice = priceParts.length > 1 ? priceParts[1] : null;
         const discountPercentage = discountedPrice ? 
             Math.round(((originalPrice - discountedPrice) / originalPrice) * 100) : 0;
         
@@ -290,8 +294,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const itemsList = cart.map((item, index) => {
         const product = products.find(p => p.name === item.name);
-        const originalPrice = product ? parseFloat(String(product.price).split('/')[0]) : item.price;
-        const isDiscounted = originalPrice !== item.price;
+        let originalPrice = item.price;
+        let isDiscounted = false;
+        
+        if (product) {
+            const priceStr = String(product.price);
+            if (priceStr.includes(',')) {
+                originalPrice = parseFloat(priceStr.split(',')[0].trim());
+                isDiscounted = true;
+            }
+        }
         
         return `🔹 *${index + 1}. ${item.name}*\n` +
                `   - الكمية: ${item.quantity}\n` +
@@ -300,6 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
                `   - الإجمالي: ₪${(item.price * item.quantity).toFixed(2)}` +
                (isDiscounted ? `\n   - وفرت: ₪${((originalPrice - item.price) * item.quantity).toFixed(2)}` : '');
     }).join('\n\n');
+
 
 
 
