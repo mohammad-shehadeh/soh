@@ -939,15 +939,16 @@ footer {
 }
 
 .add-to-cart.unavailable {
-    background-color: #cccccc;
-    color: #666666;
+    background-color: #e0e0e0;  /* لون رمادي واضح */
+    color: #a0a0a0;             /* لون النص باهت ولكن واضح */
     cursor: not-allowed;
-    border: 1px solid #aaaaaa;
+    border: 1px solid #b0b0b0;
+    opacity: 1;                 /* بدون شفافية */
 }
 
 .add-to-cart.unavailable:hover {
-    background-color: #cccccc;
-    color: #666666;
+    background-color: #e0e0e0;  /* نفس اللون دون تغيير */
+    color: #a0a0a0;
 }
 
 .price:empty {
