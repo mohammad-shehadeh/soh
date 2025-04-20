@@ -377,11 +377,16 @@ slider.addEventListener('touchend', (e) => {
         clearInterval(slideInterval); // أوقف التبديل التلقائي مؤقتًا
 
         if (diffX > 0) {
-            plusSlides(+1); // سحب لليسار (شريحة تالية)
+            plusSlides(1); // سحب لليسار (شريحة تالية)
         } else {
             plusSlides(-1); // سحب لليمين (شريحة سابقة)
         }
 
+        // أعد تشغيل التبديل التلقائي بعد تأخير بسيط لمنع التعارض
+        setTimeout(() => {
+            startSlideInterval();
+        }, 2000); // انتظر 2 ثانية قبل إعادة التشغيل
+    }
 });
     
     
