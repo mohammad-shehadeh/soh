@@ -327,83 +327,66 @@ document.addEventListener('DOMContentLoaded', () => {
     window.open(`https://wa.me/972569813333?text=${message}`, '_blank');
 });
 
-    // وظائف السلايدر// متغيرات السلايدر// تعريف المتغيرات لمتابعة مؤقتات السلايدر
-let slideTimeout;
-let restartTimeout;
-let slideInterval;
-
-function startSlideInterval() {
-    // ألغِ أي مؤقتات قائمة قبل بدء دورة جديدة
-    clearTimeout(slideTimeout);
-    clearInterval(slideInterval);
-
+    // وظائف السلايدر
+    function startSlideInterval() {
     // تغيير أول صورة بعد 500 مللي ثانية
-    slideTimeout = setTimeout(() => {
+    setTimeout(() => {
         plusSlides(1); // التبديل الأول
         // بعد التبديل الأول، نبدأ التبديل كل 2000 مللي ثانية
         slideInterval = setInterval(() => plusSlides(1), 3000);
     }, 50);
 }
 
-function plusSlides(n) {
-    slideIndex += n;
-    showSlides();
-}
+    function plusSlides(n) {
+        slideIndex += n;
+        showSlides();
+    }
 
-function currentSlide(n) {
-    slideIndex = n;
-    showSlides();
-}
+    function currentSlide(n) {
+        slideIndex = n;
+        showSlides();
+    }
 
-function showSlides() {
-    const slides = document.getElementsByClassName("mySlides");
-    const dots   = document.getElementsByClassName("dot");
+    function showSlides() {
+        const slides = document.getElementsByClassName("mySlides");
+        const dots = document.getElementsByClassName("dot");
+        
+        slideIndex = slideIndex > slides.length ? 1 : slideIndex < 1 ? slides.length : slideIndex;
+        
+        Array.from(slides).forEach(slide => slide.style.display = "none");
+        Array.from(dots).forEach(dot => dot.classList.remove("active"));
+        
+        slides[slideIndex-1].style.display = "block";
+        dots[slideIndex-1].classList.add("active");
+    }
     
-    slideIndex = slideIndex > slides.length ? 1 : slideIndex < 1 ? slides.length : slideIndex;
-    
-    Array.from(slides).forEach(slide => slide.style.display = "none");
-    Array.from(dots).forEach(dot     => dot.classList.remove("active"));
-    
-    slides[slideIndex-1].style.display = "block";
-    dots  [slideIndex-1].classList.add("active");
-}
+        // دعم اللمس للتنقل بين الشرائح
+    const slider = document.querySelector('.slideshow-container');
+    let startX = 0;
 
-// دعم اللمس للتنقل بين الشرائح
-const slider = document.querySelector('.slideshow-container');
-let startX = 0;
+    slider.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    });
 
-slider.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-});
-
-// تحسين التعامل مع السحب اليدوي
+    // تحسين التعامل مع السحب اليدوي
 slider.addEventListener('touchend', (e) => {
-    let endX  = e.changedTouches[0].clientX;
+    let endX = e.changedTouches[0].clientX;
     let diffX = startX - endX;
 
     if (Math.abs(diffX) > 50) {
-        // ألغِ أي مؤقتات تلقائية حالية
-        clearTimeout(slideTimeout);
-        clearInterval(slideInterval);
-        clearTimeout(restartTimeout);
+        clearInterval(slideInterval); // أوقف التبديل التلقائي مؤقتًا
 
         if (diffX > 0) {
-            plusSlides(1);  // سحب لليسار (شريحة تالية)
+            plusSlides(1); // سحب لليسار (شريحة تالية)
         } else {
             plusSlides(-1); // سحب لليمين (شريحة سابقة)
         }
 
         // أعد تشغيل التبديل التلقائي بعد تأخير بسيط لمنع التعارض
-        restartTimeout = setTimeout(() => {
+        setTimeout(() => {
             startSlideInterval();
         }, 2000); // انتظر 2 ثانية قبل إعادة التشغيل
     }
-});
-
-// تهيئة أولية
-document.addEventListener('DOMContentLoaded', () => {
-    showSlides();          // عرض الشريحة الأولى
-    startSlideInterval();  // بدء الحركة التلقائية
 });
     
     
@@ -417,6 +400,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.onload = function () {
     window.scrollTo(0, 0); // يبدأ من الأعلى
+    slideIndex = 1;
+    showSlides();
+    startSlideInterval();
+};
     //Products.loadCategories();
     //Products.loadProducts();
     //Cart.update();
