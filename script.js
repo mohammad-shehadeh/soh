@@ -219,14 +219,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
         
-        // تحليل السعر باستخدام الفاصلة
+        // تحليل السعر باستخدام رمز الدولار $
         const priceStr = String(product.price);
-        const priceParts = priceStr.includes(',') ? 
-            priceStr.split(',').map(part => parseFloat(part.trim())) : 
-            [parseFloat(priceStr)];
+        const priceParts = priceStr.includes('$') ? 
+            priceStr.split('$').map(part => {
+                // إزالة أي أحرف غير رقمية باستثناء النقاط العشرية
+                const numStr = part.replace(/[^\d.]/g, '');
+                return parseFloat(numStr) || 0;
+            }) : 
+            [parseFloat(priceStr.replace(/[^\d.]/g, '')) || 0];
         
         const originalPrice = priceParts[0];
-        const discountedPrice = priceParts.length > 1 ? priceParts[1] : null;
+        const discountedPrice = priceParts.length > 1 && priceParts[1] > 0 ? priceParts[1] : null;
         const discountPercentage = discountedPrice ? 
             Math.round(((originalPrice - discountedPrice) / originalPrice) * 100) : 0;
         
@@ -257,7 +261,12 @@ document.addEventListener('DOMContentLoaded', () => {
             productCard.querySelector('.add-to-cart').addEventListener('click', () => {
                 // عند الإضافة للسلة نستخدم السعر المخفض إذا كان موجوداً
                 const priceToUse = discountedPrice || originalPrice;
-                Cart.addItem({...product, price: priceToUse});
+                Cart.addItem({
+                    ...product,
+                    price: priceToUse,
+                    // نضمن حفظ السعر كرقم وليس كسلسلة
+                    originalPrice: originalPrice
+                });
             });
         }
         
@@ -293,14 +302,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
 
     const itemsList = cart.map((item, index) => {
-        const product = products.find(p => p.name === item.name);
         let originalPrice = item.price;
         let isDiscounted = false;
         
-        if (product) {
-            const priceStr = String(product.price);
-            if (priceStr.includes(',')) {
-                originalPrice = parseFloat(priceStr.split(',')[0].trim());
+        // إذا كان المنتج يحتوي على سعر أصلي مخزن
+        if (item.originalPrice) {
+            originalPrice = item.originalPrice;
+            isDiscounted = true;
+        }
+        // أو إذا كنا نستطيع استخراجه من سعر المنتج الأصلي
+        else {
+            const product = products.find(p => p.name === item.name);
+            if (product && String(product.price).includes('$')) {
+                const priceParts = String(product.price).split('$');
+                originalPrice = parseFloat(priceParts[0].replace(/[^\d.]/g, '')) || item.price;
                 isDiscounted = true;
             }
         }
@@ -313,10 +328,11 @@ document.addEventListener('DOMContentLoaded', () => {
                (isDiscounted ? `\n   - وفرت: ₪${((originalPrice - item.price) * item.quantity).toFixed(2)}` : '');
     }).join('\n\n');
 
-
-
-
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const totalSaved = cart.reduce((sum, item) => {
+        const original = item.originalPrice || item.price;
+        return sum + ((original - item.price) * item.quantity);
+    }, 0);
 
     const message = encodeURIComponent(
         `*⭐ معرض أبو عالية ⭐*\n` +
@@ -327,6 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `*تفاصيل الطلب:*\n\n` +
         `${itemsList}\n\n` +
         `💰 *المجموع الكلي:* ₪${totalAmount.toFixed(2)}\n` +
+        (totalSaved > 0 ? `💵 *وفرت إجمالاً:* ₪${totalSaved.toFixed(2)}\n` : '') +
         `────────────────────────────\n` +
         `*الاسم:* ____________________\n` +
         `*العنوان:* __________________\n` +
