@@ -232,17 +232,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // إنشاء بطاقة المنتج
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
+
         productCard.innerHTML = `
+            ${hasDiscount ? `<div class="discount-label">تخفيض</div>` : ''}
             <img src="${product.image}" alt="${product.name}">
             <h3>${product.name}</h3>
             <p class="price ${hasDiscount ? 'on-sale' : (isAvailable ? '' : 'unavailable')}"
                ${isAvailable ? '' : 'data-unavailable="true"'}>
                 ${
                     hasDiscount
-                        // عرض السعر الأصلي الوهمي مشطوباً ثم السعر الفعلي
                         ? `<span class="original-price">₪${originalPrice.toFixed(2)}</span>
                            <span class="selling-price">₪${salePrice.toFixed(2)}</span>`
-                        // أو فقط السعر الفعلي إذا لا خصم
                         : (isAvailable
                             ? `₪${salePrice.toFixed(2)}`
                             : 'غير متوفر حالياً'
