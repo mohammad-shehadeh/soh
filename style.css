@@ -1118,3 +1118,23 @@ footer {
       object-fit: contain;
     }
     
+    .price.on-sale {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.selling-price {
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+.price.unavailable {
+  color: #ccc;
+}
+    
