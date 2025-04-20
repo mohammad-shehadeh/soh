@@ -1117,3 +1117,43 @@ footer {
       height: 32px;
       object-fit: contain;
     }
+    
+    /* أنماط الأسعار والتخفيضات */
+.price-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.original-price {
+    color: #777;
+    text-decoration: line-through;
+    font-size: 0.9em;
+}
+
+.discounted-price {
+    color: #e53935;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* ملصق التخفيض */
+.discount-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #e53935;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: bold;
+    z-index: 1;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.product-image-container {
+    position: relative;
+}
