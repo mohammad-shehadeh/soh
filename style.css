@@ -906,7 +906,7 @@ footer {
   }
 }
 
-.luxury-title {
+.fancy-title {
   font-family: 'Lemonada', 'Scheherazade New', 'Noto Naskh Arabic', serif;
   font-size: 3.5rem;
   font-weight: 700;
@@ -919,7 +919,7 @@ footer {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.luxury-title::after {
+.fancy-title::after {
   content: '';
   position: absolute;
   bottom: 0;
