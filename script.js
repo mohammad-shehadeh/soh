@@ -377,7 +377,7 @@ slider.addEventListener('touchend', (e) => {
         clearInterval(slideInterval); // أوقف التبديل التلقائي مؤقتًا
 
         if (diffX > 0) {
-            plusSlides(1); // سحب لليسار (شريحة تالية)
+            plusSlides(+1); // سحب لليسار (شريحة تالية)
         } else {
             plusSlides(-1); // سحب لليمين (شريحة سابقة)
         }
