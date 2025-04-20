@@ -368,20 +368,26 @@ document.addEventListener('DOMContentLoaded', () => {
         startX = e.touches[0].clientX;
     });
 
-    slider.addEventListener('touchend', (e) => {
-        let endX = e.changedTouches[0].clientX;
-        let diffX = startX - endX;
+    // تحسين التعامل مع السحب اليدوي
+slider.addEventListener('touchend', (e) => {
+    let endX = e.changedTouches[0].clientX;
+    let diffX = startX - endX;
 
-        if (Math.abs(diffX) > 50) { // حساسية السحب
-            clearInterval(slideInterval); // إيقاف التبديل التلقائي مؤقتًا
-            if (diffX > 0) {
-                plusSlides(1); // سحب لليسار - الشريحة التالية
-            } else {
-                plusSlides(-1); // سحب لليمين - الشريحة السابقة
-            }
-            startSlideInterval(); // إعادة تشغيل التبديل التلقائي
+    if (Math.abs(diffX) > 50) {
+        clearInterval(slideInterval); // أوقف التبديل التلقائي مؤقتًا
+
+        if (diffX > 0) {
+            plusSlides(1); // سحب لليسار (شريحة تالية)
+        } else {
+            plusSlides(-1); // سحب لليمين (شريحة سابقة)
         }
-    });
+
+        // أعد تشغيل التبديل التلقائي بعد تأخير بسيط لمنع التعارض
+        setTimeout(() => {
+            startSlideInterval();
+        }, 2000); // انتظر 2 ثانية قبل إعادة التشغيل
+    }
+});
     
     
 
@@ -394,10 +400,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.onload = function () {
     window.scrollTo(0, 0); // يبدأ من الأعلى
-    Products.loadCategories();
+    //Products.loadCategories();
     //Products.loadProducts();
-    Cart.update();
-    startSlideInterval();
+    //Cart.update();
+    //startSlideInterval();
 };
 
 window.addEventListener('load', () => {
