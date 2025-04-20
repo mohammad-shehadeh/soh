@@ -1163,44 +1163,36 @@ footer {
   position: relative;
 }
     .discount-label {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #e74c3c;
-  color: white;
-  padding: 25px;
-  font-size: 1.2em;
-  font-weight: bold;
-  z-index: 2;
-  text-align: center;
-  width: 90px;
-  height: 90px;
-  line-height: 1.2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-transform: uppercase;
-  animation: pulse 1.5s infinite ease-in-out;
+      position: absolute;
+      top: 20px;
+      right: -40px; /* نحرّكها قليلاً لليمين لأن الدوران سيُخرجها */
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      color: white;
+      padding: 10px 0;
+      font-size: 1em;
+      font-weight: bold;
+      z-index: 2;
+      text-align: center;
+      width: 160px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      animation: pulse 1.5s infinite ease-in-out;
+      box-shadow: 0 0 10px rgba(231, 76, 60, 0.4);
+      border: 2px dashed white;
+      transform: rotate(45deg);
+      transform-origin: center;
+    }
 
-  /* دائرة مسننة (نجمة دائرية بـ 24 ضلع) */
-  clip-path: polygon(
-    50% 0%, 61% 13%, 75% 6%, 79% 21%, 93% 15%, 91% 30%,
-    100% 35%, 91% 45%, 100% 50%, 91% 55%, 100% 65%,
-    91% 70%, 93% 85%, 79% 79%, 75% 94%, 61% 87%, 50% 100%,
-    39% 87%, 25% 94%, 21% 79%, 7% 85%, 9% 70%, 0% 65%,
-    9% 55%, 0% 50%, 9% 45%, 0% 35%, 9% 30%, 7% 15%,
-    21% 21%, 25% 6%, 39% 13%
-  );
-}
-
-/* تأثير وميض/نبض ناعم */
-@keyframes pulse {
-  0%, 100% {
-    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
-    transform: scale(1.1);
-  }
-}
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        transform: rotate(45deg) scale(1);
+      }
+      50% {
+        box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+        transform: rotate(45deg) scale(1.05);
+      }
+    }
