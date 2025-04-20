@@ -37,7 +37,8 @@ const products = [
     "name": "مصباح ليد 10 واط",
     "price": 15,
     "discountedPrice": 20,
-    "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
+    "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg",
+    "originalPrice": 25
   },
   {
     "category": "إضاءة خارجية",
