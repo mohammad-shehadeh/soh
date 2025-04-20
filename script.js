@@ -219,44 +219,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
         
-        const originalPrice = product.price;
-        const discountedPrice = product.discount || null;
-        const discountPercentage = discountedPrice ? 
-            Math.round(((originalPrice - discountedPrice) / originalPrice) * 100) : 0;
-        
-        const isAvailable = originalPrice > 0;
+        const isAvailable = product.price > 0;
         const buttonText = isAvailable ? '' : 'غير متوفر';
         const buttonClass = isAvailable ? 'add-to-cart' : 'add-to-cart unavailable';
         
         productCard.innerHTML = `
-            <div class="product-image-container">
-                <img src="${product.image}" alt="${product.name}">
-                ${discountedPrice ? `<div class="discount-badge">تخفيض ${discountPercentage}%</div>` : ''}
-            </div>
-            <h3>${product.name}</h3>
-            <div class="price-container">
-                ${discountedPrice ? `
-                    <p class="original-price">₪${originalPrice.toFixed(2)}</p>
-                    <p class="discounted-price">₪${discountedPrice.toFixed(2)}</p>
-                ` : `
-                    <p class="price ${isAvailable ? '' : 'unavailable'}" ${isAvailable ? '' : 'data-unavailable="true"'}>
-                        ${isAvailable ? `₪${originalPrice.toFixed(2)}` : 'غير متوفر حالياً'}
-                    </p>
-                `}
-            </div>
-            <button class="${buttonClass}" data-id="${product.name}" ${isAvailable ? '' : 'disabled'}>${buttonText}</button>
-        `;
+    <img src="${product.image}" alt="${product.name}">
+    <h3>${product.name}</h3>
+    <p class="price ${isAvailable ? '' : 'unavailable'}" ${isAvailable ? '' : 'data-unavailable="true"'}>
+        ${isAvailable ? `₪${product.price.toFixed(2)}` : 'غير متوفر حالياً'}
+    </p>
+    <button class="${buttonClass}" data-id="${product.name}" ${isAvailable ? '' : 'disabled'}>${buttonText}</button>
+`;
         
         if (isAvailable) {
-            productCard.querySelector('.add-to-cart').addEventListener('click', () => {
-                // نستخدم السعر المخفض إذا كان متاحاً، وإلا السعر الأصلي
-                const priceToUse = discountedPrice || originalPrice;
-                Cart.addItem({
-                    ...product,
-                    price: priceToUse,
-                    originalPrice: originalPrice // نحفظ السعر الأصلي للعرض في الفاتورة
-                });
-            });
+            productCard.querySelector('.add-to-cart').addEventListener('click', () => Cart.addItem(product));
         }
         
         elements.productsContainer.appendChild(productCard);
@@ -290,22 +267,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const date = now.toLocaleDateString('ar-EG');
     const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
 
-    const itemsList = cart.map((item, index) => {
-        const originalPrice = item.originalPrice || item.price;
-        const isDiscounted = item.originalPrice && item.originalPrice !== item.price;
-        
-        return `🔹 *${index + 1}. ${item.name}*\n` +
-               `   - الكمية: ${item.quantity}\n` +
-               (isDiscounted ? `   - السعر الأصلي: ₪${originalPrice.toFixed(2)}\n` : '') +
-               `   - السعر المدفوع: ₪${item.price.toFixed(2)}\n` +
-               `   - الإجمالي: ₪${(item.price * item.quantity).toFixed(2)}` +
-               (isDiscounted ? `\n   - وفرت: ₪${((originalPrice - item.price) * item.quantity).toFixed(2)}` : '');
-    }).join('\n\n');
+    const itemsList = cart.map((item, index) => 
+        `🔹 *${index + 1}. ${item.name}*\n` +
+        `   - الكمية: ${item.quantity}\n` +
+        `   - السعر: ₪${item.price.toFixed(2)}\n` +
+        `   - الإجمالي: ₪${(item.price * item.quantity).toFixed(2)}`
+    ).join('\n\n');
 
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const totalSaved = cart.reduce((sum, item) => {
-        return sum + ((item.originalPrice || item.price) - item.price) * item.quantity);
-    }, 0);
 
     const message = encodeURIComponent(
         `*⭐ معرض أبو عالية ⭐*\n` +
@@ -316,7 +285,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `*تفاصيل الطلب:*\n\n` +
         `${itemsList}\n\n` +
         `💰 *المجموع الكلي:* ₪${totalAmount.toFixed(2)}\n` +
-        (totalSaved > 0 ? `💵 *وفرت إجمالاً:* ₪${totalSaved.toFixed(2)}\n` : '') +
         `────────────────────────────\n` +
         `*الاسم:* ____________________\n` +
         `*العنوان:* __________________\n` +
