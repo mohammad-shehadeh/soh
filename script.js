@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.open(`https://wa.me/972569813333?text=${message}`, '_blank');
 });
 
-    // وظائف السلايدرfunction يوجد مشكلة نها 
+    // وظائف السلايدر
     function startSlideInterval() {
     // تغيير أول صورة بعد 500 مللي ثانية
     setTimeout(() => {
