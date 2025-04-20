@@ -863,15 +863,18 @@ image: 'https'
     switchMode('categories');
     
 function enableSelectOnClick() {
-  document.querySelectorAll('td[contenteditable="true"]').forEach(td => {
-    td.addEventListener('click', () => {
-      const selection = window.getSelection();
-      const range = document.createRange();
-      range.selectNodeContents(td);
-      selection.removeAllRanges();
-      selection.addRange(range);
+  // ننتظر لحظات بسيطة لضمان أن الخلايا تم رسمها
+  setTimeout(() => {
+    document.querySelectorAll('td[contenteditable="true"]').forEach(td => {
+      td.addEventListener('click', function (e) {
+        const range = document.createRange();
+        range.selectNodeContents(this);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+      });
     });
-  });
+  }, 100); // تأخير بسيط للتأكد من وجود الخلايا
 }
   </script>
 </body>
