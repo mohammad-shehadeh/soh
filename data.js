@@ -53,3 +53,6 @@ const products = [
     "image": "https://example.com/desk-lamp.jpg"
   }
 ];
+
+window.products = products;
+window.categories = categories;
