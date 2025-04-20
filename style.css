@@ -1176,13 +1176,13 @@ footer {
   right: -40px;
   background: linear-gradient(135deg, #e74c3c, #c0392b);
   color: white;
-  padding: 12px 0;
+  height: 60px; /* زيادة الطول */
+  width: 160px; /* العرض يبقى كما هو */
   font-size: 1.6em;
   font-weight: 900;
   font-family: 'Bebas Neue', sans-serif;
   z-index: 2;
   text-align: center;
-  width: 160px;
   border-radius: 10px;
   display: flex;
   align-items: center;
