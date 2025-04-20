@@ -361,6 +361,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
         // دعم اللمس للتنقل بين الشرائح
+    const slider = document.querySelector('.slideshow-container');
+    let startX = 0;
+
+    slider.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    });
+
+    // تحسين التعامل مع السحب اليدوي
+slider.addEventListener('touchend', (e) => {
+    let endX = e.changedTouches[0].clientX;
+    let diffX = startX - endX;
+
+    if (Math.abs(diffX) > 50) {
+        clearInterval(slideInterval); // أوقف التبديل التلقائي مؤقتًا
+
+        if (diffX > 0) {
+            plusSlides(+1); // سحب لليسار (شريحة تالية)
+        } else {
+            plusSlides(-1); // سحب لليمين (شريحة سابقة)
+        }
+
         // أعد تشغيل التبديل التلقائي بعد تأخير بسيط لمنع التعارض
         setTimeout(() => {
             startSlideInterval();
