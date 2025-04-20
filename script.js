@@ -210,35 +210,67 @@ document.addEventListener('DOMContentLoaded', () => {
 },
 
         loadProducts: () => {
+    // نظف حاوية المنتجات
     elements.productsContainer.innerHTML = '';
-    const filteredProducts = currentCategory ? 
-        products.filter(p => p.category === currentCategory) : 
-        products;
+
+    // اختر الفئة الحالية أو جميع المنتجات
+    const filteredProducts = currentCategory
+        ? products.filter(p => p.category === currentCategory)
+        : products;
 
     filteredProducts.forEach(product => {
+        // السعر الفعلي (sale price) والسعر الوهمي الأصلي للعرض
+        const salePrice       = product.price;
+        const originalPrice   = product.discountedPrice ?? salePrice;
+        const hasDiscount     = originalPrice > salePrice;
+
+        // التوفر يُحسب بناءً على السعر الفعلي
+        const isAvailable     = salePrice > 0;
+        const buttonText      = isAvailable ? '' : 'غير متوفر';
+        const buttonClass     = isAvailable ? 'add-to-cart' : 'add-to-cart unavailable';
+
+        // إنشاء بطاقة المنتج
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
-        
-        const isAvailable = product.price > 0;
-        const buttonText = isAvailable ? '' : 'غير متوفر';
-        const buttonClass = isAvailable ? 'add-to-cart' : 'add-to-cart unavailable';
-        
         productCard.innerHTML = `
-    <img src="${product.image}" alt="${product.name}">
-    <h3>${product.name}</h3>
-    <p class="price ${isAvailable ? '' : 'unavailable'}" ${isAvailable ? '' : 'data-unavailable="true"'}>
-        ${isAvailable ? `₪${product.price.toFixed(2)}` : 'غير متوفر حالياً'}
-    </p>
-    <button class="${buttonClass}" data-id="${product.name}" ${isAvailable ? '' : 'disabled'}>${buttonText}</button>
-`;
-        
+            <img src="${product.image}" alt="${product.name}">
+            <h3>${product.name}</h3>
+            <p class="price ${hasDiscount ? 'on-sale' : (isAvailable ? '' : 'unavailable')}"
+               ${isAvailable ? '' : 'data-unavailable="true"'}>
+                ${
+                    hasDiscount
+                        // عرض السعر الأصلي الوهمي مشطوباً ثم السعر الفعلي
+                        ? `<span class="original-price">₪${originalPrice.toFixed(2)}</span>
+                           <span class="selling-price">₪${salePrice.toFixed(2)}</span>`
+                        // أو فقط السعر الفعلي إذا لا خصم
+                        : (isAvailable
+                            ? `₪${salePrice.toFixed(2)}`
+                            : 'غير متوفر حالياً'
+                          )
+                }
+            </p>
+            <button class="${buttonClass}"
+                    data-id="${product.name}"
+                    ${isAvailable ? '' : 'disabled'}>
+                ${buttonText}
+            </button>
+        `;
+
+        // ربط حدث "إضافة للسلة" مع تمرير السعر الفعلي فقط
         if (isAvailable) {
-            productCard.querySelector('.add-to-cart').addEventListener('click', () => Cart.addItem(product));
+            productCard
+                .querySelector('.add-to-cart')
+                .addEventListener('click', () => Cart.addItem({
+                    name: product.name,
+                    image: product.image,
+                    price: salePrice
+                }));
         }
-        
+
         elements.productsContainer.appendChild(productCard);
     });
-    
+
+    // حدّث أزرار "إضافة للسلة"
     UI.updateAddToCartButtons();
 }
     };
