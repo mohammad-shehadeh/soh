@@ -1173,17 +1173,17 @@ footer {
 .discount-label {
   position: absolute;
   top: 20px;
-  right: -40px;
+  right: -50px;
   background: linear-gradient(135deg, #e74c3c, #c0392b);
   color: white;
-  height: 60px; /* زيادة الطول */
-  width: 160px; /* العرض يبقى كما هو */
-  font-size: 1.6em;
+  height: 40px;     /* ارتفاع أقل */
+  width: 180px;     /* عرض أكبر */
+  font-size: 1.4em;
   font-weight: 900;
   font-family: 'Bebas Neue', sans-serif;
   z-index: 2;
   text-align: center;
-  border-radius: 10px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
