@@ -914,7 +914,7 @@ footer {
   color: #0d47a1;
   text-align: center;
   display: inline-block;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
   margin-top: 40px;
   position: relative;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
@@ -924,19 +924,25 @@ footer {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 15%;
+  left: 50%;
+  transform: translateX(-50%);
   width: 70%;
-  height: 3px;
-  background: linear-gradient(to right, transparent, #0d47a1, #8e24aa, #d81b60, transparent);
-  border-radius: 3px;
-  opacity: 0.9;
-  animation: pulse 2.5s infinite ease-in-out;
+  height: 4px;
+  background: linear-gradient(to right, #0d47a1, #8e24aa, #d81b60);
+  border-radius: 4px;
+  animation: linePulse 2s infinite ease-in-out;
+  opacity: 0.8;
 }
 
-@keyframes pulse {
-  0% { transform: scaleX(0.9); opacity: 0.7; }
-  50% { transform: scaleX(1.05); opacity: 1; }
-  100% { transform: scaleX(0.9); opacity: 0.7; }
+@keyframes linePulse {
+  0%, 100% {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateX(-50%) scaleX(1.05);
+    opacity: 1;
+  }
 }
 
 .add-to-cart.unavailable {
