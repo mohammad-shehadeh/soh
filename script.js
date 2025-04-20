@@ -327,66 +327,90 @@ document.addEventListener('DOMContentLoaded', () => {
     window.open(`https://wa.me/972569813333?text=${message}`, '_blank');
 });
 
-    // وظائف السلايدر
-    function startSlideInterval() {
-    // تغيير أول صورة بعد 500 مللي ثانية
-    setTimeout(() => {
-        plusSlides(1); // التبديل الأول
-        // بعد التبديل الأول، نبدأ التبديل كل 2000 مللي ثانية
+    // وظائف السلايدر// متغيرات السلايدر
+let slideIndex     = 0;
+let slideTimeout;    // لتأخير التحويل الأول (50 ملّي)
+let slideInterval;   // للدورة المتكررة (3000 ملّي)
+let restartTimeout;  // لإعادة التشغيل بعد السحب (2000 ملّي)
+
+// عرض الشرائح فعلياً
+function showSlides() {
+    const slides = document.getElementsByClassName("mySlides");
+    const dots   = document.getElementsByClassName("dot");
+
+    // ضبط الحدّ الأعلى والأدنى للفهارس
+    if (slideIndex > slides.length)  slideIndex = 1;
+    if (slideIndex < 1)              slideIndex = slides.length;
+
+    // إخفاء جميع الشرائح وإلغاء حالة النقاط
+    Array.from(slides).forEach(sl => sl.style.display = "none");
+    Array.from(dots).forEach(dt => dt.classList.remove("active"));
+
+    // إظهار الشريحة الحالية وتفعيل النقطة المقابلة
+    slides[slideIndex - 1].style.display = "block";
+    dots[slideIndex - 1].classList.add("active");
+}
+
+// الانتقال بعدد n من الشرائح
+function plusSlides(n) {
+    slideIndex += n;
+    showSlides();
+}
+
+// الانتقال إلى شريحة محددة
+function currentSlide(n) {
+    slideIndex = n;
+    showSlides();
+}
+
+// بدء الدوران التلقائي
+function startSlideInterval() {
+    // ألغِ أي مؤقتات قائمة
+    clearTimeout(slideTimeout);
+    clearInterval(slideInterval);
+
+    // بعد 50 ملّي ثانية، انتقل أولاً ثم ابدأ الدورة كل 3000 ملّي
+    slideTimeout = setTimeout(() => {
+        plusSlides(1);
         slideInterval = setInterval(() => plusSlides(1), 3000);
     }, 50);
 }
 
-    function plusSlides(n) {
-        slideIndex += n;
-        showSlides();
-    }
+// إعداد التعامل مع اللمس للسحب
+const slider = document.querySelector('.slideshow-container');
+let startX = 0;
 
-    function currentSlide(n) {
-        slideIndex = n;
-        showSlides();
-    }
+// حفظ نقطة البداية عند لمس الشاشة
+slider.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+});
 
-    function showSlides() {
-        const slides = document.getElementsByClassName("mySlides");
-        const dots = document.getElementsByClassName("dot");
-        
-        slideIndex = slideIndex > slides.length ? 1 : slideIndex < 1 ? slides.length : slideIndex;
-        
-        Array.from(slides).forEach(slide => slide.style.display = "none");
-        Array.from(dots).forEach(dot => dot.classList.remove("active"));
-        
-        slides[slideIndex-1].style.display = "block";
-        dots[slideIndex-1].classList.add("active");
-    }
-    
-        // دعم اللمس للتنقل بين الشرائح
-    const slider = document.querySelector('.slideshow-container');
-    let startX = 0;
-
-    slider.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-    });
-
-    // تحسين التعامل مع السحب اليدوي
+// عند انتهاء السحب
 slider.addEventListener('touchend', (e) => {
-    let endX = e.changedTouches[0].clientX;
-    let diffX = startX - endX;
+    const endX  = e.changedTouches[0].clientX;
+    const diffX = startX - endX;
 
     if (Math.abs(diffX) > 50) {
-        clearInterval(slideInterval); // أوقف التبديل التلقائي مؤقتًا
+        // ألغِ أي مؤقتات تلقائية
+        clearTimeout(slideTimeout);
+        clearInterval(slideInterval);
+        clearTimeout(restartTimeout);
 
-        if (diffX > 0) {
-            plusSlides(1); // سحب لليسار (شريحة تالية)
-        } else {
-            plusSlides(-1); // سحب لليمين (شريحة سابقة)
-        }
+        // قم بالتنقل يدوياً
+        if (diffX > 0) plusSlides(1);
+        else           plusSlides(-1);
 
-        // أعد تشغيل التبديل التلقائي بعد تأخير بسيط لمنع التعارض
-        setTimeout(() => {
+        // بعد 2000 ملّي، أعد تشغيل التلقائي
+        restartTimeout = setTimeout(() => {
             startSlideInterval();
-        }, 2000); // انتظر 2 ثانية قبل إعادة التشغيل
+        }, 2000);
     }
+});
+
+// تهيئة أولية
+document.addEventListener('DOMContentLoaded', () => {
+    showSlides();          // عرض الشريحة الأولى
+    startSlideInterval();  // بدء الحركة التلقائية
 });
     
     
