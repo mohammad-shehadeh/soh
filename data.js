@@ -35,8 +35,8 @@ const products = [
   {
     "category": "مصابيح ليد",
     "name": "مصباح ليد 10 واط",
-    "price": 100,
-    "discountedPrice": 150,
+    "price": 80,
+    "discountedPrice": 120,
     "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
   },
   {
@@ -53,6 +53,3 @@ const products = [
     "image": "https://example.com/desk-lamp.jpg"
   }
 ];
-
-window.products = products;
-window.categories = categories;
