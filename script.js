@@ -328,47 +328,20 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
     // وظائف السلايدر
-    function startSlideInterval() {
+    // استبدل دالة startSlideInterval بهذه النسخة المعدلة
+function startSlideInterval() {
+    // تأكد من إلغاء أي مؤقت سابق أولاً
+    clearInterval(slideInterval);
+    
     // تغيير أول صورة بعد 500 مللي ثانية
     setTimeout(() => {
         plusSlides(1); // التبديل الأول
-        // بعد التبديل الأول، نبدأ التبديل كل 2000 مللي ثانية
+        // بعد التبديل الأول، نبدأ التبديل كل 3000 مللي ثانية
         slideInterval = setInterval(() => plusSlides(1), 3000);
     }, 50);
 }
 
-    function plusSlides(n) {
-        slideIndex += n;
-        showSlides();
-    }
-
-    function currentSlide(n) {
-        slideIndex = n;
-        showSlides();
-    }
-
-    function showSlides() {
-        const slides = document.getElementsByClassName("mySlides");
-        const dots = document.getElementsByClassName("dot");
-        
-        slideIndex = slideIndex > slides.length ? 1 : slideIndex < 1 ? slides.length : slideIndex;
-        
-        Array.from(slides).forEach(slide => slide.style.display = "none");
-        Array.from(dots).forEach(dot => dot.classList.remove("active"));
-        
-        slides[slideIndex-1].style.display = "block";
-        dots[slideIndex-1].classList.add("active");
-    }
-    
-        // دعم اللمس للتنقل بين الشرائح
-    const slider = document.querySelector('.slideshow-container');
-    let startX = 0;
-
-    slider.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-    });
-
-    // تحسين التعامل مع السحب اليدوي
+// عدل حدث touchend كما يلي:
 slider.addEventListener('touchend', (e) => {
     let endX = e.changedTouches[0].clientX;
     let diffX = startX - endX;
@@ -382,10 +355,10 @@ slider.addEventListener('touchend', (e) => {
             plusSlides(-1); // سحب لليمين (شريحة سابقة)
         }
 
-        // أعد تشغيل التبديل التلقائي بعد تأخير بسيط لمنع التعارض
+        // أعد تشغيل التبديل التلقائي بعد تأخير بسيط
         setTimeout(() => {
             startSlideInterval();
-        }, 2000); // انتظر 2 ثانية قبل إعادة التشغيل
+        }, 3000); // انتظر 3 ثواني قبل إعادة التشغيل
     }
 });
     
