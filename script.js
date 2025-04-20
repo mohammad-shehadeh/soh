@@ -327,61 +327,66 @@ document.addEventListener('DOMContentLoaded', () => {
     window.open(`https://wa.me/972569813333?text=${message}`, '_blank');
 });
 
-    // وظائف السلايدر
-    function startSlideInterval() {
+    // وظائف السلايدرfunction startSlideInterval() {
+    // أوقف المؤقت الحالي إذا كان موجوداً
+    clearInterval(slideInterval);
+    
     // تغيير أول صورة بعد 500 مللي ثانية
     setTimeout(() => {
         plusSlides(1); // التبديل الأول
-        // بعد التبديل الأول، نبدأ التبديل كل 2000 مللي ثانية
+        // بعد التبديل الأول، نبدأ التبديل كل 3000 مللي ثانية
         slideInterval = setInterval(() => plusSlides(1), 3000);
     }, 50);
 }
 
-    function plusSlides(n) {
-        slideIndex += n;
-        showSlides();
-    }
+function plusSlides(n) {
+    slideIndex += n;
+    showSlides();
+}
 
-    function currentSlide(n) {
-        slideIndex = n;
-        showSlides();
-    }
+function currentSlide(n) {
+    slideIndex = n;
+    showSlides();
+}
 
-    function showSlides() {
-        const slides = document.getElementsByClassName("mySlides");
-        const dots = document.getElementsByClassName("dot");
-        
-        slideIndex = slideIndex > slides.length ? 1 : slideIndex < 1 ? slides.length : slideIndex;
-        
-        Array.from(slides).forEach(slide => slide.style.display = "none");
-        Array.from(dots).forEach(dot => dot.classList.remove("active"));
-        
-        slides[slideIndex-1].style.display = "block";
-        dots[slideIndex-1].classList.add("active");
-    }
+function showSlides() {
+    const slides = document.getElementsByClassName("mySlides");
+    const dots = document.getElementsByClassName("dot");
     
-        // دعم اللمس للتنقل بين الشرائح
-    const slider = document.querySelector('.slideshow-container');
-    let startX = 0;
+    if (slides.length === 0) return; // إذا لم توجد شرائح، توقف
+    
+    slideIndex = slideIndex > slides.length ? 1 : slideIndex < 1 ? slides.length : slideIndex;
+    
+    Array.from(slides).forEach(slide => slide.style.display = "none");
+    Array.from(dots).forEach(dot => dot.classList.remove("active"));
+    
+    slides[slideIndex-1].style.display = "block";
+    dots[slideIndex-1].classList.add("active");
+}
 
-    slider.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-    });
+// دعم اللمس للتنقل بين الشرائح
+const slider = document.querySelector('.slideshow-container');
+let startX = 0;
 
-    // تحسين التعامل مع السحب اليدوي
+slider.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    clearInterval(slideInterval); // أوقف التبديل التلقائي عند البدء بالسحب
+});
+
 slider.addEventListener('touchend', (e) => {
     let endX = e.changedTouches[0].clientX;
     let diffX = startX - endX;
 
     if (Math.abs(diffX) > 50) {
-        clearInterval(slideInterval); // أوقف التبديل التلقائي مؤقتًا
-
         if (diffX > 0) {
             plusSlides(+1); // سحب لليسار (شريحة تالية)
         } else {
             plusSlides(-1); // سحب لليمين (شريحة سابقة)
         }
-
+    }
+    
+    // أعد تشغيل المؤقت بعد 3 ثواني من آخر سحب
+    setTimeout(startSlideInterval, 3000);
 });
     
     
