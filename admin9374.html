@@ -862,15 +862,14 @@ image: 'https'
     // التحميل الأولي
     switchMode('categories');
     
-    // دالة لتحديد النص تلقائيًا عند الضغط عليه
-function enableAutoSelectOnFocus() {
-  document.querySelectorAll('[contenteditable="true"]').forEach(el => {
-    el.addEventListener('focus', () => {
+function enableSelectOnClick() {
+  document.querySelectorAll('td[contenteditable="true"]').forEach(td => {
+    td.addEventListener('click', () => {
+      const selection = window.getSelection();
       const range = document.createRange();
-      range.selectNodeContents(el);
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
+      range.selectNodeContents(td);
+      selection.removeAllRanges();
+      selection.addRange(range);
     });
   });
 }
