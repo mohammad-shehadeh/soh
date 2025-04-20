@@ -861,6 +861,19 @@ image: 'https'
 
     // التحميل الأولي
     switchMode('categories');
+    
+    // دالة لتحديد النص تلقائيًا عند الضغط عليه
+function enableAutoSelectOnFocus() {
+  document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+    el.addEventListener('focus', () => {
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    });
+  });
+}
   </script>
 </body>
 </html>
