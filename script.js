@@ -400,10 +400,6 @@ slider.addEventListener('touchend', (e) => {
 
 window.onload = function () {
     window.scrollTo(0, 0); // يبدأ من الأعلى
-    slideIndex = 1;
-    showSlides();
-    startSlideInterval();
-};
     //Products.loadCategories();
     //Products.loadProducts();
     //Cart.update();
