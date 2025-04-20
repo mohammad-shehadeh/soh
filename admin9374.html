@@ -807,10 +807,13 @@ image: 'https'
     }
 
     function updateOutput() {
-      const dataString = `const categories = ${JSON.stringify(currentData.categories, null, 2)};\n\n`
-        + `const products = ${JSON.stringify(currentData.products, null, 2)};`;
-      document.getElementById('outputText').value = dataString;
-    }
+  const dataString =
+    `const categories = ${JSON.stringify(currentData.categories, null, 2)};\n\n` +
+    `const products = ${JSON.stringify(currentData.products, null, 2)};\n\n` +
+    `window.categories = categories;\nwindow.products = products;`;
+    
+  document.getElementById('outputText').value = dataString;
+}
 
     async function saveData() {
       try {
