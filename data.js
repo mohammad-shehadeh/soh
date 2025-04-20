@@ -28,6 +28,13 @@ const categories = [
 const products = [
   {
     "category": "تريات كرستال",
+    "name": "ثريا كرستال",
+    "price": 1500,
+    "discountedPrice": 2000,
+    "image": "https://wuilt-assets-v2-dev.s3.amazonaws.com/cl2777uly0044396zj2enh2r6_4fcbd7b6-cc4d-4b5c-b255-193930e460b0.jpg"
+  },
+  {
+    "category": "تريات كرستال",
     "name": "ثريا كرستال طويل",
     "price": 2800,
     "image": "https://m.media-amazon.com/images/I/71nrcOr+VpL._AC_SL1500_.jpg"
