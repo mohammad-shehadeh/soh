@@ -359,6 +359,31 @@ document.addEventListener('DOMContentLoaded', () => {
         slides[slideIndex-1].style.display = "block";
         dots[slideIndex-1].classList.add("active");
     }
+    
+        // دعم اللمس للتنقل بين الشرائح
+    const slider = document.querySelector('.slideshow-container');
+    let startX = 0;
+
+    slider.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    });
+
+    slider.addEventListener('touchend', (e) => {
+        let endX = e.changedTouches[0].clientX;
+        let diffX = startX - endX;
+
+        if (Math.abs(diffX) > 50) { // حساسية السحب
+            clearInterval(slideInterval); // إيقاف التبديل التلقائي مؤقتًا
+            if (diffX > 0) {
+                plusSlides(1); // سحب لليسار - الشريحة التالية
+            } else {
+                plusSlides(-1); // سحب لليمين - الشريحة السابقة
+            }
+            startSlideInterval(); // إعادة تشغيل التبديل التلقائي
+        }
+    });
+    
+    
 
     // التهيئة الأولية
     Products.loadCategories();
