@@ -29,7 +29,7 @@ const products = [
   {
     "category": "تريات كرستال",
     "name": "ثريا كرستال طويل",
-    "price": 2800, 2000,
+    "price": 2800$2000,
     "image": "https://m.media-amazon.com/images/I/71nrcOr+VpL._AC_SL1500_.jpg"
   },
   {
