@@ -939,16 +939,20 @@ footer {
 }
 
 .add-to-cart.unavailable {
-    background-color: #e0e0e0;  /* لون رمادي واضح */
-    color: #a0a0a0;             /* لون النص باهت ولكن واضح */
-    cursor: not-allowed;
-    border: 1px solid #b0b0b0;
-    opacity: 1;                 /* بدون شفافية */
+    background: #d3d3d3 !important;     /* لون رمادي واضح */
+    color: #888888 !important;          /* لون نص باهت */
+    cursor: not-allowed !important;
+    border: 1px solid #bbbbbb !important;
+    box-shadow: none !important;        /* إزالة الظل */
+    animation: none !important;         /* إيقاف التحريك */
+    transform: none !important;         /* إلغاء أي تحول */
 }
 
 .add-to-cart.unavailable:hover {
-    background-color: #e0e0e0;  /* نفس اللون دون تغيير */
-    color: #a0a0a0;
+    background: #d3d3d3 !important;     /* تثبيت اللون عند التحويم */
+    color: #888888 !important;
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 .price:empty {
@@ -957,21 +961,22 @@ footer {
 
 /* تنسيق نص السعر عندما يكون المنتج غير متوفر */
 .price[data-unavailable="true"] {
-    background-color: #ffebee; /* خلفية حمراء فاتحة */
-    color: #d32f2f; /* لون نص أحمر داكن */
-    font-weight: bold; /* خط عريض */
+    background-color: #ffebee;
+    color: #d32f2f;
+    font-weight: bold;
+    font-size: 0.85rem; /* حجم أصغر */
     padding: 5px 10px;
     border-radius: 4px;
     display: inline-block;
-    border: 1px solid #ef9a9a; /* إطار أحمر فاتح */
+    border: 1px solid #ef9a9a;
     margin: 5px 0;
 }
 
-/* إذا أردت تأثيرًا أكثر وضوحًا */
 .price.unavailable {
     background-color: #ffcdd2;
     color: #c62828;
     font-weight: 700;
+    font-size: 0.85rem; /* نفس الحجم المصغّر */
     padding: 6px 12px;
     border-radius: 5px;
     display: inline-block;
