@@ -1133,7 +1133,7 @@ footer {
 
 .selling-price {
   font-weight: bold;
-  color: #2ecc71; /* أخضر للسعر الحالي */
+  color: #green; /* أخضر للسعر الحالي */
   font-size: 1.1em;
 }
 
