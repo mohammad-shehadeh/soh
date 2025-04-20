@@ -267,9 +267,10 @@ h1 {
 
 .details-btn {
   display: block;
+  width: 80%; /* عرض نسبي للحاوية */
   margin: 2rem auto;
-  padding: 1rem 2.5rem;
-  background: linear-gradient(135deg, #9d50bb, #6e48aa); /* ألوان ملكية */
+  padding: 1rem 0; /* حذف 2.5rem الجانبي لتفادي زيادة العرض */
+  background: linear-gradient(135deg, #9d50bb, #6e48aa);
   color: #fff;
   border: 2px solid #ffffff33;
   border-radius: 60px;
