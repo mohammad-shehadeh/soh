@@ -711,6 +711,16 @@
           updateOutput();
         });
         
+          // السعر قبل الخصم
+const originalPriceCell = document.createElement('td');
+originalPriceCell.contentEditable = true;
+originalPriceCell.textContent = prod.originalPrice ?? '';
+originalPriceCell.addEventListener('input', () => {
+  const val = parseFloat(originalPriceCell.textContent);
+  currentData.products[index].originalPrice = isNaN(val) ? null : val;
+  updateOutput();
+});
+          
         // صورة المنتج
         const imgCell = document.createElement('td');
         const imgContainer = document.createElement('div');
@@ -743,7 +753,7 @@
         
         actionCell.appendChild(deleteBtn);
         
-        row.append(catCell, nameCell, priceCell, imgCell, actionCell);
+        row.append(catCell, nameCell, priceCell, originalPriceCell, imgCell, actionCell);
         body.appendChild(row);
       });
     }
@@ -760,11 +770,12 @@
           return;
         }
         currentData.products.unshift({
-          category: currentData.categories[0].name,
-          name: 'منتج جديد',
-          price: 0,
-          image: 'https'
-        });
+  category: currentData.categories[0].name,
+  name: 'منتج جديد',
+  price: 0,
+  originalPrice: null,
+  image: 'https'
+});
       }
       renderTable();
       updateOutput();
