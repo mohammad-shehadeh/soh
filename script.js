@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
         productCard.className = 'product-card';
 
         productCard.innerHTML = `
-            ${hasDiscount ? `<div class="discount-label">تخفيض</div>` : ''}
+            ${hasDiscount ? `<div class="discount-label">خصم</div>` : ''}
             <img src="${product.image}" alt="${product.name}">
             <h3>${product.name}</h3>
             <p class="price ${hasDiscount ? 'on-sale' : (isAvailable ? '' : 'unavailable')}"
