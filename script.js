@@ -219,21 +219,42 @@ document.addEventListener('DOMContentLoaded', () => {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
         
-        const isAvailable = product.price > 0;
+        // تحليل السعر لمعرفة إذا كان هناك عرض
+        const priceParts = String(product.price).split('/');
+        const originalPrice = parseFloat(priceParts[0]);
+        const discountedPrice = priceParts.length > 1 ? parseFloat(priceParts[1]) : null;
+        const discountPercentage = discountedPrice ? 
+            Math.round(((originalPrice - discountedPrice) / originalPrice) * 100) : 0;
+        
+        const isAvailable = originalPrice > 0;
         const buttonText = isAvailable ? '' : 'غير متوفر';
         const buttonClass = isAvailable ? 'add-to-cart' : 'add-to-cart unavailable';
         
         productCard.innerHTML = `
-    <img src="${product.image}" alt="${product.name}">
-    <h3>${product.name}</h3>
-    <p class="price ${isAvailable ? '' : 'unavailable'}" ${isAvailable ? '' : 'data-unavailable="true"'}>
-        ${isAvailable ? `₪${product.price.toFixed(2)}` : 'غير متوفر حالياً'}
-    </p>
-    <button class="${buttonClass}" data-id="${product.name}" ${isAvailable ? '' : 'disabled'}>${buttonText}</button>
-`;
+            <div class="product-image-container">
+                <img src="${product.image}" alt="${product.name}">
+                ${discountedPrice ? `<div class="discount-badge">تخفيض ${discountPercentage}%</div>` : ''}
+            </div>
+            <h3>${product.name}</h3>
+            <div class="price-container">
+                ${discountedPrice ? `
+                    <p class="original-price">₪${originalPrice.toFixed(2)}</p>
+                    <p class="discounted-price">₪${discountedPrice.toFixed(2)}</p>
+                ` : `
+                    <p class="price ${isAvailable ? '' : 'unavailable'}" ${isAvailable ? '' : 'data-unavailable="true"'}>
+                        ${isAvailable ? `₪${originalPrice.toFixed(2)}` : 'غير متوفر حالياً'}
+                    </p>
+                `}
+            </div>
+            <button class="${buttonClass}" data-id="${product.name}" ${isAvailable ? '' : 'disabled'}>${buttonText}</button>
+        `;
         
         if (isAvailable) {
-            productCard.querySelector('.add-to-cart').addEventListener('click', () => Cart.addItem(product));
+            productCard.querySelector('.add-to-cart').addEventListener('click', () => {
+                // عند الإضافة للسلة نستخدم السعر المخفض إذا كان موجوداً
+                const priceToUse = discountedPrice || originalPrice;
+                Cart.addItem({...product, price: priceToUse});
+            });
         }
         
         elements.productsContainer.appendChild(productCard);
@@ -267,12 +288,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const date = now.toLocaleDateString('ar-EG');
     const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
 
-    const itemsList = cart.map((item, index) => 
-        `🔹 *${index + 1}. ${item.name}*\n` +
-        `   - الكمية: ${item.quantity}\n` +
-        `   - السعر: ₪${item.price.toFixed(2)}\n` +
-        `   - الإجمالي: ₪${(item.price * item.quantity).toFixed(2)}`
-    ).join('\n\n');
+    const itemsList = cart.map((item, index) => {
+        const product = products.find(p => p.name === item.name);
+        const originalPrice = product ? parseFloat(String(product.price).split('/')[0]) : item.price;
+        const isDiscounted = originalPrice !== item.price;
+        
+        return `🔹 *${index + 1}. ${item.name}*\n` +
+               `   - الكمية: ${item.quantity}\n` +
+               (isDiscounted ? `   - السعر الأصلي: ₪${originalPrice.toFixed(2)}\n` : '') +
+               `   - السعر المدفوع: ₪${item.price.toFixed(2)}\n` +
+               `   - الإجمالي: ₪${(item.price * item.quantity).toFixed(2)}` +
+               (isDiscounted ? `\n   - وفرت: ₪${((originalPrice - item.price) * item.quantity).toFixed(2)}` : '');
+    }).join('\n\n');
+
+
 
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
