@@ -918,7 +918,7 @@ footer {
   margin-top: 10px;
   position: relative;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-  background: linear-gradient(to right, #0047AB, #5E3EA1, #000000); /* الأزرق، بنفسجي مزرق، أسود */
+  background: linear-gradient(to right, #0d47a1, #8e24aa, #d81b60);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -931,7 +931,7 @@ footer {
   transform: translateX(-50%);
   width: 70%;
   height: 4px;
-  background: linear-gradient(to right, #0047AB, #5E3EA1, #000000); /* نفس التدرج */
+  background: linear-gradient(to right, #0d47a1, #8e24aa, #d81b60);
   border-radius: 4px;
   animation: linePulse 2s infinite ease-in-out;
   opacity: 0.8;
@@ -947,6 +947,7 @@ footer {
     opacity: 1;
   }
 }
+
 
 .add-to-cart.unavailable {
     background: #d3d3d3 !important;     /* لون رمادي واضح */
