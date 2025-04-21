@@ -789,28 +789,6 @@ discountedCell.addEventListener('input', () => {
       });
     }
 
-    function addNewItem() {
-      if (currentMode === 'categories') {
-        currentData.categories.unshift({
-          name: 'فئة جديدة',
-          image: 'https'
-        });
-      } else {
-        if(currentData.categories.length === 0) {
-          alert('يجب إضافة فئة أولاً!');
-          return;
-        }
-        currentData.products.unshift({
-  category: currentData.categories[0].name,
-  name: 'منتج جديد',
-  price: 0,
-discountedPrice: null,
-image: 'https'
-});
-      }
-      renderTable();
-      updateOutput();
-    }
 
     function deleteCategory(index) {
       if (confirm('هل أنت متأكد من حذف الفئة؟ سيتم حذف جميع المنتجات المرتبطة بها أيضاً')) {
