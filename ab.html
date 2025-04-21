@@ -3,215 +3,466 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>معرض ابو عالية - نظام الإدارة</title>
+  <title> معرض ابو عالية </title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      line-height: 1.6;
+    :root {
+      --primary-color: #4361ee;
+      --primary-light: #e0e7ff;
+      --secondary-color: #3f37c9;
+      --success-color: #10b981;
+      --success-light: #d1fae5;
+      --danger-color: #ef4444;
+      --danger-light: #fee2e2;
+      --warning-color: #f59e0b;
+      --light-color: #f8f9fa;
+      --dark-color: #1e293b;
+      --gray-color: #64748b;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background-color: #f5f5f5;
-      color: #333;
+    }
+    
+    body {
+      font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fafc;
+      color: var(--dark-color);
+      line-height: 1.6;
+      padding: 0;
+      direction: rtl;
     }
     
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 30px;
     }
     
     .header {
       text-align: center;
-      margin-bottom: 30px;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+      padding: 30px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+      transform: rotate(30deg);
     }
     
     .header h1 {
-      color: #2c3e50;
-      margin: 0;
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      position: relative;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
     .header p {
-      color: #7f8c8d;
+      opacity: 0.9;
+      font-size: 1.1rem;
+      position: relative;
+    }
+    
+    .header i {
+      margin-left: 15px;
+      font-size: 1.8rem;
+      vertical-align: middle;
     }
     
     .controls {
+      background-color: white;
+      padding: 25px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      margin-bottom: 30px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 20px;
+      align-items: center;
+      border: 1px solid rgba(0,0,0,0.05);
     }
     
     .mode-switch {
       display: flex;
-      gap: 10px;
-    }
-    
-    button {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      gap: 15px;
+      margin-bottom: 0;
+      background: var(--primary-light);
+      padding: 8px;
+      border-radius: 50px;
     }
     
     .mode-btn {
-      background-color: #e0e0e0;
-      color: #555;
+      padding: 12px 25px;
+      border-radius: 50px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--primary-color);
     }
     
-    .mode-btn.active-mode {
-      background-color: #3498db;
-      color: white;
+    .mode-btn:hover {
+      background: rgba(255,255,255,0.7);
+    }
+    
+    .active-mode {
+      background-color: white !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      color: var(--primary-color);
+    }
+    
+    button {
+      border: none;
+      border-radius: 50px;
+      padding: 12px 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: inherit;
+      font-size: 0.95rem;
     }
     
     .btn-primary {
-      background-color: #3498db;
+      background-color: var(--primary-color);
       color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
     }
     
     .btn-success {
-      background-color: #2ecc71;
+      background-color: var(--success-color);
       color: white;
     }
     
-    .btn-orange {
-      background-color: #e67e22;
-      color: white;
+    .btn-success:hover {
+      background-color: #0d9e6f;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
     
     .btn-danger {
-      background-color: #e74c3c;
+      background-color: var(--danger-color);
       color: white;
     }
     
+    .btn-danger:hover {
+      background-color: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+    
     .table-container {
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
       overflow-x: auto;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(0,0,0,0.05);
     }
     
     table {
       width: 100%;
       border-collapse: collapse;
+      min-width: 600px;
     }
     
     th, td {
-      padding: 12px 15px;
-      text-align: right;
-      border-bottom: 1px solid #eee;
+      padding: 15px;
+      text-align: center;
+      border-bottom: 1px solid #f1f5f9;
     }
     
     th {
-      background-color: #f8f9fa;
-      font-weight: bold;
-      color: #2c3e50;
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      font-size: 0.95rem;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f8fafc;
     }
     
     tr:hover {
-      background-color: #f9f9f9;
+      background-color: #f1f5f9;
     }
     
-    .img-cell {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .img-preview {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 4px;
-      border: 1px solid #eee;
-    }
-    
-    .url-input {
-      flex: 1;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      min-width: 0;
-    }
+    /* التعديلات الجديدة لحقول إدخال الروابط */
+    .url-input-cell {
+  padding: 5px;
+  position: relative;
+  direction: rtl;            /* الاتجاه العام للمحتوى من اليمين */
+  text-align: right;         /* محاذاة النص داخل العنصر */
+}
+
+.url-input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  text-align: right;         /* محاذاة النص لليمين */
+  direction: rtl;            /* اتجاه الكتابة من اليمين لليسار */
+  transition: var(--transition);
+  background-color: white;
+}
+
+.url-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.img-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* عرض الصورة على اليمين */
+  gap: 15px;
+  direction: rtl;
+}
+
+.img-preview {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.img-preview:hover {
+  transform: scale(1.8);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  z-index: 10;
+  position: relative;
+}
+
+.link-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* جعل الروابط تظهر على اليمين */
+  direction: rtl;
+}
     
     .action-btn {
-      padding: 6px 10px;
-      font-size: 14px;
+      padding: 8px;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      background: transparent;
+      border: none;
+      color: var(--gray-color);
+      font-size: 1rem;
+    }
+    
+    .action-btn:hover {
+      background-color: #f1f5f9;
+      color: var(--primary-color);
+      transform: rotate(15deg);
+    }
+    
+    .action-btn.delete:hover {
+      color: var(--danger-color);
+      background-color: var(--danger-light);
     }
     
     .output-container {
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      padding: 20px;
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 25px;
+      border: 1px solid rgba(0,0,0,0.05);
     }
     
     .output-container h3 {
-      margin-top: 0;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.3rem;
     }
     
-    #outputText {
+    textarea {
       width: 100%;
       height: 200px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-family: monospace;
+      padding: 18px;
+      border-radius: var(--border-radius);
+      border: 1px solid #e2e8f0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9rem;
       resize: vertical;
+      direction: ltr;
+      transition: var(--transition);
+      line-height: 1.7;
     }
     
-    .upload-btn {
-      background: #4CAF50;
-      color: white;
-      padding: 6px 12px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 5px;
-      width: 100%;
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px var(--primary-light);
     }
     
-    .upload-btn:hover {
-      background: #45a049;
+    /* تأثيرات للتفاعل */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
-    .upload-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .table-container, .output-container {
+      animation: fadeIn 0.5s ease-out;
     }
     
+    /* تحسينات للجوال */
     @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .header {
+        padding: 20px;
+        margin-bottom: 25px;
+      }
+      
+      .header h1 {
+        font-size: 1.8rem;
+      }
+      
       .controls {
         flex-direction: column;
         align-items: stretch;
+        gap: 15px;
+        padding: 20px;
       }
       
       .mode-switch {
-        justify-content: space-between;
+        width: 100%;
+        justify-content: center;
+      }
+      
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      th, td {
+        padding: 12px 10px;
+        font-size: 0.9rem;
+      }
+      
+      .img-cell {
+        flex-direction: column-reverse;
+        align-items: flex-end;
+        gap: 10px;
+      }
+      
+      .url-input {
         width: 100%;
       }
     }
+    
+    /* تأثيرات عند الحفظ */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .saved-effect {
+      animation: pulse 0.5s ease;
+    }
+    
+    .btn-orange {
+  background-color: #ffc400; /* برتقالي عادي */
+  color: white;
+  border: none;
+  padding: 13px 20px;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.7s ease;
+}
+
+.btn-orange:hover {
+  background-color: #e67600; /* أغمق قليلاً عند المرور */
+}
+
+@media (max-width: 768px) {
+  /* تكبير عمود "اسم المنتج" في جدول المنتجات */
+  #productsTable th:nth-child(2),
+  #productsTable td:nth-child(2) {
+    width: 65% !important;  /* زيادة العرض إلى 45% */
+    min-width: 120px;      /* أدنى عرض مضمون */
+  }
+
+  /* تقليص الأعمدة الأخرى لتعويض المساحة */
+  #productsTable th:nth-child(1),
+  #productsTable td:nth-child(1) {
+    width: 15% !important;  /* تقليل عرض عمود الفئة */
+  }
+
+  #productsTable th:nth-child(4),
+  #productsTable td:nth-child(4) {
+    width: 20% !important;  /* تقليل عرض عمود الصورة */
+  }
+}
+
+@media (max-width: 768px) {
+  /* تكبير عمود "اسم الفئة" فقط */
+  #categoriesTable th:nth-child(1),
+  #categoriesTable td:nth-child(1) {
+    width: 90% !important;  /* زيادة العرض إلى 70% */
+    min-width: 160px;      /* أدنى عرض مضمون */
+    font-size: 1.1rem;     /* تكبير الخط قليلاً */
+    padding-right: 15px;   /* زيادة المساحة الداخلية */
+  }
+}
+
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1><i class="fas fa-lightbulb"></i> معرض ابو عالية</h1>
-      <p>نظام إدارة الفئات والمنتجات <br> 
-        هذا النظام خاص للمسؤول صهيب الشريف فقط 🚫
+      <h1><i class="fas fa-lightbulb"></i> معرض ابو عالية  </h1>
+      <p>نظام إدارة الفئات والمنتجات  <br> 
+        هاذا النظام خاص للمسؤول صهيب الشريف فقط 🚫
       </p>
     </div>
 
@@ -225,13 +476,14 @@
         </button>
       </div>
 
-      <button class="btn-orange" onclick="window.location.href='https://postimages.org'">
-        <i class="fas fa-link"></i> Postimages
-      </button>
+        <button class="btn-orange" onclick="window.location.href='https://postimages.org'">
+  <i class="fas fa-link"></i> Postimages
+</button>
 
       <button class="btn-success" onclick="addNewItem()">
         <i class="fas fa-plus-circle"></i> إضافة جديد
       </button>
+      
       
       <button class="btn-primary" onclick="saveData()">
         <i class="fas fa-save"></i> حفظ التعديلات
@@ -244,12 +496,26 @@
         <thead>
           <tr>
             <th width="50%">اسم الفئة</th>
-            <th width="30%">صورة الفئة</th>
-            <th width="20%">إجراءات</th>
+            <th width="30%">رابط الصورة</th>
+            <th width="10%">إجراءات</th>
           </tr>
         </thead>
         <tbody id="categoriesBody">
-          <!-- سيتم ملؤه بالبيانات -->
+          <!-- مثال لعنصر الفئة -->
+          <tr>
+            <td contenteditable="true">إضاءة LED</td>
+            <td class="url-input-cell">
+              <div class="img-cell">
+                <img src="https://via.placeholder.com/60" class="img-preview" alt="Preview">
+                <input type="text" class="url-input" value="https://example.com/image1.jpg" dir="ltr">
+              </div>
+            </td>
+            <td>
+              <div class="link-container">
+                <button class="action-btn delete" title="حذف"><i class="fas fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -260,15 +526,31 @@
         <thead>
           <tr>
             <th width="20%">الفئة</th>
-            <th width="25%">اسم المنتج</th>
-            <th width="10%">السعر</th>
-            <th width="10%">قبل الخصم</th>
+            <th width="35%">اسم المنتج</th>
+            <th width="15%">السعر</th>
+            <th width="15%">قبل الخصم</th>
             <th width="20%">صورة المنتج</th>
-            <th width="15%">إجراءات</th>
+            <th width="10%">إجراءات</th>
           </tr>
         </thead>
         <tbody id="productsBody">
-          <!-- سيتم ملؤه بالبيانات -->
+          <!-- مثال لعنصر المنتج -->
+          <tr>
+            <td contenteditable="true">إضاءة LED</td>
+            <td contenteditable="true">لمبة LED 10 واط</td>
+            <td contenteditable="true">25.00 ر.س</td>
+            <td class="url-input-cell">
+              <div class="img-cell">
+                <img src="https://via.placeholder.com/60" class="img-preview" alt="Preview">
+                <input type="text" class="url-input" value="https://example.com/product1.jpg" dir="ltr">
+              </div>
+            </td>
+            <td>
+              <div class="link-container">
+                <button class="action-btn delete" title="حذف"><i class="fas fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -279,35 +561,27 @@
     </div>
   </div>
 
-
-  <script src="config.js"></script>
   <script src="data.js"></script>
+  <script src="config.js"></script>
+  <script src="password.html"></script>
+
   <script>
-    // بيانات أولية
-    let categories = [
-      { name: "إضاءة LED", image: "" },
-      { name: "لمبات", image: "" }
-    ];
-
-    let products = [
-      { 
-        category: "إضاءة LED", 
-        name: "لمبة LED 10 واط", 
-        price: "25.00 ر.س", 
-        discountedPrice: "30.00 ر.س",
-        image: "" 
-      }
-    ];
-
-    // تحقق من حالة المصادقة
-    if (localStorage.getItem('isAuthenticated') !== 'true') {
-      window.location.href = 'password.html';
-    }
-
+      // تحقق من حالة المصادقة
+  if (localStorage.getItem('isAuthenticated') !== 'true') {
+    window.location.href = 'password.html';
+  }
+  
+  // دالة للخروج من النظام
+  function logout() {
+    localStorage.removeItem('isAuthenticated');
+    window.location.href = 'password.html';
+  }
     // دالة لدمج أجزاء التوكن
     function getGitHubToken() {
-      // يمكنك استبدال هذا بآلية الحصول على التوكن الخاصة بك
-      return "YOUR_GITHUB_TOKEN";
+      if (typeof TOKEN_PART1 !== 'undefined' && typeof TOKEN_PART2 !== 'undefined') {
+        return TOKEN_PART1 + TOKEN_PART2;
+      }
+      throw new Error("لم يتم العثور على أجزاء التوكن في ملف config.js");
     }
 
     const currentData = {
@@ -361,29 +635,26 @@
         // صورة الفئة
         const imgCell = document.createElement('td');
         const imgContainer = document.createElement('div');
-        imgContainer.className = 'img-cell';
+        imgContainer.className = 'link-container';
         
         const imgPreview = document.createElement('img');
         imgPreview.className = 'img-preview';
-        imgPreview.src = cat.image || 'https://via.placeholder.com/60';
-        imgPreview.onerror = () => imgPreview.src = 'https://via.placeholder.com/60';
+        imgPreview.src = cat.image;
+        imgPreview.onerror = () => imgPreview.style.display = 'none';
         
-        const imgInput = document.createElement('input');
-        imgInput.type = 'text';
-        imgInput.className = 'url-input';
-        imgInput.value = cat.image || '';
+        const imgInput = document.createElement('span');
+        imgInput.contentEditable = true;
+        imgInput.textContent = cat.image;
         imgInput.addEventListener('input', () => {
-          currentData.categories[index].image = imgInput.value.trim();
-          imgPreview.src = imgInput.value.trim();
+          currentData.categories[index].image = imgInput.textContent.trim();
+          imgPreview.src = imgInput.textContent.trim();
+          imgPreview.style.display = 'inline-block';
           updateOutput();
         });
         
-        const uploadBtn = document.createElement('button');
-        uploadBtn.className = 'upload-btn';
-        uploadBtn.innerHTML = '<i class="fas fa-upload"></i> رفع صورة';
-        uploadBtn.onclick = () => uploadImage(imgInput, imgPreview);
-        
-        imgContainer.append(imgPreview, imgInput, uploadBtn);
+        const uploadBtn = createUploadButton(imgInput, imgPreview);
+imgContainer.append(imgPreview, imgInput, uploadBtn);
+
         imgCell.appendChild(imgContainer);
         
         // زر الحذف
@@ -438,45 +709,44 @@
         priceCell.contentEditable = true;
         priceCell.textContent = prod.price;
         priceCell.addEventListener('input', () => {
-          currentData.products[index].price = priceCell.textContent.trim();
+          currentData.products[index].price = parseFloat(priceCell.textContent) || 0;
           updateOutput();
         });
         
-        // السعر قبل الخصم
-        const discountedCell = document.createElement('td');
-        discountedCell.contentEditable = true;
-        discountedCell.textContent = prod.discountedPrice || '';
-        discountedCell.addEventListener('input', () => {
-          currentData.products[index].discountedPrice = discountedCell.textContent.trim();
-          updateOutput();
-        });
-        
+          // السعر قبل الخصم
+// السعر بعد الخصم
+const discountedCell = document.createElement('td');
+discountedCell.contentEditable = true;
+discountedCell.textContent = prod.discountedPrice ?? '';
+discountedCell.addEventListener('input', () => {
+  const val = parseFloat(discountedCell.textContent);
+  currentData.products[index].discountedPrice = isNaN(val) ? null : val;
+  updateOutput();
+});
+          
         // صورة المنتج
         const imgCell = document.createElement('td');
         const imgContainer = document.createElement('div');
-        imgContainer.className = 'img-cell';
+        imgContainer.className = 'link-container';
         
         const imgPreview = document.createElement('img');
         imgPreview.className = 'img-preview';
-        imgPreview.src = prod.image || 'https://via.placeholder.com/60';
-        imgPreview.onerror = () => imgPreview.src = 'https://via.placeholder.com/60';
+        imgPreview.src = prod.image;
+        imgPreview.onerror = () => imgPreview.style.display = 'none';
         
-        const imgInput = document.createElement('input');
-        imgInput.type = 'text';
-        imgInput.className = 'url-input';
-        imgInput.value = prod.image || '';
+        const imgInput = document.createElement('span');
+        imgInput.contentEditable = true;
+        imgInput.textContent = prod.image;
         imgInput.addEventListener('input', () => {
-          currentData.products[index].image = imgInput.value.trim();
-          imgPreview.src = imgInput.value.trim();
+          currentData.products[index].image = imgInput.textContent.trim();
+          imgPreview.src = imgInput.textContent.trim();
+          imgPreview.style.display = 'inline-block';
           updateOutput();
         });
         
-        const uploadBtn = document.createElement('button');
-        uploadBtn.className = 'upload-btn';
-        uploadBtn.innerHTML = '<i class="fas fa-upload"></i> رفع صورة';
-        uploadBtn.onclick = () => uploadImage(imgInput, imgPreview);
-        
-        imgContainer.append(imgPreview, imgInput, uploadBtn);
+        const uploadBtn = createUploadButton(imgInput, imgPreview);
+imgContainer.append(imgPreview, imgInput, uploadBtn);
+
         imgCell.appendChild(imgContainer);
         
         // زر الحذف
@@ -493,63 +763,11 @@
       });
     }
 
-    async function uploadImage(inputElement, previewElement) {
-      // إنشاء عنصر input مخفي لاختيار الملف
-      const fileInput = document.createElement('input');
-      fileInput.type = 'file';
-      fileInput.accept = 'image/*';
-      
-      fileInput.onchange = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        try {
-          // عرض تحميل مؤقت
-          previewElement.src = 'https://via.placeholder.com/60/cccccc/loading...';
-          
-          const formData = new FormData();
-          formData.append('file', file);
-          formData.append('upload_preset', 'Shehadeh'); // استخدم الـ preset الخاص بك
-          
-          const response = await fetch('https://api.cloudinary.com/v1_1/dygc5b8cn/image/upload', {
-            method: 'POST',
-            body: formData
-          });
-          
-          if (!response.ok) throw new Error('فشل في رفع الصورة');
-          
-          const data = await response.json();
-          
-          // تحديث الحقول
-          inputElement.value = data.secure_url;
-          previewElement.src = data.secure_url;
-          
-          // تحديث البيانات
-          if (currentMode === 'categories') {
-            const index = Array.from(document.querySelectorAll('#categoriesBody .url-input')).indexOf(inputElement);
-            if (index !== -1) currentData.categories[index].image = data.secure_url;
-          } else {
-            const index = Array.from(document.querySelectorAll('#productsBody .url-input')).indexOf(inputElement);
-            if (index !== -1) currentData.products[index].image = data.secure_url;
-          }
-          
-          updateOutput();
-          
-        } catch (err) {
-          console.error(err);
-          alert(`خطأ في رفع الصورة: ${err.message}`);
-          previewElement.src = 'https://via.placeholder.com/60';
-        }
-      };
-      
-      fileInput.click();
-    }
-
     function addNewItem() {
       if (currentMode === 'categories') {
         currentData.categories.unshift({
           name: 'فئة جديدة',
-          image: ''
+          image: 'https'
         });
       } else {
         if(currentData.categories.length === 0) {
@@ -557,12 +775,12 @@
           return;
         }
         currentData.products.unshift({
-          category: currentData.categories[0].name,
-          name: 'منتج جديد',
-          price: '0.00 ر.س',
-          discountedPrice: '',
-          image: ''
-        });
+  category: currentData.categories[0].name,
+  name: 'منتج جديد',
+  price: 0,
+discountedPrice: null,
+image: 'https'
+});
       }
       renderTable();
       updateOutput();
@@ -586,6 +804,21 @@
       }
     }
 
+function enableSelectOnClick() {
+  // ننتظر لحظات بسيطة لضمان أن الخلايا تم رسمها
+  setTimeout(() => {
+    document.querySelectorAll('td[contenteditable="true"]').forEach(td => {
+      td.addEventListener('click', function (e) {
+        const range = document.createRange();
+        range.selectNodeContents(this);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+      });
+    });
+  }, 100); // تأخير بسيط للتأكد من وجود الخلايا
+}
+
     function updateProductsCategories(oldName, newName) {
       currentData.products.forEach(prod => {
         if (prod.category === oldName) prod.category = newName;
@@ -593,35 +826,29 @@
     }
 
     function updateOutput() {
-      const dataString =
-        `const categories = ${JSON.stringify(currentData.categories, null, 2)};\n\n` +
-        `const products = ${JSON.stringify(currentData.products, null, 2)};\n\n` +
-        `window.categories = categories;\nwindow.products = products;`;
-        
-      document.getElementById('outputText').value = dataString;
-    }
+  const dataString =
+    `const categories = ${JSON.stringify(currentData.categories, null, 2)};\n\n` +
+    `const products = ${JSON.stringify(currentData.products, null, 2)};\n\n` +
+    `window.categories = categories;\nwindow.products = products;`;
+    
+  document.getElementById('outputText').value = dataString;
+}
 
     async function saveData() {
       try {
         const token = getGitHubToken();
-        const content = btoa(unescape(encodeURIComponent(document.getElementById('outputText').value));
+        const content = btoa(unescape(encodeURIComponent(document.getElementById('outputText').value)));
         const path = 'data.js';
         const url = `https://api.github.com/repos/mohammad-shehadeh/soh/contents/${path}`;
 
-        // جلب SHA للملف الموجود (للتحديث)
-        let sha = '';
-        try {
-          const shaRes = await fetch(url, {
-            headers: { Authorization: `token ${token}` }
-          });
-          
-          if (shaRes.ok) {
-            const shaData = await shaRes.json();
-            sha = shaData.sha;
-          }
-        } catch (e) {
-          console.log('لم يتم العثور على ملف موجود، سيتم إنشاء ملف جديد');
-        }
+        const shaRes = await fetch(url, {
+          headers: { Authorization: `token ${token}` }
+        });
+        
+        if (!shaRes.ok) throw new Error("فشل في جلب بيانات الملف من GitHub");
+        
+        const shaData = await shaRes.json();
+        const sha = shaData.sha;
 
         const saveRes = await fetch(url, {
           method: "PUT",
@@ -632,7 +859,7 @@
           body: JSON.stringify({
             message: "تحديث البيانات من المحرر",
             content: content,
-            sha: sha || undefined
+            sha: sha
           })
         });
         
@@ -640,7 +867,7 @@
         
         const data = await saveRes.json();
         if (data.content) {
-          alert("تم الحفظ بنجاح في GitHub!");
+          alert("تم الحفظ بنجاح في Server!");
         } else {
           console.error(data);
           alert("حدث خطأ غير متوقع أثناء الحفظ.");
@@ -651,8 +878,13 @@
       }
     }
 
+
+
+
     // التحميل الأولي
     switchMode('categories');
+    
+    
   </script>
 </body>
 </html>
