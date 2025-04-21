@@ -39,6 +39,13 @@ const categories = [
 
 const products = [
   {
+    "category": "المسار المغناطيسي",
+    "name": "ليد سمار مغناطيسي",
+    "price": 150,
+    "discountedPrice": 200,
+    "image": "https://res.cloudinary.com/dygc5b8cn/image/upload/v1745269037/by95xciwkgmt8zdmdwiw.jpg"
+  },
+  {
     "category": "تريات كرستال",
     "name": "ثريا كرستال",
     "price": 1700,
