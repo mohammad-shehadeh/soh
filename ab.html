@@ -205,8 +205,8 @@
           <tr>
             <th width="20%">الفئة</th>
             <th width="20%">اسم المنتج</th>
-            <th width="15%">السعر</th>
-            <th width="15%">قبل الخصم</th>
+            <th width="15%">السعر (ر.س)</th>
+            <th width="15%">قبل الخصم (ر.س)</th>
             <th width="20%">صورة المنتج</th>
             <th width="10%">إجراءات</th>
           </tr>
@@ -419,7 +419,7 @@
             currentData.products.unshift({
               category: currentData.categories[0].name,
               name: 'منتج جديد',
-              price: '0.00 ر.س',
+              price: 0, // سعر افتراضي كرقم
               discountedPrice: null,
               image: imageUrl
             });
@@ -538,21 +538,23 @@
           updateOutput();
         });
         
-        // السعر
+        // السعر (معالجة كرقم)
         const priceCell = document.createElement('td');
         priceCell.contentEditable = true;
         priceCell.textContent = prod.price;
         priceCell.addEventListener('input', () => {
-          currentData.products[index].price = priceCell.textContent.trim();
+          const priceValue = parseFloat(priceCell.textContent);
+          currentData.products[index].price = isNaN(priceValue) ? 0 : priceValue;
           updateOutput();
         });
         
-        // السعر قبل الخصم
+        // السعر قبل الخصم (معالجة كرقم)
         const discountedCell = document.createElement('td');
         discountedCell.contentEditable = true;
         discountedCell.textContent = prod.discountedPrice || '';
         discountedCell.addEventListener('input', () => {
-          currentData.products[index].discountedPrice = discountedCell.textContent.trim();
+          const discountedValue = parseFloat(discountedCell.textContent);
+          currentData.products[index].discountedPrice = isNaN(discountedValue) ? null : discountedValue;
           updateOutput();
         });
         
