@@ -1,5 +1,9 @@
 const categories = [
   {
+    "name": "مرستال",
+    "image": "https://res.cloudinary.com/dygc5b8cn/image/upload/v1745263564/v5hfdr3kmdmewvlfuchn.jpg"
+  },
+  {
     "name": "المسار المغناطيسي",
     "image": "https://i.postimg.cc/NMRCyxN1/IMG-7308.jpg"
   },
