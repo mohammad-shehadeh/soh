@@ -1,5 +1,13 @@
 const categories = [
   {
+    "name": "ثريا معدن كلاسيك",
+    "image": "https://i.postimg.cc/nLq0WgVm/IMG-7306.jpg"
+  },
+  {
+    "name": "ثريا ليد موديرن",
+    "image": "https://i.postimg.cc/Qd3DwGhg/IMG-7305.jpg"
+  },
+  {
     "name": "تريات كرستال",
     "image": "https://m.media-amazon.com/images/I/71gTDrRvIOL._AC_UF1000,1000_QL80_.jpg"
   },
@@ -14,10 +22,6 @@ const categories = [
   {
     "name": "إضاءة داخلية",
     "image": "https://cdn.salla.sa/WRneP/JIWbcJ7b4MZuYJMXNnp9ifrb18AmvbTGlDIEglI1.jpg"
-  },
-  {
-    "name": "إضاءة شوارع",
-    "image": "https://www.tarshid.com.sa/_next/image?url=https%3A%2F%2Fwww.tarshid.com.sa%2Fuploads%2Fmain_cover.jpg-nrps7n.jpeg&w=3840&q=75"
   },
   {
     "name": "إضاءة مكتبية",
