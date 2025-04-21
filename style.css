@@ -914,8 +914,8 @@ footer {
   font-weight: 700;
   text-align: center;
   display: inline-block;
-  padding-bottom: 5px;
-  padding-left: 40px; /* مساحة للعصا من اليسار */
+  padding-bottom: 10px;
+  padding-left: 30px; /* مساحة لالتفاف البداية */
   margin-top: 10px;
   position: relative;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
@@ -924,7 +924,7 @@ footer {
   -webkit-text-fill-color: transparent;
 }
 
-/* الخط الزخرفي أسفل العنوان */
+/* الخط الزخرفي المستقيم */
 .fancy-title::after {
   content: '';
   position: absolute;
@@ -932,7 +932,7 @@ footer {
   left: 50%;
   transform: translateX(-50%);
   width: 70%;
-  height: 4px;
+  height: 3px;
   background: linear-gradient(to right, #0d47a1, #8e24aa, #d81b60);
   border-radius: 4px;
   animation: linePulse 2s infinite ease-in-out;
@@ -943,14 +943,17 @@ footer {
 .fancy-title::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 8px;
-  width: 25px;
-  height: 50px;
-  background: linear-gradient(135deg, #d81b60, #8e24aa, #0d47a1);
-  border-radius: 50% 50% 0 0;
+  bottom: 0;
+  left: -10px;
+  width: 12px;
+  height: 12px;
+  border: 3px solid transparent;
+  border-top-color: #0d47a1;
+  border-left-color: #0d47a1;
+  border-radius: 50%;
   transform: rotate(-45deg);
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  opacity: 0.8;
+  animation: linePulse 2s infinite ease-in-out;
 }
 
 @keyframes linePulse {
