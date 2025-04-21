@@ -1,5 +1,9 @@
 const categories = [
   {
+    "name": "المسار المغناطيسي",
+    "image": "https://i.postimg.cc/NMRCyxN1/IMG-7308.jpg"
+  },
+  {
     "name": "ثريا معدن كلاسيك",
     "image": "https://i.postimg.cc/HxVfv5sK/IMG-7307.jpg"
   },
