@@ -615,9 +615,10 @@
     throw new Error("لم يتم العثور على أجزاء التوكن في ملف config.js");
   }
 
+  // تهيئة البيانات
   const currentData = {
-    categories: [...categories],
-    products: [...products]
+    categories: window.categories || [],
+    products: window.products || []
   };
 
   let currentMode = 'categories';
@@ -668,7 +669,7 @@
     } catch (error) {
       console.error('Error uploading image:', error);
       alert('حدث خطأ أثناء رفع الصورة: ' + error.message);
-      return null;
+      return 'https://via.placeholder.com/60';
     }
   }
 
@@ -685,14 +686,12 @@
         if (!file) return;
         
         const imageUrl = await uploadImage(file);
-        if (imageUrl) {
-          currentData.categories.unshift({
-            name: 'فئة جديدة',
-            image: imageUrl
-          });
-          renderTable();
-          updateOutput();
-        }
+        currentData.categories.unshift({
+          name: 'فئة جديدة',
+          image: imageUrl
+        });
+        renderTable();
+        updateOutput();
       };
       
       document.body.appendChild(fileInput);
@@ -704,7 +703,6 @@
         return;
       }
       
-      // نفس المنطق للمنتجات
       const fileInput = document.createElement('input');
       fileInput.type = 'file';
       fileInput.accept = 'image/*';
@@ -715,17 +713,15 @@
         if (!file) return;
         
         const imageUrl = await uploadImage(file);
-        if (imageUrl) {
-          currentData.products.unshift({
-            category: currentData.categories[0].name,
-            name: 'منتج جديد',
-            price: 0,
-            discountedPrice: null,
-            image: imageUrl
-          });
-          renderTable();
-          updateOutput();
-        }
+        currentData.products.unshift({
+          category: currentData.categories[0].name,
+          name: 'منتج جديد',
+          price: 0,
+          discountedPrice: null,
+          image: imageUrl
+        });
+        renderTable();
+        updateOutput();
       };
       
       document.body.appendChild(fileInput);
@@ -738,6 +734,11 @@
     const body = document.getElementById('categoriesBody');
     body.innerHTML = '';
     
+    if (!currentData.categories || currentData.categories.length === 0) {
+      body.innerHTML = '<tr><td colspan="3" style="text-align:center">لا توجد فئات مضافة</td></tr>';
+      return;
+    }
+    
     currentData.categories.forEach((cat, index) => {
       const row = document.createElement('tr');
       
@@ -746,8 +747,9 @@
       nameCell.contentEditable = true;
       nameCell.textContent = cat.name;
       nameCell.addEventListener('input', () => {
+        const oldName = currentData.categories[index].name;
         currentData.categories[index].name = nameCell.textContent.trim();
-        updateProductsCategories(cat.name, nameCell.textContent.trim());
+        updateProductsCategories(oldName, nameCell.textContent.trim());
         updateOutput();
       });
       
@@ -758,10 +760,10 @@
       
       const imgPreview = document.createElement('img');
       imgPreview.className = 'img-preview';
-      imgPreview.src = cat.image;
+      imgPreview.src = cat.image || 'https://via.placeholder.com/60';
       imgPreview.onerror = () => imgPreview.src = 'https://via.placeholder.com/60';
       
-      // زر تغيير الصورة للعناصر الموجودة
+      // زر تغيير الصورة
       const changeImgBtn = document.createElement('button');
       changeImgBtn.className = 'btn-sm btn-secondary';
       changeImgBtn.innerHTML = '<i class="fas fa-camera"></i> تغيير الصورة';
@@ -776,11 +778,9 @@
           if (!file) return;
           
           const imageUrl = await uploadImage(file);
-          if (imageUrl) {
-            currentData.categories[index].image = imageUrl;
-            imgPreview.src = imageUrl;
-            updateOutput();
-          }
+          currentData.categories[index].image = imageUrl;
+          renderTable();
+          updateOutput();
         };
         
         document.body.appendChild(fileInput);
@@ -809,6 +809,11 @@
     const body = document.getElementById('productsBody');
     body.innerHTML = '';
     
+    if (!currentData.products || currentData.products.length === 0) {
+      body.innerHTML = '<tr><td colspan="6" style="text-align:center">لا توجد منتجات مضافة</td></tr>';
+      return;
+    }
+    
     currentData.products.forEach((prod, index) => {
       const row = document.createElement('tr');
       
@@ -816,6 +821,7 @@
       const catCell = document.createElement('td');
       const select = document.createElement('select');
       select.className = 'category-select';
+      
       currentData.categories.forEach(cat => {
         const option = document.createElement('option');
         option.value = cat.name;
@@ -823,6 +829,7 @@
         if (cat.name === prod.category) option.selected = true;
         select.appendChild(option);
       });
+      
       select.onchange = () => {
         currentData.products[index].category = select.value;
         updateOutput();
@@ -841,7 +848,7 @@
       // السعر
       const priceCell = document.createElement('td');
       priceCell.contentEditable = true;
-      priceCell.textContent = prod.price;
+      priceCell.textContent = prod.price || '0';
       priceCell.addEventListener('input', () => {
         currentData.products[index].price = parseFloat(priceCell.textContent) || 0;
         updateOutput();
@@ -864,7 +871,7 @@
       
       const imgPreview = document.createElement('img');
       imgPreview.className = 'img-preview';
-      imgPreview.src = prod.image;
+      imgPreview.src = prod.image || 'https://via.placeholder.com/60';
       imgPreview.onerror = () => imgPreview.src = 'https://via.placeholder.com/60';
       
       // زر تغيير الصورة
@@ -882,11 +889,9 @@
           if (!file) return;
           
           const imageUrl = await uploadImage(file);
-          if (imageUrl) {
-            currentData.products[index].image = imageUrl;
-            imgPreview.src = imageUrl;
-            updateOutput();
-          }
+          currentData.products[index].image = imageUrl;
+          renderTable();
+          updateOutput();
         };
         
         document.body.appendChild(fileInput);
@@ -932,7 +937,7 @@
   function enableSelectOnClick() {
     setTimeout(() => {
       document.querySelectorAll('td[contenteditable="true"]').forEach(td => {
-        td.addEventListener('click', function (e) {
+        td.addEventListener('click', function(e) {
           const range = document.createRange();
           range.selectNodeContents(this);
           const selection = window.getSelection();
@@ -945,7 +950,9 @@
 
   function updateProductsCategories(oldName, newName) {
     currentData.products.forEach(prod => {
-      if (prod.category === oldName) prod.category = newName;
+      if (prod.category === oldName) {
+        prod.category = newName;
+      }
     });
   }
 
@@ -965,6 +972,7 @@
       const path = 'data.js';
       const url = `https://api.github.com/repos/mohammad-shehadeh/soh/contents/${path}`;
 
+      // الحصول على SHA للملف الموجود
       const shaRes = await fetch(url, {
         headers: { Authorization: `token ${token}` }
       });
@@ -974,6 +982,7 @@
       const shaData = await shaRes.json();
       const sha = shaData.sha;
 
+      // حفظ التغييرات
       const saveRes = await fetch(url, {
         method: "PUT",
         headers: {
@@ -1003,8 +1012,17 @@
   }
 
   // التحميل الأولي
-  switchMode('categories');
-  enableSelectOnClick();
+  document.addEventListener('DOMContentLoaded', function() {
+    // تهيئة البيانات إذا لم تكن موجودة
+    if (!window.categories) window.categories = [];
+    if (!window.products) window.products = [];
+    
+    currentData.categories = [...window.categories];
+    currentData.products = [...window.products];
+    
+    switchMode('categories');
+    enableSelectOnClick();
+  });
 </script>
 </body>
 </html>
