@@ -595,8 +595,8 @@
   <script src="config.js"></script>
   <script src="password.html"></script>
 
-  <script>
-      // تحقق من حالة المصادقة
+ <script>
+  // تحقق من حالة المصادقة
   if (localStorage.getItem('isAuthenticated') !== 'true') {
     window.location.href = 'password.html';
   }
@@ -606,575 +606,405 @@
     localStorage.removeItem('isAuthenticated');
     window.location.href = 'password.html';
   }
-    // دالة لدمج أجزاء التوكن
-    function getGitHubToken() {
-      if (typeof TOKEN_PART1 !== 'undefined' && typeof TOKEN_PART2 !== 'undefined') {
-        return TOKEN_PART1 + TOKEN_PART2;
-      }
-      throw new Error("لم يتم العثور على أجزاء التوكن في ملف config.js");
+
+  // دالة لدمج أجزاء التوكن
+  function getGitHubToken() {
+    if (typeof TOKEN_PART1 !== 'undefined' && typeof TOKEN_PART2 !== 'undefined') {
+      return TOKEN_PART1 + TOKEN_PART2;
     }
+    throw new Error("لم يتم العثور على أجزاء التوكن في ملف config.js");
+  }
 
-    const currentData = {
-      categories: [...categories],
-      products: [...products]
-    };
+  const currentData = {
+    categories: [...categories],
+    products: [...products]
+  };
 
-    let currentMode = 'categories';
+  let currentMode = 'categories';
+  
+  function switchMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.mode-btn').forEach(btn => 
+      btn.classList.remove('active-mode'));
+    document.querySelectorAll(`[onclick="switchMode('${mode}')"]`)
+      .forEach(btn => btn.classList.add('active-mode'));
     
-    function switchMode(mode) {
-      currentMode = mode;
-      document.querySelectorAll('.mode-btn').forEach(btn => 
-        btn.classList.remove('active-mode'));
-      document.querySelectorAll(`[onclick="switchMode('${mode}')"]`)
-        .forEach(btn => btn.classList.add('active-mode'));
-      
-      document.getElementById('categoriesTable').style.display = 
-        mode === 'categories' ? 'block' : 'none';
-      document.getElementById('productsTable').style.display = 
-        mode === 'products' ? 'block' : 'none';
-      
-      renderTable();
-      updateOutput();
-    }
+    document.getElementById('categoriesTable').style.display = 
+      mode === 'categories' ? 'block' : 'none';
+    document.getElementById('productsTable').style.display = 
+      mode === 'products' ? 'block' : 'none';
+    
+    renderTable();
+    updateOutput();
+  }
 
-    function renderTable() {
-      if (currentMode === 'categories') {
-        renderCategories();
-      } else {
-        renderProducts();
-      }
+  function renderTable() {
+    if (currentMode === 'categories') {
+      renderCategories();
+    } else {
+      renderProducts();
     }
+  }
 
-    function renderCategories() {
-      const body = document.getElementById('categoriesBody');
-      body.innerHTML = '';
-      
-      currentData.categories.forEach((cat, index) => {
-        const row = document.createElement('tr');
-        
-        // اسم الفئة
-        const nameCell = document.createElement('td');
-        nameCell.contentEditable = true;
-        nameCell.textContent = cat.name;
-        nameCell.addEventListener('input', () => {
-          currentData.categories[index].name = nameCell.textContent.trim();
-          updateProductsCategories(cat.name, nameCell.textContent.trim());
-          updateOutput();
-        });
-        
-        // صورة الفئة
-        const imgCell = document.createElement('td');
-        const imgContainer = document.createElement('div');
-        imgContainer.className = 'link-container';
-        
-        const imgPreview = document.createElement('img');
-        imgPreview.className = 'img-preview';
-        imgPreview.src = cat.image;
-        imgPreview.onerror = () => imgPreview.style.display = 'none';
-        
-        const imgInput = document.createElement('span');
-        imgInput.contentEditable = true;
-        imgInput.textContent = cat.image;
-        imgInput.addEventListener('input', () => {
-          currentData.categories[index].image = imgInput.textContent.trim();
-          imgPreview.src = imgInput.textContent.trim();
-          imgPreview.style.display = 'inline-block';
-          updateOutput();
-        });
-        
-        imgContainer.append(imgPreview, imgInput);
-        imgCell.appendChild(imgContainer);
-        
-        // زر الحذف
-        const actionCell = document.createElement('td');
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'btn-danger action-btn';
-        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-        deleteBtn.onclick = () => deleteCategory(index);
-        
-        actionCell.appendChild(deleteBtn);
-        
-        row.append(nameCell, imgCell, actionCell);
-        body.appendChild(row);
+  // دالة لرفع الصورة إلى Cloudinary
+  async function uploadImage(file) {
+    const cloudName = 'dygc5b8cn';
+    const uploadPreset = 'Shehadeh';
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', uploadPreset);
+    
+    try {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: 'POST',
+        body: formData
       });
-    }
-
-    function renderProducts() {
-      const body = document.getElementById('productsBody');
-      body.innerHTML = '';
       
-      currentData.products.forEach((prod, index) => {
-        const row = document.createElement('tr');
+      if (!response.ok) throw new Error('فشل في رفع الصورة');
+      
+      const data = await response.json();
+      return data.secure_url;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('حدث خطأ أثناء رفع الصورة: ' + error.message);
+      return null;
+    }
+  }
+
+  function addNewItem() {
+    if (currentMode === 'categories') {
+      // إنشاء عنصر إدخال ملف مخفي
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.style.display = 'none';
+      
+      fileInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
         
-        // اختيار الفئة
-        const catCell = document.createElement('td');
-        const select = document.createElement('select');
-        select.className = 'category-select';
-        currentData.categories.forEach(cat => {
-          const option = document.createElement('option');
-          option.value = cat.name;
-          option.textContent = cat.name;
-          if (cat.name === prod.category) option.selected = true;
-          select.appendChild(option);
-        });
-        select.onchange = () => {
-          currentData.products[index].category = select.value;
+        const imageUrl = await uploadImage(file);
+        if (imageUrl) {
+          currentData.categories.unshift({
+            name: 'فئة جديدة',
+            image: imageUrl
+          });
+          renderTable();
           updateOutput();
-        };
-        catCell.appendChild(select);
+        }
+      };
+      
+      document.body.appendChild(fileInput);
+      fileInput.click();
+      document.body.removeChild(fileInput);
+    } else {
+      if(currentData.categories.length === 0) {
+        alert('يجب إضافة فئة أولاً!');
+        return;
+      }
+      
+      // نفس المنطق للمنتجات
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.style.display = 'none';
+      
+      fileInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
         
-        // اسم المنتج
-        const nameCell = document.createElement('td');
-        nameCell.contentEditable = true;
-        nameCell.textContent = prod.name;
-        nameCell.addEventListener('input', () => {
-          currentData.products[index].name = nameCell.textContent.trim();
+        const imageUrl = await uploadImage(file);
+        if (imageUrl) {
+          currentData.products.unshift({
+            category: currentData.categories[0].name,
+            name: 'منتج جديد',
+            price: 0,
+            discountedPrice: null,
+            image: imageUrl
+          });
+          renderTable();
           updateOutput();
-        });
+        }
+      };
+      
+      document.body.appendChild(fileInput);
+      fileInput.click();
+      document.body.removeChild(fileInput);
+    }
+  }
+
+  function renderCategories() {
+    const body = document.getElementById('categoriesBody');
+    body.innerHTML = '';
+    
+    currentData.categories.forEach((cat, index) => {
+      const row = document.createElement('tr');
+      
+      // اسم الفئة
+      const nameCell = document.createElement('td');
+      nameCell.contentEditable = true;
+      nameCell.textContent = cat.name;
+      nameCell.addEventListener('input', () => {
+        currentData.categories[index].name = nameCell.textContent.trim();
+        updateProductsCategories(cat.name, nameCell.textContent.trim());
+        updateOutput();
+      });
+      
+      // صورة الفئة
+      const imgCell = document.createElement('td');
+      const imgContainer = document.createElement('div');
+      imgContainer.className = 'img-cell';
+      
+      const imgPreview = document.createElement('img');
+      imgPreview.className = 'img-preview';
+      imgPreview.src = cat.image;
+      imgPreview.onerror = () => imgPreview.src = 'https://via.placeholder.com/60';
+      
+      // زر تغيير الصورة للعناصر الموجودة
+      const changeImgBtn = document.createElement('button');
+      changeImgBtn.className = 'btn-sm btn-secondary';
+      changeImgBtn.innerHTML = '<i class="fas fa-camera"></i> تغيير الصورة';
+      changeImgBtn.onclick = () => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
         
-        // السعر
-        const priceCell = document.createElement('td');
-        priceCell.contentEditable = true;
-        priceCell.textContent = prod.price;
-        priceCell.addEventListener('input', () => {
-          currentData.products[index].price = parseFloat(priceCell.textContent) || 0;
-          updateOutput();
-        });
-        
-          // السعر قبل الخصم
-// السعر بعد الخصم
-const discountedCell = document.createElement('td');
-discountedCell.contentEditable = true;
-discountedCell.textContent = prod.discountedPrice ?? '';
-discountedCell.addEventListener('input', () => {
-  const val = parseFloat(discountedCell.textContent);
-  currentData.products[index].discountedPrice = isNaN(val) ? null : val;
-  updateOutput();
-});
+        fileInput.onchange = async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
           
-        // صورة المنتج
-        const imgCell = document.createElement('td');
-        const imgContainer = document.createElement('div');
-        imgContainer.className = 'link-container';
+          const imageUrl = await uploadImage(file);
+          if (imageUrl) {
+            currentData.categories[index].image = imageUrl;
+            imgPreview.src = imageUrl;
+            updateOutput();
+          }
+        };
         
-        const imgPreview = document.createElement('img');
-        imgPreview.className = 'img-preview';
-        imgPreview.src = prod.image;
-        imgPreview.onerror = () => imgPreview.style.display = 'none';
-        
-        const imgInput = document.createElement('span');
-        imgInput.contentEditable = true;
-        imgInput.textContent = prod.image;
-        imgInput.addEventListener('input', () => {
-          currentData.products[index].image = imgInput.textContent.trim();
-          imgPreview.src = imgInput.textContent.trim();
-          imgPreview.style.display = 'inline-block';
-          updateOutput();
-        });
-        
-        imgContainer.append(imgPreview, imgInput);
-        imgCell.appendChild(imgContainer);
-        
-        // زر الحذف
-        const actionCell = document.createElement('td');
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'btn-danger action-btn';
-        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-        deleteBtn.onclick = () => deleteProduct(index);
-        
-        actionCell.appendChild(deleteBtn);
-        
-        row.append(catCell, nameCell, priceCell, discountedCell, imgCell, actionCell);
-        body.appendChild(row);
-      });
-    }
+        document.body.appendChild(fileInput);
+        fileInput.click();
+        document.body.removeChild(fileInput);
+      };
+      
+      imgContainer.append(imgPreview, changeImgBtn);
+      imgCell.appendChild(imgContainer);
+      
+      // زر الحذف
+      const actionCell = document.createElement('td');
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn-danger action-btn';
+      deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+      deleteBtn.onclick = () => deleteCategory(index);
+      
+      actionCell.appendChild(deleteBtn);
+      
+      row.append(nameCell, imgCell, actionCell);
+      body.appendChild(row);
+    });
+  }
 
-    function addNewItem() {
-      if (currentMode === 'categories') {
-        currentData.categories.unshift({
-          name: 'فئة جديدة',
-          image: 'https'
-        });
-      } else {
-        if(currentData.categories.length === 0) {
-          alert('يجب إضافة فئة أولاً!');
-          return;
-        }
-        currentData.products.unshift({
-  category: currentData.categories[0].name,
-  name: 'منتج جديد',
-  price: 0,
-discountedPrice: null,
-image: 'https'
-});
-      }
+  function renderProducts() {
+    const body = document.getElementById('productsBody');
+    body.innerHTML = '';
+    
+    currentData.products.forEach((prod, index) => {
+      const row = document.createElement('tr');
+      
+      // اختيار الفئة
+      const catCell = document.createElement('td');
+      const select = document.createElement('select');
+      select.className = 'category-select';
+      currentData.categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.name;
+        option.textContent = cat.name;
+        if (cat.name === prod.category) option.selected = true;
+        select.appendChild(option);
+      });
+      select.onchange = () => {
+        currentData.products[index].category = select.value;
+        updateOutput();
+      };
+      catCell.appendChild(select);
+      
+      // اسم المنتج
+      const nameCell = document.createElement('td');
+      nameCell.contentEditable = true;
+      nameCell.textContent = prod.name;
+      nameCell.addEventListener('input', () => {
+        currentData.products[index].name = nameCell.textContent.trim();
+        updateOutput();
+      });
+      
+      // السعر
+      const priceCell = document.createElement('td');
+      priceCell.contentEditable = true;
+      priceCell.textContent = prod.price;
+      priceCell.addEventListener('input', () => {
+        currentData.products[index].price = parseFloat(priceCell.textContent) || 0;
+        updateOutput();
+      });
+      
+      // السعر قبل الخصم
+      const discountedCell = document.createElement('td');
+      discountedCell.contentEditable = true;
+      discountedCell.textContent = prod.discountedPrice ?? '';
+      discountedCell.addEventListener('input', () => {
+        const val = parseFloat(discountedCell.textContent);
+        currentData.products[index].discountedPrice = isNaN(val) ? null : val;
+        updateOutput();
+      });
+      
+      // صورة المنتج
+      const imgCell = document.createElement('td');
+      const imgContainer = document.createElement('div');
+      imgContainer.className = 'img-cell';
+      
+      const imgPreview = document.createElement('img');
+      imgPreview.className = 'img-preview';
+      imgPreview.src = prod.image;
+      imgPreview.onerror = () => imgPreview.src = 'https://via.placeholder.com/60';
+      
+      // زر تغيير الصورة
+      const changeImgBtn = document.createElement('button');
+      changeImgBtn.className = 'btn-sm btn-secondary';
+      changeImgBtn.innerHTML = '<i class="fas fa-camera"></i> تغيير الصورة';
+      changeImgBtn.onclick = () => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
+        
+        fileInput.onchange = async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          
+          const imageUrl = await uploadImage(file);
+          if (imageUrl) {
+            currentData.products[index].image = imageUrl;
+            imgPreview.src = imageUrl;
+            updateOutput();
+          }
+        };
+        
+        document.body.appendChild(fileInput);
+        fileInput.click();
+        document.body.removeChild(fileInput);
+      };
+      
+      imgContainer.append(imgPreview, changeImgBtn);
+      imgCell.appendChild(imgContainer);
+      
+      // زر الحذف
+      const actionCell = document.createElement('td');
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn-danger action-btn';
+      deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+      deleteBtn.onclick = () => deleteProduct(index);
+      
+      actionCell.appendChild(deleteBtn);
+      
+      row.append(catCell, nameCell, priceCell, discountedCell, imgCell, actionCell);
+      body.appendChild(row);
+    });
+  }
+
+  function deleteCategory(index) {
+    if (confirm('هل أنت متأكد من حذف الفئة؟ سيتم حذف جميع المنتجات المرتبطة بها أيضاً')) {
+      const catName = currentData.categories[index].name;
+      currentData.categories.splice(index, 1);
+      currentData.products = currentData.products.filter(p => p.category !== catName);
       renderTable();
       updateOutput();
     }
-
-    function deleteCategory(index) {
-      if (confirm('هل أنت متأكد من حذف الفئة؟ سيتم حذف جميع المنتجات المرتبطة بها أيضاً')) {
-        const catName = currentData.categories[index].name;
-        currentData.categories.splice(index, 1);
-        currentData.products = currentData.products.filter(p => p.category !== catName);
-        renderTable();
-        updateOutput();
-      }
-    }
-
-    function deleteProduct(index) {
-      if (confirm('هل أنت متأكد من حذف المنتج؟')) {
-        currentData.products.splice(index, 1);
-        renderTable();
-        updateOutput();
-      }
-    }
-
-function enableSelectOnClick() {
-  // ننتظر لحظات بسيطة لضمان أن الخلايا تم رسمها
-  setTimeout(() => {
-    document.querySelectorAll('td[contenteditable="true"]').forEach(td => {
-      td.addEventListener('click', function (e) {
-        const range = document.createRange();
-        range.selectNodeContents(this);
-        const selection = window.getSelection();
-        selection.removeAllRanges();
-        selection.addRange(range);
-      });
-    });
-  }, 100); // تأخير بسيط للتأكد من وجود الخلايا
-}
-
-    function updateProductsCategories(oldName, newName) {
-      currentData.products.forEach(prod => {
-        if (prod.category === oldName) prod.category = newName;
-      });
-    }
-
-    function updateOutput() {
-  const dataString =
-    `const categories = ${JSON.stringify(currentData.categories, null, 2)};\n\n` +
-    `const products = ${JSON.stringify(currentData.products, null, 2)};\n\n` +
-    `window.categories = categories;\nwindow.products = products;`;
-    
-  document.getElementById('outputText').value = dataString;
-}
-
-    async function saveData() {
-      try {
-        const token = getGitHubToken();
-        const content = btoa(unescape(encodeURIComponent(document.getElementById('outputText').value)));
-        const path = 'data.js';
-        const url = `https://api.github.com/repos/mohammad-shehadeh/soh/contents/${path}`;
-
-        const shaRes = await fetch(url, {
-          headers: { Authorization: `token ${token}` }
-        });
-        
-        if (!shaRes.ok) throw new Error("فشل في جلب بيانات الملف من GitHub");
-        
-        const shaData = await shaRes.json();
-        const sha = shaData.sha;
-
-        const saveRes = await fetch(url, {
-          method: "PUT",
-          headers: {
-            "Authorization": `token ${token}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            message: "تحديث البيانات من المحرر",
-            content: content,
-            sha: sha
-          })
-        });
-        
-        if (!saveRes.ok) throw new Error("فشل في حفظ التغييرات على GitHub");
-        
-        const data = await saveRes.json();
-        if (data.content) {
-          alert("تم الحفظ بنجاح في Server!");
-        } else {
-          console.error(data);
-          alert("حدث خطأ غير متوقع أثناء الحفظ.");
-        }
-      } catch (err) {
-        console.error(err);
-        alert(`خطأ: ${err.message}`);
-      }
-    }
-
-    // التحميل الأولي
-    switchMode('categories');
-    
-    // دالة لرفع الصورة إلى Cloudinary
-async function uploadImage(file) {
-  const cloudName = 'dygc5b8cn';
-  const uploadPreset = 'Shehadeh';
-  
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', uploadPreset);
-  
-  try {
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-      method: 'POST',
-      body: formData
-    });
-    
-    if (!response.ok) throw new Error('فشل في رفع الصورة');
-    
-    const data = await response.json();
-    return data.secure_url;
-  } catch (error) {
-    console.error('Error uploading image:', error);
-    alert('حدث خطأ أثناء رفع الصورة: ' + error.message);
-    return null;
   }
-}
 
-// تعديل دالة addNewItem لدعم رفع الصور
-function addNewItem() {
-  if (currentMode === 'categories') {
-    // إنشاء عنصر إدخال ملف مخفي
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.style.display = 'none';
-    
-    fileInput.onchange = async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      
-      const imageUrl = await uploadImage(file);
-      if (imageUrl) {
-        currentData.categories.unshift({
-          name: 'فئة جديدة',
-          image: imageUrl
-        });
-        renderTable();
-        updateOutput();
-      }
-    };
-    
-    document.body.appendChild(fileInput);
-    fileInput.click();
-    document.body.removeChild(fileInput);
-    
-  } else {
-    if(currentData.categories.length === 0) {
-      alert('يجب إضافة فئة أولاً!');
-      return;
+  function deleteProduct(index) {
+    if (confirm('هل أنت متأكد من حذف المنتج؟')) {
+      currentData.products.splice(index, 1);
+      renderTable();
+      updateOutput();
     }
-    
-    // نفس المنطق للمنتجات
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.style.display = 'none';
-    
-    fileInput.onchange = async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      
-      const imageUrl = await uploadImage(file);
-      if (imageUrl) {
-        currentData.products.unshift({
-          category: currentData.categories[0].name,
-          name: 'منتج جديد',
-          price: 0,
-          discountedPrice: null,
-          image: imageUrl
-        });
-        renderTable();
-        updateOutput();
-      }
-    };
-    
-    document.body.appendChild(fileInput);
-    fileInput.click();
-    document.body.removeChild(fileInput);
   }
-}
 
-// تعديل دالة renderCategories لتحسين عرض الصور
-function renderCategories() {
-  const body = document.getElementById('categoriesBody');
-  body.innerHTML = '';
-  
-  currentData.categories.forEach((cat, index) => {
-    const row = document.createElement('tr');
-    
-    // اسم الفئة
-    const nameCell = document.createElement('td');
-    nameCell.contentEditable = true;
-    nameCell.textContent = cat.name;
-    nameCell.addEventListener('input', () => {
-      currentData.categories[index].name = nameCell.textContent.trim();
-      updateProductsCategories(cat.name, nameCell.textContent.trim());
-      updateOutput();
-    });
-    
-    // صورة الفئة
-    const imgCell = document.createElement('td');
-    const imgContainer = document.createElement('div');
-    imgContainer.className = 'img-cell';
-    
-    const imgPreview = document.createElement('img');
-    imgPreview.className = 'img-preview';
-    imgPreview.src = cat.image;
-    imgPreview.onerror = () => imgPreview.src = 'https://via.placeholder.com/60';
-    
-    // زر تغيير الصورة للعناصر الموجودة
-    const changeImgBtn = document.createElement('button');
-    changeImgBtn.className = 'btn-sm btn-secondary';
-    changeImgBtn.innerHTML = '<i class="fas fa-camera"></i> تغيير الصورة';
-    changeImgBtn.onclick = () => {
-      const fileInput = document.createElement('input');
-      fileInput.type = 'file';
-      fileInput.accept = 'image/*';
-      fileInput.style.display = 'none';
-      
-      fileInput.onchange = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        const imageUrl = await uploadImage(file);
-        if (imageUrl) {
-          currentData.categories[index].image = imageUrl;
-          imgPreview.src = imageUrl;
-          updateOutput();
-        }
-      };
-      
-      document.body.appendChild(fileInput);
-      fileInput.click();
-      document.body.removeChild(fileInput);
-    };
-    
-    imgContainer.append(imgPreview, changeImgBtn);
-    imgCell.appendChild(imgContainer);
-    
-    // زر الحذف
-    const actionCell = document.createElement('td');
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'btn-danger action-btn';
-    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-    deleteBtn.onclick = () => deleteCategory(index);
-    
-    actionCell.appendChild(deleteBtn);
-    
-    row.append(nameCell, imgCell, actionCell);
-    body.appendChild(row);
-  });
-}
+  function enableSelectOnClick() {
+    setTimeout(() => {
+      document.querySelectorAll('td[contenteditable="true"]').forEach(td => {
+        td.addEventListener('click', function (e) {
+          const range = document.createRange();
+          range.selectNodeContents(this);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+        });
+      });
+    }, 100);
+  }
 
-// نفس التعديلات لـ renderProducts
-function renderProducts() {
-  const body = document.getElementById('productsBody');
-  body.innerHTML = '';
-  
-  currentData.products.forEach((prod, index) => {
-    const row = document.createElement('tr');
-    
-    // اختيار الفئة
-    const catCell = document.createElement('td');
-    const select = document.createElement('select');
-    select.className = 'category-select';
-    currentData.categories.forEach(cat => {
-      const option = document.createElement('option');
-      option.value = cat.name;
-      option.textContent = cat.name;
-      if (cat.name === prod.category) option.selected = true;
-      select.appendChild(option);
+  function updateProductsCategories(oldName, newName) {
+    currentData.products.forEach(prod => {
+      if (prod.category === oldName) prod.category = newName;
     });
-    select.onchange = () => {
-      currentData.products[index].category = select.value;
-      updateOutput();
-    };
-    catCell.appendChild(select);
-    
-    // اسم المنتج
-    const nameCell = document.createElement('td');
-    nameCell.contentEditable = true;
-    nameCell.textContent = prod.name;
-    nameCell.addEventListener('input', () => {
-      currentData.products[index].name = nameCell.textContent.trim();
-      updateOutput();
-    });
-    
-    // السعر
-    const priceCell = document.createElement('td');
-    priceCell.contentEditable = true;
-    priceCell.textContent = prod.price;
-    priceCell.addEventListener('input', () => {
-      currentData.products[index].price = parseFloat(priceCell.textContent) || 0;
-      updateOutput();
-    });
-    
-    // السعر قبل الخصم
-    const discountedCell = document.createElement('td');
-    discountedCell.contentEditable = true;
-    discountedCell.textContent = prod.discountedPrice ?? '';
-    discountedCell.addEventListener('input', () => {
-      const val = parseFloat(discountedCell.textContent);
-      currentData.products[index].discountedPrice = isNaN(val) ? null : val;
-      updateOutput();
-    });
-    
-    // صورة المنتج
-    const imgCell = document.createElement('td');
-    const imgContainer = document.createElement('div');
-    imgContainer.className = 'img-cell';
-    
-    const imgPreview = document.createElement('img');
-    imgPreview.className = 'img-preview';
-    imgPreview.src = prod.image;
-    imgPreview.onerror = () => imgPreview.src = 'https://via.placeholder.com/60';
-    
-    // زر تغيير الصورة
-    const changeImgBtn = document.createElement('button');
-    changeImgBtn.className = 'btn-sm btn-secondary';
-    changeImgBtn.innerHTML = '<i class="fas fa-camera"></i> تغيير الصورة';
-    changeImgBtn.onclick = () => {
-      const fileInput = document.createElement('input');
-      fileInput.type = 'file';
-      fileInput.accept = 'image/*';
-      fileInput.style.display = 'none';
+  }
+
+  function updateOutput() {
+    const dataString =
+      `const categories = ${JSON.stringify(currentData.categories, null, 2)};\n\n` +
+      `const products = ${JSON.stringify(currentData.products, null, 2)};\n\n` +
+      `window.categories = categories;\nwindow.products = products;`;
       
-      fileInput.onchange = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        const imageUrl = await uploadImage(file);
-        if (imageUrl) {
-          currentData.products[index].image = imageUrl;
-          imgPreview.src = imageUrl;
-          updateOutput();
-        }
-      };
+    document.getElementById('outputText').value = dataString;
+  }
+
+  async function saveData() {
+    try {
+      const token = getGitHubToken();
+      const content = btoa(unescape(encodeURIComponent(document.getElementById('outputText').value));
+      const path = 'data.js';
+      const url = `https://api.github.com/repos/mohammad-shehadeh/soh/contents/${path}`;
+
+      const shaRes = await fetch(url, {
+        headers: { Authorization: `token ${token}` }
+      });
       
-      document.body.appendChild(fileInput);
-      fileInput.click();
-      document.body.removeChild(fileInput);
-    };
-    
-    imgContainer.append(imgPreview, changeImgBtn);
-    imgCell.appendChild(imgContainer);
-    
-    // زر الحذف
-    const actionCell = document.createElement('td');
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'btn-danger action-btn';
-    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-    deleteBtn.onclick = () => deleteProduct(index);
-    
-    actionCell.appendChild(deleteBtn);
-    
-    row.append(catCell, nameCell, priceCell, discountedCell, imgCell, actionCell);
-    body.appendChild(row);
-  });
-}
-  </script>
+      if (!shaRes.ok) throw new Error("فشل في جلب بيانات الملف من GitHub");
+      
+      const shaData = await shaRes.json();
+      const sha = shaData.sha;
+
+      const saveRes = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Authorization": `token ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: "تحديث البيانات من المحرر",
+          content: content,
+          sha: sha
+        })
+      });
+      
+      if (!saveRes.ok) throw new Error("فشل في حفظ التغييرات على GitHub");
+      
+      const data = await saveRes.json();
+      if (data.content) {
+        alert("تم الحفظ بنجاح في Server!");
+      } else {
+        console.error(data);
+        alert("حدث خطأ غير متوقع أثناء الحفظ.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert(`خطأ: ${err.message}`);
+    }
+  }
+
+  // التحميل الأولي
+  switchMode('categories');
+  enableSelectOnClick();
+</script>
 </body>
 </html>
