@@ -526,293 +526,327 @@
 
   <script src="data.js"></script>
   <script src="config.js"></script>
-  <script>
-    if (localStorage.getItem('isAuthenticated') !== 'true') {
-      window.location.href = 'password.html';
-    }
+<script>
+  if (localStorage.getItem('isAuthenticated') !== 'true') {
+    window.location.href = 'password.html';
+  }
 
-    function logout() {
-      localStorage.removeItem('isAuthenticated');
-      window.location.href = 'password.html';
-    }
+  function logout() {
+    localStorage.removeItem('isAuthenticated');
+    window.location.href = 'password.html';
+  }
 
-    const currentData = {
-      categories: [...categories],
-      products: [...products]
-    };
+  const currentData = {
+    categories: [...categories],
+    products: [...products]
+  };
 
-    let currentMode = 'categories';
+  let currentMode = 'categories';
 
-    function switchMode(mode) {
-      currentMode = mode;
-      document.querySelectorAll('.mode-btn').forEach(btn =>
-        btn.classList.remove('active-mode'));
-      document.querySelectorAll(`[onclick="switchMode('${mode}')"]`)
-        .forEach(btn => btn.classList.add('active-mode'));
+  function switchMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.mode-btn').forEach(btn =>
+      btn.classList.remove('active-mode'));
+    document.querySelectorAll(`[onclick="switchMode('${mode}')"]`)
+      .forEach(btn => btn.classList.add('active-mode'));
 
-      document.getElementById('categoriesTable').style.display =
-        mode === 'categories' ? 'block' : 'none';
-      document.getElementById('productsTable').style.display =
-        mode === 'products' ? 'block' : 'none';
+    document.getElementById('categoriesTable').style.display =
+      mode === 'categories' ? 'block' : 'none';
+    document.getElementById('productsTable').style.display =
+      mode === 'products' ? 'block' : 'none';
 
-      renderTable();
-      updateOutput();
-    }
+    renderTable();
+    updateOutput();
+  }
 
-    function renderTable() {
-      currentMode === 'categories' ? renderCategories() : renderProducts();
-    }
+  async function uploadToCloudinary(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "Shehadeh");
 
-    function renderCategories() {
-      const body = document.getElementById('categoriesBody');
-      body.innerHTML = '';
+    const res = await fetch("https://api.cloudinary.com/v1_1/dygc5b8cn/image/upload", {
+      method: "POST",
+      body: formData
+    });
 
-      currentData.categories.forEach((cat, index) => {
-        const row = document.createElement('tr');
+    const data = await res.json();
+    return data.secure_url;
+  }
 
-        const nameCell = document.createElement('td');
-        nameCell.contentEditable = true;
-        nameCell.textContent = cat.name;
-        nameCell.oninput = () => {
-          currentData.categories[index].name = nameCell.textContent.trim();
-          updateProductsCategories(cat.name, nameCell.textContent.trim());
-          updateOutput();
-        };
+  function renderCategories() {
+    const body = document.getElementById('categoriesBody');
+    body.innerHTML = '';
 
-        const imgCell = document.createElement('td');
-        const imgContainer = document.createElement('div');
-        imgContainer.className = 'link-container';
+    currentData.categories.forEach((cat, index) => {
+      const row = document.createElement('tr');
 
-        if (!cat.image) {
-          const addBtn = document.createElement('button');
-          addBtn.className = 'btn-orange';
-          addBtn.textContent = 'إضافة صورة';
-          addBtn.onclick = () => {
-            const url = prompt("أدخل رابط الصورة:");
-            if (url) {
-              currentData.categories[index].image = url;
-              renderCategories();
-              updateOutput();
-            }
-          };
-          imgContainer.appendChild(addBtn);
-        } else {
-          const img = document.createElement('img');
-          img.className = 'img-preview';
-          img.src = cat.image;
+      const nameCell = document.createElement('td');
+      nameCell.contentEditable = true;
+      nameCell.textContent = cat.name;
+      nameCell.oninput = () => {
+        currentData.categories[index].name = nameCell.textContent.trim();
+        updateProductsCategories(cat.name, nameCell.textContent.trim());
+        updateOutput();
+      };
 
-          const input = document.createElement('span');
-          input.contentEditable = true;
-          input.textContent = cat.image;
-          input.oninput = () => {
-            currentData.categories[index].image = input.textContent.trim();
-            img.src = input.textContent.trim();
+      const imgCell = document.createElement('td');
+      const imgContainer = document.createElement('div');
+      imgContainer.className = 'link-container';
+
+      if (!cat.image) {
+        const addBtn = document.createElement('button');
+        addBtn.className = 'btn-orange';
+        addBtn.textContent = 'إضافة صورة';
+
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
+
+        addBtn.onclick = () => fileInput.click();
+
+        fileInput.onchange = async () => {
+          const file = fileInput.files[0];
+          if (file) {
+            addBtn.textContent = 'جاري الرفع...';
+            const url = await uploadToCloudinary(file);
+            currentData.categories[index].image = url;
+            renderCategories();
             updateOutput();
-          };
-
-          imgContainer.append(img, input);
-        }
-
-        imgCell.appendChild(imgContainer);
-
-        const actionsCell = document.createElement('td');
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'btn-danger';
-        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-        deleteBtn.onclick = () => deleteCategory(index);
-        actionsCell.appendChild(deleteBtn);
-
-        row.append(nameCell, imgCell, actionsCell);
-        body.appendChild(row);
-      });
-    }
-
-    function renderProducts() {
-      const body = document.getElementById('productsBody');
-      body.innerHTML = '';
-
-      currentData.products.forEach((prod, index) => {
-        const row = document.createElement('tr');
-
-        const catCell = document.createElement('td');
-        const select = document.createElement('select');
-        currentData.categories.forEach(cat => {
-          const option = document.createElement('option');
-          option.value = cat.name;
-          option.textContent = cat.name;
-          if (cat.name === prod.category) option.selected = true;
-          select.appendChild(option);
-        });
-        select.onchange = () => {
-          currentData.products[index].category = select.value;
-          updateOutput();
-        };
-        catCell.appendChild(select);
-
-        const nameCell = document.createElement('td');
-        nameCell.contentEditable = true;
-        nameCell.textContent = prod.name;
-        nameCell.oninput = () => {
-          currentData.products[index].name = nameCell.textContent.trim();
-          updateOutput();
+          }
         };
 
-        const priceCell = document.createElement('td');
-        priceCell.contentEditable = true;
-        priceCell.textContent = prod.price;
-        priceCell.oninput = () => {
-          currentData.products[index].price = parseFloat(priceCell.textContent) || 0;
-          updateOutput();
-        };
-
-        const discountedCell = document.createElement('td');
-        discountedCell.contentEditable = true;
-        discountedCell.textContent = prod.discountedPrice ?? '';
-        discountedCell.oninput = () => {
-          const val = parseFloat(discountedCell.textContent);
-          currentData.products[index].discountedPrice = isNaN(val) ? null : val;
-          updateOutput();
-        };
-
-        const imgCell = document.createElement('td');
-        const imgContainer = document.createElement('div');
-        imgContainer.className = 'link-container';
-
-        if (!prod.image) {
-          const addBtn = document.createElement('button');
-          addBtn.className = 'btn-orange';
-          addBtn.textContent = 'إضافة صورة';
-          addBtn.onclick = () => {
-            const url = prompt("أدخل رابط الصورة:");
-            if (url) {
-              currentData.products[index].image = url;
-              renderProducts();
-              updateOutput();
-            }
-          };
-          imgContainer.appendChild(addBtn);
-        } else {
-          const img = document.createElement('img');
-          img.className = 'img-preview';
-          img.src = prod.image;
-
-          const input = document.createElement('span');
-          input.contentEditable = true;
-          input.textContent = prod.image;
-          input.oninput = () => {
-            currentData.products[index].image = input.textContent.trim();
-            img.src = input.textContent.trim();
-            updateOutput();
-          };
-
-          imgContainer.append(img, input);
-        }
-
-        imgCell.appendChild(imgContainer);
-
-        const actionsCell = document.createElement('td');
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'btn-danger';
-        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-        deleteBtn.onclick = () => deleteProduct(index);
-        actionsCell.appendChild(deleteBtn);
-
-        row.append(catCell, nameCell, priceCell, discountedCell, imgCell, actionsCell);
-        body.appendChild(row);
-      });
-    }
-
-    function addNewItem() {
-      if (currentMode === 'categories') {
-        currentData.categories.unshift({ name: 'فئة جديدة', image: '' });
+        imgContainer.appendChild(addBtn);
+        imgContainer.appendChild(fileInput);
       } else {
-        if (currentData.categories.length === 0) {
-          alert('يجب إضافة فئة أولاً!');
-          return;
-        }
-        currentData.products.unshift({
-          category: currentData.categories[0].name,
-          name: 'منتج جديد',
-          price: 0,
-          discountedPrice: null,
-          image: ''
-        });
+        const img = document.createElement('img');
+        img.className = 'img-preview';
+        img.src = cat.image;
+
+        const input = document.createElement('span');
+        input.contentEditable = true;
+        input.textContent = cat.image;
+        input.oninput = () => {
+          currentData.categories[index].image = input.textContent.trim();
+          img.src = input.textContent.trim();
+          updateOutput();
+        };
+
+        imgContainer.append(img, input);
       }
+
+      imgCell.appendChild(imgContainer);
+
+      const actionsCell = document.createElement('td');
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn-danger';
+      deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+      deleteBtn.onclick = () => deleteCategory(index);
+      actionsCell.appendChild(deleteBtn);
+
+      row.append(nameCell, imgCell, actionsCell);
+      body.appendChild(row);
+    });
+  }
+
+  function renderProducts() {
+    const body = document.getElementById('productsBody');
+    body.innerHTML = '';
+
+    currentData.products.forEach((prod, index) => {
+      const row = document.createElement('tr');
+
+      const catCell = document.createElement('td');
+      const select = document.createElement('select');
+      currentData.categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.name;
+        option.textContent = cat.name;
+        if (cat.name === prod.category) option.selected = true;
+        select.appendChild(option);
+      });
+      select.onchange = () => {
+        currentData.products[index].category = select.value;
+        updateOutput();
+      };
+      catCell.appendChild(select);
+
+      const nameCell = document.createElement('td');
+      nameCell.contentEditable = true;
+      nameCell.textContent = prod.name;
+      nameCell.oninput = () => {
+        currentData.products[index].name = nameCell.textContent.trim();
+        updateOutput();
+      };
+
+      const priceCell = document.createElement('td');
+      priceCell.contentEditable = true;
+      priceCell.textContent = prod.price;
+      priceCell.oninput = () => {
+        currentData.products[index].price = parseFloat(priceCell.textContent) || 0;
+        updateOutput();
+      };
+
+      const discountedCell = document.createElement('td');
+      discountedCell.contentEditable = true;
+      discountedCell.textContent = prod.discountedPrice ?? '';
+      discountedCell.oninput = () => {
+        const val = parseFloat(discountedCell.textContent);
+        currentData.products[index].discountedPrice = isNaN(val) ? null : val;
+        updateOutput();
+      };
+
+      const imgCell = document.createElement('td');
+      const imgContainer = document.createElement('div');
+      imgContainer.className = 'link-container';
+
+      if (!prod.image) {
+        const addBtn = document.createElement('button');
+        addBtn.className = 'btn-orange';
+        addBtn.textContent = 'إضافة صورة';
+
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
+
+        addBtn.onclick = () => fileInput.click();
+
+        fileInput.onchange = async () => {
+          const file = fileInput.files[0];
+          if (file) {
+            addBtn.textContent = 'جاري الرفع...';
+            const url = await uploadToCloudinary(file);
+            currentData.products[index].image = url;
+            renderProducts();
+            updateOutput();
+          }
+        };
+
+        imgContainer.appendChild(addBtn);
+        imgContainer.appendChild(fileInput);
+      } else {
+        const img = document.createElement('img');
+        img.className = 'img-preview';
+        img.src = prod.image;
+
+        const input = document.createElement('span');
+        input.contentEditable = true;
+        input.textContent = prod.image;
+        input.oninput = () => {
+          currentData.products[index].image = input.textContent.trim();
+          img.src = input.textContent.trim();
+          updateOutput();
+        };
+
+        imgContainer.append(img, input);
+      }
+
+      imgCell.appendChild(imgContainer);
+
+      const actionsCell = document.createElement('td');
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn-danger';
+      deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+      deleteBtn.onclick = () => deleteProduct(index);
+      actionsCell.appendChild(deleteBtn);
+
+      row.append(catCell, nameCell, priceCell, discountedCell, imgCell, actionsCell);
+      body.appendChild(row);
+    });
+  }
+
+  function addNewItem() {
+    if (currentMode === 'categories') {
+      currentData.categories.unshift({ name: 'فئة جديدة', image: '' });
+    } else {
+      if (currentData.categories.length === 0) {
+        alert('يجب إضافة فئة أولاً!');
+        return;
+      }
+      currentData.products.unshift({
+        category: currentData.categories[0].name,
+        name: 'منتج جديد',
+        price: 0,
+        discountedPrice: null,
+        image: ''
+      });
+    }
+    renderTable();
+    updateOutput();
+  }
+
+  function deleteCategory(index) {
+    if (confirm('هل أنت متأكد من حذف الفئة؟')) {
+      const name = currentData.categories[index].name;
+      currentData.categories.splice(index, 1);
+      currentData.products = currentData.products.filter(p => p.category !== name);
       renderTable();
       updateOutput();
     }
+  }
 
-    function deleteCategory(index) {
-      if (confirm('هل أنت متأكد من حذف الفئة؟')) {
-        const name = currentData.categories[index].name;
-        currentData.categories.splice(index, 1);
-        currentData.products = currentData.products.filter(p => p.category !== name);
-        renderTable();
-        updateOutput();
-      }
+  function deleteProduct(index) {
+    if (confirm('هل أنت متأكد من حذف المنتج؟')) {
+      currentData.products.splice(index, 1);
+      renderTable();
+      updateOutput();
     }
+  }
 
-    function deleteProduct(index) {
-      if (confirm('هل أنت متأكد من حذف المنتج؟')) {
-        currentData.products.splice(index, 1);
-        renderTable();
-        updateOutput();
-      }
-    }
+  function updateProductsCategories(oldName, newName) {
+    currentData.products.forEach(p => {
+      if (p.category === oldName) p.category = newName;
+    });
+  }
 
-    function updateProductsCategories(oldName, newName) {
-      currentData.products.forEach(p => {
-        if (p.category === oldName) p.category = newName;
+  function updateOutput() {
+    const dataString =
+      `const categories = ${JSON.stringify(currentData.categories, null, 2)};\n\n` +
+      `const products = ${JSON.stringify(currentData.products, null, 2)};\n\n` +
+      `window.categories = categories;\nwindow.products = products;`;
+
+    document.getElementById('outputText').value = dataString;
+  }
+
+  async function saveData() {
+    try {
+      const token = TOKEN_PART1 + TOKEN_PART2;
+      const content = btoa(unescape(encodeURIComponent(document.getElementById('outputText').value)));
+      const path = 'data.js';
+      const url = `https://api.github.com/repos/mohammad-shehadeh/soh/contents/${path}`;
+
+      const shaRes = await fetch(url, {
+        headers: { Authorization: `token ${token}` }
       });
-    }
 
-    function updateOutput() {
-      const dataString =
-        `const categories = ${JSON.stringify(currentData.categories, null, 2)};\n\n` +
-        `const products = ${JSON.stringify(currentData.products, null, 2)};\n\n` +
-        `window.categories = categories;\nwindow.products = products;`;
+      const shaData = await shaRes.json();
+      const sha = shaData.sha;
 
-      document.getElementById('outputText').value = dataString;
-    }
+      const saveRes = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Authorization": `token ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: "تحديث البيانات من المحرر",
+          content: content,
+          sha: sha
+        })
+      });
 
-    async function saveData() {
-      try {
-        const token = TOKEN_PART1 + TOKEN_PART2;
-        const content = btoa(unescape(encodeURIComponent(document.getElementById('outputText').value)));
-        const path = 'data.js';
-        const url = `https://api.github.com/repos/mohammad-shehadeh/soh/contents/${path}`;
-
-        const shaRes = await fetch(url, {
-          headers: { Authorization: `token ${token}` }
-        });
-
-        const shaData = await shaRes.json();
-        const sha = shaData.sha;
-
-        const saveRes = await fetch(url, {
-          method: "PUT",
-          headers: {
-            "Authorization": `token ${token}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            message: "تحديث البيانات من المحرر",
-            content: content,
-            sha: sha
-          })
-        });
-
-        if (saveRes.ok) {
-          alert("تم الحفظ بنجاح في Server!");
-        } else {
-          alert("فشل الحفظ!");
-        }
-      } catch (err) {
-        alert("حدث خطأ أثناء الحفظ: " + err.message);
+      if (saveRes.ok) {
+        alert("تم الحفظ بنجاح في Server!");
+      } else {
+        alert("فشل الحفظ!");
       }
+    } catch (err) {
+      alert("حدث خطأ أثناء الحفظ: " + err.message);
     }
+  }
 
-    switchMode('categories');
-  </script>
+  switchMode('categories');
+</script>
 </body>
 </html>
