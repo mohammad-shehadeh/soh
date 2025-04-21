@@ -198,7 +198,8 @@ h1 {
 
 /* Hero Section */
 .hero {
-  margin: 2rem auto;
+  margin-top: 1rem; /* بدل 2rem */
+  margin-bottom: 1rem;
   max-width: 1400px;
   padding: 0 5%;
   position: relative;
