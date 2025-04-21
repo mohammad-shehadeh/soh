@@ -1,7 +1,7 @@
 const categories = [
   {
     "name": "ثريا معدن كلاسيك",
-    "image": "https://i.postimg.cc/nLq0WgVm/IMG-7306.jpg"
+    "image": "https://i.postimg.cc/HxVfv5sK/IMG-7307.jpg"
   },
   {
     "name": "ثريا ليد موديرن",
