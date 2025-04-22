@@ -455,6 +455,37 @@
   }
 }
 
+.btn-sm.btn-secondary {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.btn-sm.btn-secondary:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
+.btn-sm.btn-secondary i {
+  font-size: 0.7rem;
+}
+
+/* إذا أردت زرًا أصغر يمكنك استخدام هذا */
+/*
+.btn-xs {
+  padding: 0.15rem 0.3rem;
+  font-size: 0.65rem;
+  border-radius: 0.2rem;
+}
+*/
   </style>
 </head>
 <body>
@@ -494,7 +525,7 @@
       <table>
         <thead>
           <tr>
-            <th width="50%">اسم الفئة</th>
+            <th width="30%">اسم الفئة</th>
             <th width="30%">صورة الفئة</th>
             <th width="20%">إجراءات</th>
           </tr>
@@ -512,8 +543,8 @@
           <tr>
             <th width="20%">الفئة</th>
             <th width="20%">اسم المنتج</th>
-            <th width="15%">السعر (ر.س)</th>
-            <th width="15%">قبل الخصم (ر.س)</th>
+            <th width="15%">السعر</th>
+            <th width="15%">قبل الخصم</th>
             <th width="20%">صورة المنتج</th>
             <th width="10%">إجراءات</th>
           </tr>
