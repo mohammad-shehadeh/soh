@@ -340,130 +340,38 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // إرسال الطلب عبر واتساب
-    elements.sendOrderBtn.addEventListener('click', async () => {
-    const { jsPDF } = window.jspdf;
-    const now = new Date();
-    const date = now.toLocaleDateString('ar-EG');
-    const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+    elements.sendOrderBtn.addEventListener('click', () => {
+        const now = new Date();
+        const date = now.toLocaleDateString('ar-EG');
+        const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
 
-    const invoiceDiv = document.createElement('div');
-    invoiceDiv.style.position = 'absolute';
-    invoiceDiv.style.left = '-9999px';
-    invoiceDiv.style.padding = '20px';
-    invoiceDiv.style.width = '800px';
-    invoiceDiv.style.backgroundColor = '#fff';
-    invoiceDiv.dir = 'rtl';
+        const itemsList = cart.map((item, index) => 
+            `🔹 *${index + 1}. ${item.name}*\n` +
+            `   - الكمية: ${item.quantity}\n` +
+            `   - السعر: ₪${item.price.toFixed(2)}\n` +
+            `   - الإجمالي: ₪${(item.price * item.quantity).toFixed(2)}`
+        ).join('\n\n');
 
-    const processedCart = await Promise.all(cart.map(async (item) => {
-        try {
-            const imgExists = await checkImageExists(item.image);
-            return {
-                ...item,
-                image: imgExists ? item.image : 'https://via.placeholder.com/80?text=No+Image'
-            };
-        } catch {
-            return {
-                ...item,
-                image: 'https://via.placeholder.com/80?text=No+Image'
-            };
-        }
-    }));
+        const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-    invoiceDiv.innerHTML = `
-        <!-- نفس تنسيق HTML السابق تماماً -->
-        <style>/* ... نفس التنسيق ... */</style>
-        <div class="invoice-header">
-            <div class="invoice-title">⭐ معرض أبو عالية ⭐</div>
-            <div>────────────────────────────</div>
-        </div>
-        <div class="invoice-details">
-            <div>🗓️ <strong>التاريخ:</strong> ${date}</div>
-            <div>⏰ <strong>الوقت:</strong> ${time}</div>
-        </div>
-        <table class="invoice-table">
-            <thead>
-                <tr>
-                    <th>الصورة</th><th>المنتج</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${processedCart.map((item, index) => `
-                    <tr>
-                        <td><img src="${item.image}" class="product-image"></td>
-                        <td>${item.name}</td>
-                        <td>${item.quantity}</td>
-                        <td>₪${item.price.toFixed(2)}</td>
-                        <td>₪${(item.price * item.quantity).toFixed(2)}</td>
-                    </tr>
-                `).join('')}
-                <tr class="total-row">
-                    <td colspan="4" style="text-align: left;">المجموع الكلي:</td>
-                    <td>₪${processedCart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</td>
-                </tr>
-            </tbody>
-        </table>
-        <div style="margin-top: 30px;">
-            <div><strong>الاسم:</strong> ____________________</div>
-            <div><strong>العنوان:</strong> __________________</div>
-            <div><strong>طريقة الدفع:</strong> ______________</div>
-            <div><strong>ملاحظات:</strong> _________________</div>
-        </div>
-    `;
-
-    document.body.appendChild(invoiceDiv);
-
-    try {
-        const canvas = await html2canvas(invoiceDiv, { useCORS: true, scale: 2 });
-        document.body.removeChild(invoiceDiv);
-
-        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm' });
-        const imgData = canvas.toDataURL('image/png');
-        const imgWidth = 210;
-        const imgHeight = canvas.height * imgWidth / canvas.width;
-
-        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-
-        // تحويل إلى Blob
-        const pdfBlob = pdf.output('blob');
-        const pdfFileName = `فاتورة-${date.replace(/\//g, '-')}.pdf`;
-
-        // إنشاء رابط تنزيل محلي
-        const pdfUrl = URL.createObjectURL(pdfBlob);
-
-        // تنزيل الملف مباشرة (اختياري)
-        const downloadLink = document.createElement('a');
-        downloadLink.href = pdfUrl;
-        downloadLink.download = pdfFileName;
-        downloadLink.click();
-
-        // إنشاء نص الرسالة
         const message = encodeURIComponent(
-            `السلام عليكم،\n` +
-            `أرفقنا لكم فاتورة الشراء من معرض أبو عالية بصيغة PDF.\n` +
-            `تاريخ الفاتورة: ${date}\n` +
-            `المجموع الكلي: ₪${processedCart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}\n\n` +
-            `لتحميل الفاتورة بصيغة PDF:\n${pdfUrl}\n\n` +
-            `شكراً لتعاملكم معنا!`
+            `*⭐ معرض أبو عالية ⭐*\n` +
+            `────────────────────────────\n` +
+            `🗓️ *التاريخ:* ${date}\n` +
+            `⏰ *الوقت:* ${time}\n` +
+            `────────────────────────────\n` +
+            `*تفاصيل الطلب:*\n\n` +
+            `${itemsList}\n\n` +
+            `💰 *المجموع الكلي:* ₪${totalAmount.toFixed(2)}\n` +
+            `────────────────────────────\n` +
+            `*الاسم:* ____________________\n` +
+            `*العنوان:* __________________\n` +
+            `*طريقة الدفع:* ______________\n` +
+            `*ملاحظات:* _________________`
         );
 
-        // فتح واتساب
         window.open(`https://wa.me/972569813333?text=${message}`, '_blank');
-
-    } catch (error) {
-        console.error('PDF generation failed:', error);
-        document.body.removeChild(invoiceDiv);
-    }
-});
-
-// التحقق من وجود الصورة
-async function checkImageExists(url) {
-    try {
-        const response = await fetch(url, { method: 'HEAD', mode: 'no-cors' });
-        return response.ok || (url.startsWith('data:image') || url.startsWith('blob:'));
-    } catch {
-        return false;
-    }
-}
+    });  
 
     // أحداث السلايدر
     const slider = document.querySelector('.slideshow-container');
