@@ -340,20 +340,125 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // إرسال الطلب عبر واتساب
-    elements.sendOrderBtn.addEventListener('click', () => {
-        const now = new Date();
-        const date = now.toLocaleDateString('ar-EG');
-        const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+    elements.sendOrderBtn.addEventListener('click', async () => {
+    const { jsPDF } = window.jspdf;
+    const now = new Date();
+    const date = now.toLocaleDateString('ar-EG');
+    const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
 
-        const itemsList = cart.map((item, index) => 
-            `🔹 *${index + 1}. ${item.name}*\n` +
-            `   - الكمية: ${item.quantity}\n` +
-            `   - السعر: ₪${item.price.toFixed(2)}\n` +
-            `   - الإجمالي: ₪${(item.price * item.quantity).toFixed(2)}`
-        ).join('\n\n');
+    // إنشاء عنصر HTML للفاتورة
+    const invoiceDiv = document.createElement('div');
+    invoiceDiv.style.position = 'absolute';
+    invoiceDiv.style.left = '-9999px';
+    invoiceDiv.style.padding = '20px';
+    invoiceDiv.style.width = '800px';
+    invoiceDiv.style.backgroundColor = '#fff';
+    invoiceDiv.dir = 'rtl';
+    
+    invoiceDiv.innerHTML = `
+        <style>
+            .invoice-header { text-align: center; margin-bottom: 20px; }
+            .invoice-title { font-size: 24px; font-weight: bold; }
+            .invoice-details { margin: 20px 0; }
+            .invoice-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+            .invoice-table th { background-color: #f2f2f2; padding: 10px; text-align: right; }
+            .invoice-table td { padding: 10px; border-bottom: 1px solid #ddd; }
+            .product-image { width: 80px; height: 80px; object-fit: cover; }
+            .total-row { font-weight: bold; }
+        </style>
+        
+        <div class="invoice-header">
+            <div class="invoice-title">⭐ معرض أبو عالية ⭐</div>
+            <div>────────────────────────────</div>
+        </div>
+        
+        <div class="invoice-details">
+            <div>🗓️ <strong>التاريخ:</strong> ${date}</div>
+            <div>⏰ <strong>الوقت:</strong> ${time}</div>
+        </div>
+        
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>الصورة</th>
+                    <th>المنتج</th>
+                    <th>الكمية</th>
+                    <th>السعر</th>
+                    <th>الإجمالي</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${cart.map((item, index) => `
+                    <tr>
+                        <td><img src="${item.image}" class="product-image" onerror="this.src='https://via.placeholder.com/80'"></td>
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>₪${item.price.toFixed(2)}</td>
+                        <td>₪${(item.price * item.quantity).toFixed(2)}</td>
+                    </tr>
+                `).join('')}
+                <tr class="total-row">
+                    <td colspan="4" style="text-align: left;">المجموع الكلي:</td>
+                    <td>₪${cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div style="margin-top: 30px;">
+            <div><strong>الاسم:</strong> ____________________</div>
+            <div><strong>العنوان:</strong> __________________</div>
+            <div><strong>طريقة الدفع:</strong> ______________</div>
+            <div><strong>ملاحظات:</strong> _________________</div>
+        </div>
+    `;
 
-        const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    document.body.appendChild(invoiceDiv);
 
+    try {
+        // تحويل HTML إلى صورة باستخدام html2canvas
+        const canvas = await html2canvas(invoiceDiv);
+        document.body.removeChild(invoiceDiv);
+
+        // إنشاء PDF
+        const pdf = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm'
+        });
+
+        // إضافة الصورة إلى PDF
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = 210; // A4 width in mm
+        const pageHeight = 295; // A4 height in mm
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        
+        // حفظ PDF
+        const pdfBlob = pdf.output('blob');
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        
+        // إنشاء رابط الواتساب مع رسالة مرفقة
+        const defaultMessage = encodeURIComponent(
+            `السلام عليكم،\n` +
+            `أرسل لكم فاتورة الشراء من معرض أبو عالية\n` +
+            `يرجى مراجعتها والمتابعة معنا\n` +
+            `شكراً لثقتكم بنا!`
+        );
+        
+        // إنشاء نموذج البيانات لإرسال الملف
+        const form = document.createElement('form');
+        form.action = `https://wa.me/972569813333?text=${defaultMessage}`;
+        form.method = 'POST';
+        form.enctype = 'multipart/form-data';
+        
+        // لن نتمكن من إرسال الملف مباشرة عبر الواتساب ويب
+        // لذا سنفتح نافذة جديدة مع رسالة ونوفر رابط لتحميل الفاتورة
+        window.open(`https://wa.me/972569813333?text=${defaultMessage}%0A%0Aرابط الفاتورة: ${pdfUrl}`, '_blank');
+        
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+        document.body.removeChild(invoiceDiv);
+        // العودة للطريقة القديمة في حالة الخطأ
         const message = encodeURIComponent(
             `*⭐ معرض أبو عالية ⭐*\n` +
             `────────────────────────────\n` +
@@ -361,17 +466,22 @@ document.addEventListener('DOMContentLoaded', () => {
             `⏰ *الوقت:* ${time}\n` +
             `────────────────────────────\n` +
             `*تفاصيل الطلب:*\n\n` +
-            `${itemsList}\n\n` +
-            `💰 *المجموع الكلي:* ₪${totalAmount.toFixed(2)}\n` +
+            `${cart.map((item, index) => 
+                `🔹 *${index + 1}. ${item.name}*\n` +
+                `   - الكمية: ${item.quantity}\n` +
+                `   - السعر: ₪${item.price.toFixed(2)}\n` +
+                `   - الإجمالي: ₪${(item.price * item.quantity).toFixed(2)}`
+            ).join('\n\n')}\n\n` +
+            `💰 *المجموع الكلي:* ₪${cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}\n` +
             `────────────────────────────\n` +
             `*الاسم:* ____________________\n` +
             `*العنوان:* __________________\n` +
             `*طريقة الدفع:* ______________\n` +
             `*ملاحظات:* _________________`
         );
-
         window.open(`https://wa.me/972569813333?text=${message}`, '_blank');
-    });
+    }
+});
 
     // أحداث السلايدر
     const slider = document.querySelector('.slideshow-container');
