@@ -247,9 +247,36 @@
 .img-cell {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* عرض الصورة على اليمين */
+  justify-content: flex-start;
   gap: 15px;
   direction: rtl;
+  flex-wrap: wrap; /* يسمح بعناصر جديدة في نفس السطر */
+}
+
+.change-image-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap; /* يمنع كسر النص إلى سطور متعددة */
+  flex-shrink: 0; /* يمنع تصغير الزر */
+  order: -1; /* لجعل الزر يظهر قبل الصورة في الترتيب (للاتجاه RTL) */
+}
+
+.change-image-btn:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
+.change-image-btn i {
+  font-size: 0.7rem;
 }
 
 .img-preview {
