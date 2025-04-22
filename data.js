@@ -62,7 +62,7 @@ const products = [
     "category": "إضاءة خارجية",
     "name": "مصباح حديقة مقاوم للماء",
     "price": 44.5,
-    "image": "https://example.com/garden-light.jpg",
+    "image": "https://res.cloudinary.com/dygc5b8cn/image/upload/v1745307709/sif2kddhsab2goktrmdp.jpg",
     "discountedPrice": 50
   },
   {
