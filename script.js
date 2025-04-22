@@ -355,6 +355,23 @@ document.addEventListener('DOMContentLoaded', () => {
     invoiceDiv.style.backgroundColor = '#fff';
     invoiceDiv.dir = 'rtl';
     
+    // معالجة الصور قبل إضافتها
+    const processedCart = await Promise.all(cart.map(async (item) => {
+        try {
+            // التحقق من صحة رابط الصورة
+            const imgExists = await checkImageExists(item.image);
+            return {
+                ...item,
+                image: imgExists ? item.image : 'https://via.placeholder.com/80?text=No+Image'
+            };
+        } catch {
+            return {
+                ...item,
+                image: 'https://via.placeholder.com/80?text=No+Image'
+            };
+        }
+    }));
+
     invoiceDiv.innerHTML = `
         <style>
             .invoice-header { text-align: center; margin-bottom: 20px; }
@@ -388,9 +405,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 </tr>
             </thead>
             <tbody>
-                ${cart.map((item, index) => `
+                ${processedCart.map((item, index) => `
                     <tr>
-                        <td><img src="${item.image}" class="product-image" onerror="this.src='https://via.placeholder.com/80'"></td>
+                        <td><img src="${item.image}" class="product-image"></td>
                         <td>${item.name}</td>
                         <td>${item.quantity}</td>
                         <td>₪${item.price.toFixed(2)}</td>
@@ -399,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `).join('')}
                 <tr class="total-row">
                     <td colspan="4" style="text-align: left;">المجموع الكلي:</td>
-                    <td>₪${cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</td>
+                    <td>₪${processedCart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</td>
                 </tr>
             </tbody>
         </table>
@@ -416,7 +433,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
         // تحويل HTML إلى صورة باستخدام html2canvas
-        const canvas = await html2canvas(invoiceDiv);
+        const canvas = await html2canvas(invoiceDiv, {
+            useCORS: true, // هذا السطر مهم للتعامل مع الصور من مصادر خارجية
+            scale: 2 // لتحسين جودة الصورة
+        });
         document.body.removeChild(invoiceDiv);
 
         // إنشاء PDF
@@ -427,8 +447,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // إضافة الصورة إلى PDF
         const imgData = canvas.toDataURL('image/png');
-        const imgWidth = 210; // A4 width in mm
-        const pageHeight = 295; // A4 height in mm
+        const imgWidth = 210; // عرض A4 بالميليمتر
+        const pageHeight = 295; // ارتفاع A4 بالميليمتر
         const imgHeight = canvas.height * imgWidth / canvas.width;
         
         pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
@@ -437,23 +457,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const pdfBlob = pdf.output('blob');
         const pdfUrl = URL.createObjectURL(pdfBlob);
         
-        // إنشاء رابط الواتساب مع رسالة مرفقة
+        // إنشاء رسالة افتراضية
         const defaultMessage = encodeURIComponent(
             `السلام عليكم،\n` +
-            `أرسل لكم فاتورة الشراء من معرض أبو عالية\n` +
+            `أرفق لكم فاتورة الشراء من معرض أبو عالية\n` +
+            `تاريخ الفاتورة: ${date}\n` +
+            `المجموع الكلي: ₪${processedCart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}\n\n` +
             `يرجى مراجعتها والمتابعة معنا\n` +
             `شكراً لثقتكم بنا!`
         );
         
-        // إنشاء نموذج البيانات لإرسال الملف
-        const form = document.createElement('form');
-        form.action = `https://wa.me/972569813333?text=${defaultMessage}`;
-        form.method = 'POST';
-        form.enctype = 'multipart/form-data';
-        
-        // لن نتمكن من إرسال الملف مباشرة عبر الواتساب ويب
-        // لذا سنفتح نافذة جديدة مع رسالة ونوفر رابط لتحميل الفاتورة
-        window.open(`https://wa.me/972569813333?text=${defaultMessage}%0A%0Aرابط الفاتورة: ${pdfUrl}`, '_blank');
+        // فتح نافذة الواتساب مع رسالة ورابط الفاتورة
+        window.open(`https://wa.me/972569813333?text=${defaultMessage}%0A%0Aرابط الفاتورة: ${encodeURIComponent(pdfUrl)}`, '_blank');
         
     } catch (error) {
         console.error('Error generating PDF:', error);
@@ -466,13 +481,13 @@ document.addEventListener('DOMContentLoaded', () => {
             `⏰ *الوقت:* ${time}\n` +
             `────────────────────────────\n` +
             `*تفاصيل الطلب:*\n\n` +
-            `${cart.map((item, index) => 
+            `${processedCart.map((item, index) => 
                 `🔹 *${index + 1}. ${item.name}*\n` +
                 `   - الكمية: ${item.quantity}\n` +
                 `   - السعر: ₪${item.price.toFixed(2)}\n` +
                 `   - الإجمالي: ₪${(item.price * item.quantity).toFixed(2)}`
             ).join('\n\n')}\n\n` +
-            `💰 *المجموع الكلي:* ₪${cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}\n` +
+            `💰 *المجموع الكلي:* ₪${processedCart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}\n` +
             `────────────────────────────\n` +
             `*الاسم:* ____________________\n` +
             `*العنوان:* __________________\n` +
@@ -482,6 +497,16 @@ document.addEventListener('DOMContentLoaded', () => {
         window.open(`https://wa.me/972569813333?text=${message}`, '_blank');
     }
 });
+
+// دالة للتحقق من وجود الصورة
+async function checkImageExists(url) {
+    try {
+        const response = await fetch(url, { method: 'HEAD', mode: 'no-cors' });
+        return response.ok || (url.startsWith('data:image') || (url.startsWith('blob:'));
+    } catch {
+        return false;
+    }
+}
 
     // أحداث السلايدر
     const slider = document.querySelector('.slideshow-container');
