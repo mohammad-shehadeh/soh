@@ -475,10 +475,17 @@
   /* تكبير عمود "اسم الفئة" فقط */
   #categoriesTable th:nth-child(1),
   #categoriesTable td:nth-child(1) {
-    width: 35% !important;  /* زيادة العرض إلى 70% */
-    min-width: 160px;      /* أدنى عرض مضمون */
-    font-size: 1.1rem;     /* تكبير الخط قليلاً */
-    padding-right: 15px;   /* زيادة المساحة الداخلية */
+    width: 35% !important;
+    min-width: 100px;
+    font-size: 1.4rem;
+    padding-right: 15px;
+  }
+
+  /* تصغير عرض عمود الصورة */
+  #categoriesTable th:nth-child(2),
+  #categoriesTable td:nth-child(2) {
+    width: 20% !important;    /* تصغير العرض */
+    max-width: 60px;          /* تحديد أقصى عرض */
   }
 }
 
