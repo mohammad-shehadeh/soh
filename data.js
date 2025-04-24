@@ -46,20 +46,20 @@ const products = [
     "image": "https://wuilt-assets-v2-dev.s3.amazonaws.com/cl2777uly0044396zj2enh2r6_4fcbd7b6-cc4d-4b5c-b255-193930e460b0.jpg"
   },
   {
-    "category": "تريات كرستال",
+    "category": "ثريا معدن كلاسيك",
     "name": "ثريا كرستال طويل",
     "price": 2800,
     "image": "https://m.media-amazon.com/images/I/71nrcOr+VpL._AC_SL1500_.jpg"
   },
   {
-    "category": "مصابيح ليد",
+    "category": "مرستال",
     "name": "مصباح ليد 10 واط",
     "price": 70,
     "discountedPrice": 140,
     "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
   },
   {
-    "category": "إضاءة خارجية",
+    "category": "مرستال",
     "name": "مصباح حديقة مقاوم للماء",
     "price": 44.5,
     "image": "https://res.cloudinary.com/dygc5b8cn/image/upload/v1745307709/sif2kddhsab2goktrmdp.jpg",
