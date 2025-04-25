@@ -1668,14 +1668,22 @@ footer::before {
   background-clip: text;
   -webkit-text-fill-color: transparent;
 } /* جرادينت إنستغرام */
-.fa-tiktok { color: #000000; } /* أسود تيك توك */
+.fa-tiktok {
+  color: #ffffff; /* أبيض */
+  text-shadow: 
+    -2px -2px 0 #fe2d52, /* ظل أحمر (الجهة اليسرى) */
+    2px 2px 0 #25f4ee; /* ظل أزرق (الجهة اليمنى) */
+} /* تيك توك بألوانه الأصلية */
 .fa-whatsapp { color: #25d366; } /* أخضر واتساب */
 
 /* تأثير هافر (اختياري) */
 .fa-facebook:hover { color: #166fe5; }
 .fa-instagram:hover { opacity: 0.8; }
-.fa-tiktok:hover { color: #333333; }
+.fa-tiktok:hover {
+  text-shadow: 
+    -3px -3px 0 #fe2d52, 
+    3px 3px 0 #25f4ee;
+}
 .fa-whatsapp:hover { color: #128c7e; }
 
-  }
 }
