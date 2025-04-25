@@ -1527,3 +1527,23 @@ footer::before {
     transform: rotate(45deg) scale(1.08);
   }
 }
+
+/* تلوين أيقونات وسائل التواصل حسب ألوانها الرسمية */
+.fa-facebook { color: #1877f2; } /* أزرق فيسبوك */
+.fa-instagram { 
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+} /* جرادينت إنستغرام */
+.fa-tiktok { color: #000000; } /* أسود تيك توك */
+.fa-whatsapp { color: #25d366; } /* أخضر واتساب */
+
+/* تأثير هافر (اختياري) */
+.fa-facebook:hover { color: #166fe5; }
+.fa-instagram:hover { opacity: 0.8; }
+.fa-tiktok:hover { color: #333333; }
+.fa-whatsapp:hover { color: #128c7e; }
+
+  }
+}
