@@ -1,6 +1,6 @@
 const categories = [
   {
-    "name": "مرستال",
+    "name": "كرستال",
     "image": "https://res.cloudinary.com/dygc5b8cn/image/upload/v1745263564/v5hfdr3kmdmewvlfuchn.jpg"
   },
   {
@@ -39,6 +39,13 @@ const categories = [
 
 const products = [
   {
+    "category": "كرستال",
+    "name": "سايد لامب كريستال P6022-6",
+    "price": 1300,
+    "discountedPrice": null,
+    "image": "https://res.cloudinary.com/dygc5b8cn/image/upload/v1745651866/sb6iipofsj3tqrv661vh.jpg"
+  },
+  {
     "category": "تريات كرستال",
     "name": "ثريا كرستال",
     "price": 1700,
@@ -52,14 +59,14 @@ const products = [
     "image": "https://m.media-amazon.com/images/I/71nrcOr+VpL._AC_SL1500_.jpg"
   },
   {
-    "category": "مرستال",
+    "category": "كرستال",
     "name": "مصباح ليد 10 واط",
     "price": 70,
     "discountedPrice": 140,
     "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
   },
   {
-    "category": "مرستال",
+    "category": "كرستال",
     "name": "مصباح حديقة مقاوم للماء",
     "price": 44.5,
     "image": "https://res.cloudinary.com/dygc5b8cn/image/upload/v1745307709/sif2kddhsab2goktrmdp.jpg",
