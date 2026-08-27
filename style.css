@@ -60,8 +60,8 @@ header {
 }
 
 .logo {
-  width: 140px;
-  height: 100px;
+  width: 240px;
+  height: 140px;
   object-fit: contain;
   transition: transform 0.3s ease;
 }
