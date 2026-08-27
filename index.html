@@ -4,179 +4,224 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>VEN-DENS | متجر الإلكترونيات - فلسطين</title>
-  <meta name="description" content="VEN-DENS - متجر إلكترونيات بريطاني في فلسطين. نوفر أحدث الأجهزة الإلكترونية والكهربائية بأعلى جودة." />
+  <title>VEN-DENS | المتجر الرسمي للإلكترونيات - فلسطين</title>
+  <meta name="description" content="VEN-DENS - متجر إلكترونيات بريطاني رائد في فلسطين. نوفر أحدث الأجهزة الإلكترونية والملحقات الذكية بأعلى معايير الجودة." />
   <meta name="keywords" content="VEN-DENS, إلكترونيات, أجهزة كهربائية, متجر إلكترونيات, فلسطين, بيت لحم" />
   <meta name="author" content="VEN-DENS Palestine" />
 
-  <meta property="og:title" content="VEN-DENS | متجر الإلكترونيات - فلسطين" />
+  <!-- Open Graph / Facebook -->
+  <meta property="og:title" content="VEN-DENS | المتجر الرسمي للإلكترونيات - فلسطين" />
   <meta property="og:description" content="أجهزة إلكترونية وكهربائية عالية الجودة من VEN-DENS في فلسطين." />
   <meta property="og:image" content="https://cdn.phototourl.com/free/2026-08-27-cdcfb8e2-5e3d-4a8e-a106-53f4820d4860.webp" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://mohammad-shehadeh.github.io/soh/" />
 
   <link rel="icon" type="image/jpeg" href="https://cdn.phototourl.com/free/2026-08-27-cdcfb8e2-5e3d-4a8e-a106-53f4820d4860.webp" />
 
+  <!-- Stylesheets & Fonts -->
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
+
+  <!-- Header Section -->
   <header>
     <div class="top-bar">
       <div class="logo-container">
-        <img src="https://cdn.phototourl.com/free/2026-08-27-cdcfb8e2-5e3d-4a8e-a106-53f4820d4860.webp" alt="شعار VEN-DENS" class="logo" />
+        <a href="#">
+          <img src="https://cdn.phototourl.com/free/2026-08-27-cdcfb8e2-5e3d-4a8e-a106-53f4820d4860.webp" alt="شعار VEN-DENS" class="logo" />
+        </a>
       </div>
 
-      <div class="cart-container">
-        <button id="cart-button" aria-label="عربة التسوق">
-          <i class="fas fa-shopping-cart"></i>
-          <span id="cart-count">0</span>
+      <div class="header-actions">
+        <button id="cart-button" class="cart-button" aria-label="عربة التسوق">
+          <i class="fas fa-shopping-bag"></i>
+          <span>سلة الشراء</span>
+          <span id="cart-count" class="cart-badge">0</span>
         </button>
       </div>
     </div>
 
+    <!-- Navigation Bar / Categories -->
     <nav class="categories-scroll" aria-label="فئات المنتجات">
       <div class="categories-container" id="categories-container">
-        <!-- يتم تحميل الفئات هنا باستخدام JavaScript -->
+        <!-- يتم تحميل الفئات ديناميكياً باستخدام JavaScript -->
       </div>
     </nav>
   </header>
 
-  <br><br><br><br><br>
   <main>
-    <section class="hero" aria-label="منتجاتنا">
+    <!-- Hero Slider Section -->
+    <section class="hero" aria-label="منتجاتنا المميزة">
       <div class="slideshow-container">
         <div class="mySlides fade">
-          <img src="https://i.postimg.cc/6pT5CH5H/bbf83cae-9e99-469c-bfe5-9ccc76d13ff1.jpg" alt="أجهزة إلكترونية متطورة" style="width:100%" />
+          <img src="https://i.postimg.cc/6pT5CH5H/bbf83cae-9e99-469c-bfe5-9ccc76d13ff1.jpg" alt="أجهزة إلكترونية متطورة" />
+          <div class="slide-overlay">
+            <h2>إلكترونيات عصرية متطورة</h2>
+            <p>أحدث التقنيات العالمية بين يديك بأعلى معايير الجودة</p>
+          </div>
         </div>
         <div class="mySlides fade">
-          <img src="https://i.postimg.cc/cHR4TGcM/IMG-7219.jpg" alt="أحدث الأجهزة الكهربائية" style="width:100%" />
+          <img src="https://i.postimg.cc/cHR4TGcM/IMG-7219.jpg" alt="أحدث الأجهزة الكهربائية" />
+          <div class="slide-overlay">
+            <h2>تشكيلة واسعة من الملحقات</h2>
+            <p>حلول ذكية متكاملة لتسهيل حياتك اليومية</p>
+          </div>
         </div>
         <div class="mySlides fade">
-          <img src="https://i.postimg.cc/zfDjqqy3/IMG-7218.jpg" alt="منتجات موفرة للطاقة" style="width:100%" />
+          <img src="https://i.postimg.cc/zfDjqqy3/IMG-7218.jpg" alt="منتجات موفرة للطاقة" />
+          <div class="slide-overlay">
+            <h2>أداء فائق وكفاءة عالية</h2>
+            <p>استمتع بتجربة اقتناء منتجات أصيلة ومضمونة</p>
+          </div>
         </div>
-      </div>
 
-      <div class="dots-container">
-        <span class="dot" onclick="currentSlide(1)" aria-label="الشريحة 1"></span>
-        <span class="dot" onclick="currentSlide(2)" aria-label="الشريحة 2"></span>
-        <span class="dot" onclick="currentSlide(3)" aria-label="الشريحة 3"></span>
+        <div class="dots-container">
+          <span class="dot" onclick="currentSlide(1)" aria-label="الشريحة 1"></span>
+          <span class="dot" onclick="currentSlide(2)" aria-label="الشريحة 2"></span>
+          <span class="dot" onclick="currentSlide(3)" aria-label="الشريحة 3"></span>
+        </div>
       </div>
     </section>
 
+    <!-- Products Showcase Section -->
     <section class="products-section" aria-labelledby="products-title">
-      <h2 id="products-title">منتجاتنا</h2>
+      <div class="section-header">
+        <h2 id="products-title">معرض المنتجات</h2>
+        <p>استكشف التشكيلة المختارة من أفضل الأجهزة والملحقات الإلكترونية</p>
+      </div>
+
       <div class="products-container" id="products-container" role="list">
         <!-- سيتم تحميل المنتجات هنا باستخدام JavaScript -->
       </div>
+
+      <div class="filter-prompt">
+        <button class="details-btn"><i class="fas fa-hand-pointer"></i> اختر من التصنيفات أعلاه لعرض المنتجات المخصصة</button>
+      </div>
     </section>
 
-    <button class="details-btn">اختار من القائمة أعلاه لعرض المنتجات</button>
-
+    <!-- About Section -->
     <section class="about-section" aria-labelledby="about-heading">
-      <h2 id="about-heading">من نحن</h2>
-      <p>
-        <strong>VEN-DENS</strong> هي علامة تجارية بريطانية رائدة في مجال الإلكترونيات، تأسست في المملكة المتحدة منذ أكثر من عقدين. نفتخر اليوم بوجودنا في فلسطين، حيث نقدم لعملائنا أحدث الأجهزة الإلكترونية والكهربائية بأعلى معايير الجودة والموثوقية. 
-        <br><br>
-        في <strong>VEN-DENS فلسطين</strong>، نؤمن بأن التكنولوجيا يجب أن تكون في متناول الجميع، لذلك نحرص على توفير منتجات تجمع بين الأداء المتميز والسعر المناسب. تشمل مجموعتنا الواسعة: التلفزيونات الذكية، أنظمة الصوت، الأجهزة المنزلية، الإضاءة الحديثة، ومستلزمات الحاسب الآلي.
-        <br><br>
-        نلتزم بتقديم خدمة ما بعد البيع المتميزة، ونضمن لعملائنا الأصالة والجودة في كل منتج. نشكر ثقتكم بنا، ونتطلع لخدمتكم في فروعنا ببيت لحم والمناطق المجاورة.
-      </p>
+      <div class="about-container">
+        <div class="about-content">
+          <h2 id="about-heading">عن VEN-DENS</h2>
+          <div class="about-divider"></div>
+          <p>
+            <strong>VEN-DENS</strong> هي علامة تجارية بريطانية رائدة في عالم الإلكترونيات والتقنيات الذكية، تأسست في المملكة المتحدة وتوسعت لتضمن الوصول إلى الشرق الأوسط. نفتخر بوجودنا في فلسطين لنقدم لعملائنا الكرام أحدث التقنيات والأجهزة الذكية وفق أعلى معايير الجودة العالمية.
+          </p>
+          <p>
+            نحرص في <strong>VEN-DENS فلسطين</strong> على الموازنة المثالية بين الأداء الفائق والأسعار المنافسة. تتضمن مجموعتنا المتنوعة: إكسسوارات الهواتف المحمولة، التلفزيونات الذكية، أنظمة الصوت، والأجهزة المنزلية العصرية، مدعومة بخدمة ضمان ورعاية عملاء متميزة.
+          </p>
+          
+          <div class="about-features">
+            <div class="feature-item">
+              <i class="fas fa-shield-alt"></i>
+              <span>منتجات أصيلة 100%</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-truck-fast"></i>
+              <span>توصيل سريع لكافة المناطق</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-headset"></i>
+              <span>دعم فني وخدمة زبائن ممتازة</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
+  <!-- Shopping Cart Modal -->
   <div class="cart-modal" id="cart-modal" role="dialog" aria-modal="true" aria-labelledby="cart-title">
     <div class="modal-content">
-      <button class="close" aria-label="إغلاق العربة">&times;</button>
-      <br><br>
-      <h2 id="cart-title">عربة التسوق</h2>
+      <div class="modal-header">
+        <h2 id="cart-title"><i class="fas fa-shopping-basket"></i> عربة التسوق</h2>
+        <button class="close" aria-label="إغلاق العربة">&times;</button>
+      </div>
+
       <div class="cart-items" id="cart-items" role="list">
-        <!-- سيتم تحميل عناصر العربة هنا -->
+        <!-- سيتم تحميل عناصر العربة هنا عبر JS -->
       </div>
-      <div class="cart-total">
-        <strong>المجموع: $<span id="cart-total-price">0.00</span></strong>
+
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>الإجمالي الكلي:</span>
+          <strong>$<span id="cart-total-price">0.00</span></strong>
+        </div>
+        <button class="send-order-btn" id="send-order-btn">
+          <i class="fab fa-whatsapp"></i> تأكيد وإرسال الطلب عبر الواتساب
+        </button>
       </div>
-      <button class="send-order-btn" id="send-order-btn">
-        <i class="fab fa-whatsapp"></i> إرسال الطلب 
-      </button>
     </div>
   </div>
 
+  <!-- Footer Section -->
   <footer>
     <div class="footer-content">
+      <div class="footer-section main-info">
+        <img src="https://cdn.phototourl.com/free/2026-08-27-cdcfb8e2-5e3d-4a8e-a106-53f4820d4860.webp" alt="VEN-DENS Logo" class="footer-logo-img" />
+        <p>الفرع الرسمي لعلامة VEN-DENS البريطانية في فلسطين. جودة عالية وتكنولوجيا تثق بها.</p>
+        <div class="social-icons">
+          <a href="https://www.facebook.com/share/18o7iVmJAz/?mibextid=wwXIfr" aria-label="فيسبوك" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/sohaib_sharief?igsh=a25pOWg4Y3FhcTdk" aria-label="إنستغرام" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.tiktok.com/@sohaib_sharief?_t=ZM-8vfWK6kCpZn&_r=1" aria-label="تيك توك" target="_blank"><i class="fab fa-tiktok"></i></a>
+          <a href="https://wa.me/+972597258885" aria-label="واتساب" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+
       <div class="footer-section">
         <h3>تواصل معنا</h3>
-        <p><i class="fas fa-phone"></i> +972 597258885</p>
-        <p><i class="fas fa-phone"></i> +972 597258885</p>
-        <p><i class="fas fa-envelope"></i> info@vendenps.com</p>
-        <p><i class="fas fa-map-marker-alt"></i> بيت لحم، فلسطين</p>
+        <ul class="contact-info">
+          <li><i class="fas fa-phone-alt"></i> <span>+972 597258885</span></li>
+          <li><i class="fas fa-envelope"></i> <span>info@vendens.com</span></li>
+          <li><i class="fas fa-map-marker-alt"></i> <span>بيت لحم، فلسطين</span></li>
+        </ul>
       </div>
+
       <div class="footer-section">
         <h3>روابط سريعة</h3>
         <ul>
-          <li>
-            <a href="javascript:window.scrollTo(0,0); setTimeout(function(){ location.reload(true); }, 300);">
-              <i class="fas fa-home"></i> الرئيسية
-            </a>
-          </li>
-          <li>
-            <a href="https://maps.google.com/?q=31.695541,35.177929" target="_blank" rel="noopener noreferrer">
-              <i class="fas fa-map-marker-alt"></i> موقعنا
-            </a>
-          </li>
-          <li>
-            <a href="https://www.vendens.co.uk" target="_blank" rel="noopener noreferrer">
-              <i class="fas fa-globe"></i> الموقع الرسمي UK
-            </a>
-          </li>
+          <li><a href="javascript:window.scrollTo({top: 0, behavior: 'smooth'});"><i class="fas fa-chevron-left"></i> الرئيسية</a></li>
+          <li><a href="https://maps.google.com/?q=31.695541,35.177929" target="_blank" rel="noopener noreferrer"><i class="fas fa-chevron-left"></i> موقع الفروع</a></li>
+          <li><a href="https://www.vendens.co.uk" target="_blank" rel="noopener noreferrer"><i class="fas fa-chevron-left"></i> الموقع الرسمي UK</a></li>
         </ul>
       </div>
+
       <div class="footer-section">
         <h3>ساعات العمل</h3>
-        <p>الأحد - الخميس: 9:00 - 19:00</p>
-        <p>السبت: 9:00 - 14:00</p>
-        <p>الجمعة: مغلق</p>
-      </div>
-      <div class="footer-section">
-        <h3>تابعنا</h3>
-        <div class="social-icons">
-          <a href="https://www.facebook.com/share/18o7iVmJAz/?mibextid=wwXIfr" aria-label="فيسبوك"><i class="fab fa-facebook"></i></a>
-          <a href="https://www.instagram.com/sohaib_sharief?igsh=a25pOWg4Y3FhcTdk" aria-label="إنستغرام"><i class="fab fa-instagram"></i></a>
-          <a href="https://www.tiktok.com/@sohaib_sharief?_t=ZM-8vfWK6kCpZn&_r=1" aria-label="تيك توك" target="_blank">
-            <i class="fab fa-tiktok"></i>
-          </a>
-          <a href="https://wa.me/+972597258885" aria-label="واتساب" target="_blank">
-            <i class="fab fa-whatsapp"></i>
-          </a>
-        </div>
+        <ul class="working-hours">
+          <li><span>الأحد - الخميس:</span> <span>9:00 ص - 7:00 م</span></li>
+          <li><span>السبت:</span> <span>9:00 ص - 2:00 م</span></li>
+          <li><span>الجمعة:</span> <span class="closed">مغلق</span></li>
+        </ul>
         <div class="newsletter">
-          <h4>تواصل معنا</h4>
-          <form>
-            <input type="email" placeholder="بريدك الإلكتروني" />
+          <h4>اشترك في النشرة البريدية</h4>
+          <form onsubmit="event.preventDefault();">
+            <input type="email" placeholder="أدخل بريدك الإلكتروني" required />
             <button type="submit">اشتراك</button>
           </form>
         </div>
       </div>
     </div>
+
     <div class="footer-bottom">
-      <p>&copy; 2025 VEN-DENS فلسطين. جميع الحقوق محفوظة.</p>
-      <p>برمجة وتطوير: محمد شحادة</p>
-      <p class="payment-methods">
-        <i class="fab fa-cc-visa"></i>
-        <i class="fab fa-cc-mastercard"></i>
-        <i class="fab fa-cc-paypal"></i>
-        <i class="fab fa-cc-apple-pay"></i>
-        <img src="https://www.raya.ps/cached_uploads/resize/650/315/2019/09/04/pib-logo-01-2-1567576456.png" alt="Arab Bank">
-        <img src="https://reflectapp.com/wp-content/uploads/2022/02/reflectlogo1.png" alt="Reflect">
-      </p>
+      <p>&copy; 2026 <strong>VEN-DENS فلسطين</strong>. جميع الحقوق محفوظة.</p>
+      <p class="developer">برمجة وتطوير: <span>محمد شحادة</span></p>
+      <div class="payment-methods">
+        <i class="fab fa-cc-visa" title="Visa"></i>
+        <i class="fab fa-cc-mastercard" title="Mastercard"></i>
+        <i class="fab fa-cc-paypal" title="PayPal"></i>
+        <i class="fab fa-cc-apple-pay" title="Apple Pay"></i>
+        <img src="https://www.raya.ps/cached_uploads/resize/650/315/2019/09/04/pib-logo-01-2-1567576456.png" alt="Arab Bank" />
+        <img src="https://reflectapp.com/wp-content/uploads/2022/02/reflectlogo1.png" alt="Reflect" />
+      </div>
     </div>
   </footer>
 
+  <!-- Scripts -->
   <script src="data.js"></script>
   <script src="script.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
