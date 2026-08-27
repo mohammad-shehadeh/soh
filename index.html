@@ -35,18 +35,19 @@
     <div class="top-bar">
       <div class="logo-container">
         <img src="https://cdn.phototourl.com/free/2026-08-27-cdcfb8e2-5e3d-4a8e-a106-53f4820d4860.webp" alt="شعار متجر ابو عالية" class="logo" />
-        <a href="">
-  <h1 class="fancy-title">VEN-DENS</h1>
-</a>
+        <span class="store-name">VEN-DENS</span>
+        
+        <!-- تم نقل عربة التسوق هنا بجانب الشعار -->
+        <div class="cart-container">
+          <button id="cart-button" aria-label="عربة التسوق">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cart-count">0</span>
+          </button>
+        </div>
       </div>
 
-      <div class="cart-container">
-        <button id="cart-button" aria-label="عربة التسوق">
-          <i class="fas fa-shopping-cart"></i>
-          <span id="cart-count">0</span>
-        </button>
-      </div>
-    </div>
+      <!-- تم إزالة h1 من هنا -->
+    </div>   
 
     <nav class="categories-scroll" aria-label="فئات المنتجات">
       <div class="categories-container" id="categories-container">
