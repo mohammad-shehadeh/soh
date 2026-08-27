@@ -58,7 +58,7 @@ header {
   padding: 0.5rem 5%;
   max-width: 1440px;
   margin: 0 auto;
-  min-height: 130px;
+  min-height: 180px;
   height: auto;
   background: var(--white);
 }
@@ -68,8 +68,8 @@ header {
   display: flex;
   align-items: center;
   flex: 1 1 auto;
-  max-width: 70%;
-  min-width: 200px;
+  max-width: 100%;
+  min-width: 250px;
 }
 
 /* ===== الشعار - حجم كبير جداً ===== */
