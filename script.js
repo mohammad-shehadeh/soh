@@ -1,4 +1,4 @@
-// script.js - النسخة الكاملة مع التحكم في شريط الفئات
+// script.js - FINAL VERSION WITH SCROLL TO TOP BUTTON
 
 document.addEventListener('DOMContentLoaded', () => {
     let currentCategory = null;
@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
         slides: document.getElementsByClassName("mySlides"),
         dots: document.getElementsByClassName("dot"),
         categoriesScroll: document.querySelector('.categories-scroll'),
-        mainHeader: document.getElementById('main-header')
+        mainHeader: document.getElementById('main-header'),
+        detailsBtn: document.querySelector('.details-btn')
     };
 
     // وظائف التحكم في شريط الفئات
@@ -59,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         handleScroll: () => {
             const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-            const scrollThreshold = 50; // مسافة التمرير المطلوبة لإظهار الشريط
+            const scrollThreshold = 50;
             
             // إضافة ظل للهيدر عند التمرير
             if (currentScroll > 20) {
@@ -70,14 +71,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // منطق إظهار/إخفاء شريط الفئات
             if (currentScroll <= 20) {
-                // عندما نكون في أعلى الصفحة - إخفاء الشريط
+                // في أعلى الصفحة - إخفاء الشريط
                 CategoriesVisibility.hide();
             } else if (currentScroll > scrollThreshold) {
-                // عند التمرير للأسفل أو للأعلى - إظهار الشريط
+                // عند التمرير للأسفل - إظهار الشريط
                 CategoriesVisibility.show();
             }
 
             lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+        }
+    };
+
+    // وظيفة زر التمرير للأعلى
+    const setupScrollToTopButton = () => {
+        if (elements.detailsBtn) {
+            elements.detailsBtn.addEventListener('click', () => {
+                // إظهار شريط الفئات
+                CategoriesVisibility.show();
+                
+                // التمرير للأعلى
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                // إضافة تأثير تمييز بعد الوصول
+                setTimeout(() => {
+                    CategoriesVisibility.show();
+                    
+                    // إضافة تأثير بصري مؤقت
+                    elements.categoriesScroll.style.animation = 'highlightCategories 1s ease';
+                    setTimeout(() => {
+                        elements.categoriesScroll.style.animation = '';
+                    }, 1000);
+                }, 500);
+            });
         }
     };
 
@@ -479,15 +507,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // التهيئة الأولية
-    CategoriesVisibility.init();
-    Products.loadCategories();
-    Cart.update();
-    Slider.init();
+    const init = () => {
+        CategoriesVisibility.init();
+        Products.loadCategories();
+        Cart.update();
+        Slider.init();
+        setupScrollToTopButton();
 
-    // إضافة مستمع للتمرير
-    window.addEventListener('scroll', () => {
-        CategoriesVisibility.handleScroll();
-    });
+        // إضافة مستمع للتمرير
+        window.addEventListener('scroll', () => {
+            CategoriesVisibility.handleScroll();
+        });
+    };
+
+    init();
 });
 
 window.addEventListener('load', () => {
