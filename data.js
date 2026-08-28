@@ -1,19 +1,19 @@
 const categories = [
   {
-    "name": "كرستال",
-    "image": "https://res.cloudinary.com/dygc5b8cn/image/upload/v1745263564/v5hfdr3kmdmewvlfuchn.jpg"
+    "name": "USB drive",
+    "image": "https://cdn.phototourl.com/free/2026-08-28-71423df7-3e75-41b1-a1e7-532e0477b0d9.jpg"
   },
   {
-    "name": "المسار المغناطيسي",
-    "image": "https://i.postimg.cc/NMRCyxN1/IMG-7308.jpg"
+    "name": "power bank",
+    "image": "https://cdn.phototourl.com/free/2026-08-28-f0c9cc4c-2909-484a-9fbf-cbf590a01dbc.jpg"
   },
   {
-    "name": "ثريا معدن كلاسيك",
-    "image": "https://i.postimg.cc/HxVfv5sK/IMG-7307.jpg"
+    "name": "Airpods",
+    "image": "https://i.postimg.cc/RFxhsrCK/IMG-2012.webp"
   },
   {
-    "name": "ثريا ليد موديرن",
-    "image": "https://i.postimg.cc/Qd3DwGhg/IMG-7305.jpg"
+    "name": "Cable",
+    "image": "https://i.postimg.cc/fTRLgfsB/IMG-2013.webp"
   },
   {
     "name": "تريات كرستال",
