@@ -20,20 +20,8 @@ const categories = [
     "image": "https://i.postimg.cc/C5jXbxw7/IMG-2035.jpg"
   },
   {
-    "name": "حبل انارة مخفية 220 فولت",
-    "image": "https://i.postimg.cc/MTwBn7xK/IMG-7208.jpg"
-  },
-  {
-    "name": "إضاءة خارجية",
-    "image": "https://cdn.salla.sa/KjYjdb/0lYORcT8H8NPYnGNp1sQbYZfLT6DSnWdD2TFiPTD.jpg"
-  },
-  {
-    "name": "إضاءة داخلية",
-    "image": "https://cdn.salla.sa/WRneP/JIWbcJ7b4MZuYJMXNnp9ifrb18AmvbTGlDIEglI1.jpg"
-  },
-  {
-    "name": "إضاءة مكتبية",
-    "image": "https://m.media-amazon.com/images/I/61jl27ilxtL.jpg"
+    "name": "abc",
+    "image": "gggggg"
   }
 ];
 
