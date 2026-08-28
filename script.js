@@ -1,10 +1,12 @@
-// script.js - COMPLETE FIXED VERSION
+// script.js - النسخة الكاملة مع التحكم في شريط الفئات
 
 document.addEventListener('DOMContentLoaded', () => {
     let currentCategory = null;
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let slideIndex = 0;
     let slideInterval = null;
+    let lastScrollTop = 0;
+    let isCategoriesVisible = false;
 
     // عناصر DOM
     const elements = {
@@ -18,7 +20,65 @@ document.addEventListener('DOMContentLoaded', () => {
         closeCartBtn: document.querySelector('.close'),
         cartButton: document.getElementById('cart-button'),
         slides: document.getElementsByClassName("mySlides"),
-        dots: document.getElementsByClassName("dot")
+        dots: document.getElementsByClassName("dot"),
+        categoriesScroll: document.querySelector('.categories-scroll'),
+        mainHeader: document.getElementById('main-header')
+    };
+
+    // وظائف التحكم في شريط الفئات
+    const CategoriesVisibility = {
+        init: () => {
+            // إخفاء الشريط في البداية
+            elements.categoriesScroll.style.maxHeight = '0';
+            elements.categoriesScroll.style.opacity = '0';
+            elements.categoriesScroll.style.padding = '0';
+            elements.categoriesScroll.style.borderBottom = 'none';
+            elements.categoriesScroll.style.overflow = 'hidden';
+            elements.categoriesScroll.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+        },
+
+        show: () => {
+            if (!isCategoriesVisible) {
+                elements.categoriesScroll.style.maxHeight = '110px';
+                elements.categoriesScroll.style.opacity = '1';
+                elements.categoriesScroll.style.padding = '0.6rem 0';
+                elements.categoriesScroll.style.borderBottom = '2px solid var(--primary)';
+                isCategoriesVisible = true;
+            }
+        },
+
+        hide: () => {
+            if (isCategoriesVisible) {
+                elements.categoriesScroll.style.maxHeight = '0';
+                elements.categoriesScroll.style.opacity = '0';
+                elements.categoriesScroll.style.padding = '0';
+                elements.categoriesScroll.style.borderBottom = 'none';
+                isCategoriesVisible = false;
+            }
+        },
+
+        handleScroll: () => {
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollThreshold = 50; // مسافة التمرير المطلوبة لإظهار الشريط
+            
+            // إضافة ظل للهيدر عند التمرير
+            if (currentScroll > 20) {
+                elements.mainHeader.classList.add('scrolled');
+            } else {
+                elements.mainHeader.classList.remove('scrolled');
+            }
+
+            // منطق إظهار/إخفاء شريط الفئات
+            if (currentScroll <= 20) {
+                // عندما نكون في أعلى الصفحة - إخفاء الشريط
+                CategoriesVisibility.hide();
+            } else if (currentScroll > scrollThreshold) {
+                // عند التمرير للأسفل أو للأعلى - إظهار الشريط
+                CategoriesVisibility.show();
+            }
+
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+        }
     };
 
     // وظائف عرض الرسائل
@@ -187,7 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3>${category.name}</h3>
                 `;
                 categoryElement.addEventListener('click', () => {
-                    // تحديث الفئة النشطة
                     document.querySelectorAll('.category-card').forEach(card => {
                         card.classList.remove('active');
                     });
@@ -321,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
         handleTouch: (startX, endX) => {
             const diffX = startX - endX;
             if (Math.abs(diffX) > 50) {
-                Slider.startAutoSlide(); // إعادة تشغيل المؤقت
+                Slider.startAutoSlide();
                 if (diffX > 0) {
                     Slider.nextSlide();
                 } else {
@@ -420,9 +479,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // التهيئة الأولية
+    CategoriesVisibility.init();
     Products.loadCategories();
     Cart.update();
     Slider.init();
+
+    // إضافة مستمع للتمرير
+    window.addEventListener('scroll', () => {
+        CategoriesVisibility.handleScroll();
+    });
 });
 
 window.addEventListener('load', () => {
