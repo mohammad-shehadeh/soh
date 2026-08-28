@@ -1,11 +1,10 @@
-// script.js
+// script.js - COMPLETE FIXED VERSION
 
 document.addEventListener('DOMContentLoaded', () => {
     let currentCategory = null;
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     let slideIndex = 0;
     let slideInterval = null;
-    let isSliding = false; // متغير لتتبع حالة الانتقال بين الشرائح
 
     // عناصر DOM
     const elements = {
@@ -22,46 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
         dots: document.getElementsByClassName("dot")
     };
 
-    // وظائف إدارة الواجهة
+    // وظائف عرض الرسائل
     const UI = {
-        updateAddToCartButtons: () => {
-            document.querySelectorAll('.add-to-cart').forEach(button => {
-                const productName = button.dataset.id;
-                const cartItem = cart.find(item => item.name === productName);
-                button.innerHTML = cartItem ? 
-                    `<span class="quantity-controls">
-                        <button class="decrement">-</button>
-                        <span class="quantity">${cartItem.quantity}</span>
-                        <button class="increment">+</button>
-                    </span>` : 
-                    'إضافة للسلة';
-                
-                if (cartItem) {
-                    button.querySelector('.decrement').addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        Cart.decreaseQuantity(cart.indexOf(cartItem));
-                    });
-                    
-                    button.querySelector('.increment').addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        Cart.increaseQuantity(cart.indexOf(cartItem));
-                    });
-                }
-            });
-        },
-
         showToast: (message) => {
-            const arabicMessages = {
-                'added': 'تمت الإضافة إلى السلة',
-                'removed': 'تم الحذف من السلة',
-                'added to cart': 'تمت الإضافة إلى السلة',
-                'removed from cart': 'تم الحذف من السلة'
-            };
-
-            const toastMessage = arabicMessages[message.toLowerCase()] || message;
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.textContent = toastMessage;
+            toast.textContent = message;
             document.body.appendChild(toast);
             
             setTimeout(() => {
@@ -70,6 +35,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     toast.remove();
                 }, 3000);
             }, 100);
+        },
+
+        updateAddToCartButtons: () => {
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                const productName = button.dataset.id;
+                const cartItem = cart.find(item => item.name === productName);
+                
+                if (cartItem) {
+                    button.innerHTML = `
+                        <span class="quantity-controls">
+                            <button class="decrement">-</button>
+                            <span class="quantity">${cartItem.quantity}</span>
+                            <button class="increment">+</button>
+                        </span>
+                    `;
+                    
+                    button.querySelector('.decrement').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const index = cart.indexOf(cartItem);
+                        Cart.decreaseQuantity(index);
+                    });
+                    
+                    button.querySelector('.increment').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const index = cart.indexOf(cartItem);
+                        Cart.increaseQuantity(index);
+                    });
+                } else {
+                    button.textContent = 'إضافة للسلة';
+                }
+            });
         },
 
         createCartItemElement: (item, index) => {
@@ -123,14 +119,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 cart.push({ ...product, quantity: 1 });
             }
             Cart.update();
-            UI.showToast(`${product.name} added to cart`);
+            UI.showToast('تمت الإضافة إلى السلة');
         },
 
         removeItem: (index) => {
-            const itemName = cart[index].name;
             cart.splice(index, 1);
             Cart.update();
-            UI.showToast(`${itemName} removed from cart`);
+            UI.showToast('تم الحذف من السلة');
         },
 
         increaseQuantity: (index) => {
@@ -160,10 +155,14 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.cartItems.innerHTML = '';
             let total = 0;
             
-            cart.forEach((item, index) => {
-                elements.cartItems.appendChild(UI.createCartItemElement(item, index));
-                total += item.price * item.quantity;
-            });
+            if (cart.length === 0) {
+                elements.cartItems.innerHTML = '<p style="text-align:center;padding:2rem;color:#9CA3AF;">السلة فارغة</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    elements.cartItems.appendChild(UI.createCartItemElement(item, index));
+                    total += item.price * item.quantity;
+                });
+            }
             
             elements.cartTotal.textContent = total.toFixed(2);
             UI.updateAddToCartButtons();
@@ -174,6 +173,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const Products = {
         loadCategories: () => {
             elements.categoriesContainer.innerHTML = '';
+            
+            if (typeof categories === 'undefined') {
+                console.error('Categories data not found');
+                return;
+            }
+            
             categories.forEach(category => {
                 const categoryElement = document.createElement('div');
                 categoryElement.className = 'category-card';
@@ -181,7 +186,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <img src="${category.image}" alt="${category.name}">
                     <h3>${category.name}</h3>
                 `;
-                categoryElement.addEventListener('click', () => Products.filterByCategory(category.name));
+                categoryElement.addEventListener('click', () => {
+                    // تحديث الفئة النشطة
+                    document.querySelectorAll('.category-card').forEach(card => {
+                        card.classList.remove('active');
+                    });
+                    categoryElement.classList.add('active');
+                    Products.filterByCategory(category.name);
+                });
                 elements.categoriesContainer.appendChild(categoryElement);
             });
         },
@@ -191,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             Products.loadProducts();
             
             setTimeout(() => {
-                const firstProduct = document.querySelector('.product-card:first-child');
+                const firstProduct = document.querySelector('.product-card');
                 if (firstProduct) {
                     const yOffset = 270;
                     const y = firstProduct.getBoundingClientRect().top + window.pageYOffset - yOffset;
@@ -206,6 +218,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         loadProducts: () => {
             elements.productsContainer.innerHTML = '';
+            
+            if (typeof products === 'undefined') {
+                console.error('Products data not found');
+                return;
+            }
+            
             const filteredProducts = currentCategory
                 ? products.filter(p => p.category === currentCategory)
                 : products;
@@ -215,18 +233,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const originalPrice = product.discountedPrice ?? salePrice;
                 const hasDiscount = originalPrice > salePrice;
                 const isAvailable = salePrice > 0;
-                const buttonText = isAvailable ? '' : 'غير متوفر';
-                const buttonClass = isAvailable ? 'add-to-cart' : 'add-to-cart unavailable';
 
                 const productCard = document.createElement('div');
                 productCard.className = 'product-card';
 
                 productCard.innerHTML = `
-                    ${hasDiscount ? `<div class="discount-label">SALE</div>` : ''}
+                    ${hasDiscount ? '<div class="discount-label">SALE</div>' : ''}
                     <img src="${product.image}" alt="${product.name}">
                     <h3>${product.name}</h3>
-                    <p class="price ${hasDiscount ? 'on-sale' : (isAvailable ? '' : 'unavailable')}"
-                       ${isAvailable ? '' : 'data-unavailable="true"'}>
+                    <p class="price ${hasDiscount ? 'on-sale' : (isAvailable ? '' : 'unavailable')}">
                         ${
                             hasDiscount
                                 ? `<span class="original-price">₪${originalPrice.toFixed(2)}</span>
@@ -237,10 +252,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                   )
                         }
                     </p>
-                    <button class="${buttonClass}"
+                    <button class="add-to-cart ${isAvailable ? '' : 'unavailable'}"
                             data-id="${product.name}"
                             ${isAvailable ? '' : 'disabled'}>
-                        ${buttonText}
+                        ${isAvailable ? 'إضافة للسلة' : 'غير متوفر'}
                     </button>
                 `;
 
@@ -271,60 +286,68 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         startAutoSlide: () => {
-            clearInterval(slideInterval);
+            if (slideInterval) {
+                clearInterval(slideInterval);
+            }
             slideInterval = setInterval(() => {
-                if (!isSliding) {
-                    Slider.nextSlide();
-                }
+                Slider.nextSlide();
             }, 3000);
         },
 
         nextSlide: () => {
-            isSliding = true;
             slideIndex = (slideIndex + 1) % elements.slides.length;
             Slider.showSlide(slideIndex);
-            setTimeout(() => {
-                isSliding = false;
-            }, 700); // يتطابق مع مدة الانتقال في CSS
         },
 
         prevSlide: () => {
-            isSliding = true;
             slideIndex = (slideIndex - 1 + elements.slides.length) % elements.slides.length;
             Slider.showSlide(slideIndex);
-            setTimeout(() => {
-                isSliding = false;
-            }, 700);
         },
 
         showSlide: (index) => {
             for (let i = 0; i < elements.slides.length; i++) {
                 elements.slides[i].style.display = "none";
-                elements.dots[i].classList.remove("active");
+                if (elements.dots[i]) {
+                    elements.dots[i].classList.remove("active");
+                }
             }
             
             elements.slides[index].style.display = "block";
-            elements.dots[index].classList.add("active");
+            if (elements.dots[index]) {
+                elements.dots[index].classList.add("active");
+            }
         },
 
         handleTouch: (startX, endX) => {
             const diffX = startX - endX;
             if (Math.abs(diffX) > 50) {
-                clearInterval(slideInterval);
+                Slider.startAutoSlide(); // إعادة تشغيل المؤقت
                 if (diffX > 0) {
                     Slider.nextSlide();
                 } else {
                     Slider.prevSlide();
                 }
-                Slider.startAutoSlide();
             }
         }
     };
 
+    // أحداث النقر على النقاط
+    if (elements.dots.length > 0) {
+        Array.from(elements.dots).forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                slideIndex = index;
+                Slider.showSlide(slideIndex);
+                Slider.startAutoSlide();
+            });
+        });
+    }
+
     // أحداث السلة
     elements.cartButton.addEventListener('click', () => {
         elements.cartModal.style.display = 'block';
-        clearInterval(slideInterval);
+        if (slideInterval) {
+            clearInterval(slideInterval);
+        }
     });
 
     elements.closeCartBtn.addEventListener('click', () => {
@@ -341,6 +364,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // إرسال الطلب عبر واتساب
     elements.sendOrderBtn.addEventListener('click', () => {
+        if (cart.length === 0) {
+            UI.showToast('السلة فارغة');
+            return;
+        }
+        
         const now = new Date();
         const date = now.toLocaleDateString('ar-EG');
         const time = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
@@ -355,7 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
         const message = encodeURIComponent(
-            `*⭐ معرض أبو عالية ⭐*\n` +
+            `*⭐ VEN-DENS ⭐*\n` +
             `────────────────────────────\n` +
             `🗓️ *التاريخ:* ${date}\n` +
             `⏰ *الوقت:* ${time}\n` +
@@ -370,22 +398,26 @@ document.addEventListener('DOMContentLoaded', () => {
             `*ملاحظات:* _________________`
         );
 
-        window.open(`https://wa.me/972569813333?text=${message}`, '_blank');
+        window.open(`https://wa.me/972597258885?text=${message}`, '_blank');
     });  
 
-    // أحداث السلايدر
+    // أحداث اللمس للسلايدر
     const slider = document.querySelector('.slideshow-container');
-    let touchStartX = 0;
+    if (slider) {
+        let touchStartX = 0;
 
-    slider.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        clearInterval(slideInterval);
-    });
+        slider.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            if (slideInterval) {
+                clearInterval(slideInterval);
+            }
+        });
 
-    slider.addEventListener('touchend', (e) => {
-        const touchEndX = e.changedTouches[0].clientX;
-        Slider.handleTouch(touchStartX, touchEndX);
-    });
+        slider.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            Slider.handleTouch(touchStartX, touchEndX);
+        });
+    }
 
     // التهيئة الأولية
     Products.loadCategories();
