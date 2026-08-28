@@ -1,5 +1,5 @@
 /* ==========================================================================
-   VEN-DENS E-COMMERCE OFFICIAL THEME - COMPLETE FIXED VERSION
+   VEN-DENS E-COMMERCE OFFICIAL THEME - FINAL VERSION
    ========================================================================== */
 
 /* ===== RESET & ROOT VARIABLES ===== */
@@ -145,13 +145,8 @@ header.scrolled {
   background: var(--white);
   border-top: 1px solid var(--gray-100);
   border-bottom: 2px solid var(--primary);
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.categories-scroll::-webkit-scrollbar {
-  display: none;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .categories-container {
@@ -160,6 +155,14 @@ header.scrolled {
   padding: 0.6rem 4%;
   max-width: 1400px;
   margin: 0 auto;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.categories-container::-webkit-scrollbar {
+  display: none;
 }
 
 .category-card {
@@ -506,28 +509,88 @@ header.scrolled {
   margin-top: 2.5rem;
 }
 
+/* ===== DETAILS BUTTON - SCROLL TO TOP ===== */
 .details-btn {
-  background: linear-gradient(135deg, var(--gray-100) 0%, var(--gray-200) 100%);
-  color: var(--gray-800);
-  border: 2px solid var(--gray-200);
-  padding: 0.8rem 1.8rem;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: var(--white);
+  border: none;
+  padding: 1rem 2rem;
   border-radius: var(--radius-full);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 700;
   font-family: 'Cairo', sans-serif;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.8rem;
   transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-red);
+  animation: pulseButton 2s infinite;
+}
+
+.details-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.details-btn:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .details-btn:hover {
-  background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
-  border-color: var(--primary);
-  color: var(--primary);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(200, 16, 46, 0.4);
+  animation: none;
+}
+
+.details-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(200, 16, 46, 0.3);
+}
+
+.details-btn i {
+  font-size: 1.2rem;
+  animation: bounceArrow 1.5s infinite;
+}
+
+@keyframes bounceArrow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulseButton {
+  0%, 100% {
+    box-shadow: 0 8px 20px rgba(200, 16, 46, 0.25);
+  }
+  50% {
+    box-shadow: 0 8px 30px rgba(200, 16, 46, 0.45);
+  }
+}
+
+@keyframes highlightCategories {
+  0%, 100% {
+    background: var(--white);
+  }
+  50% {
+    background: #FFF3F5;
+    box-shadow: 0 0 20px rgba(200, 16, 46, 0.2);
+  }
 }
 
 /* ===== ABOUT SECTION ===== */
@@ -1137,6 +1200,11 @@ footer {
   .modal-content {
     margin: 1rem auto;
   }
+
+  .details-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1147,5 +1215,10 @@ footer {
   
   .product-card h3 {
     font-size: 0.8rem;
+  }
+
+  .details-btn {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.85rem;
   }
 }
