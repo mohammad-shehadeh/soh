@@ -16,8 +16,8 @@ const categories = [
     "image": "https://i.postimg.cc/fTRLgfsB/IMG-2013.webp"
   },
   {
-    "name": "تريات كرستال",
-    "image": "https://m.media-amazon.com/images/I/71gTDrRvIOL._AC_UF1000,1000_QL80_.jpg"
+    "name": "Holder",
+    "image": "https://i.postimg.cc/C5jXbxw7/IMG-2035.jpg"
   },
   {
     "name": "حبل انارة مخفية 220 فولت",
