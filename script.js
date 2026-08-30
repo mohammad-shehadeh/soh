@@ -1,4 +1,4 @@
-// script.js - FINAL VERSION WITH SCROLL TO TOP BUTTON
+// script.js - FINAL VERSION WITH SCROLL TO TOP BUTTON & OUT OF STOCK HANDLING
 
 document.addEventListener('DOMContentLoaded', () => {
     let currentCategory = null;
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         updateAddToCartButtons: () => {
-            document.querySelectorAll('.add-to-cart').forEach(button => {
+            document.querySelectorAll('.add-to-cart:not(.unavailable)').forEach(button => {
                 const productName = button.dataset.id;
                 const cartItem = cart.find(item => item.name === productName);
                 
@@ -200,6 +200,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // وظائف عربة التسوق
     const Cart = {
         addItem: (product) => {
+            // التحقق من أن المنتج متوفر (price !== null)
+            if (product.price === null || product.price === undefined || product.price <= 0) {
+                UI.showToast('هذا المنتج غير متوفر حالياً');
+                return;
+            }
+            
             const existingItem = cart.find(item => item.name === product.name);
             if (existingItem) {
                 existingItem.quantity++;
@@ -316,28 +322,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 : products;
 
             filteredProducts.forEach(product => {
-                const salePrice = product.price;
+                // التحقق من توفر المنتج (price !== null)
+                const isAvailable = product.price !== null && product.price !== undefined && product.price > 0;
+                
+                // السعر الفعلي (للبيع)
+                const salePrice = isAvailable ? product.price : 0;
+                
+                // السعر الأصلي (قبل الخصم)
                 const originalPrice = product.discountedPrice ?? salePrice;
-                const hasDiscount = originalPrice > salePrice;
-                const isAvailable = salePrice > 0;
+                
+                // التحقق من وجود خصم
+                const hasDiscount = isAvailable && originalPrice > salePrice;
 
                 const productCard = document.createElement('div');
                 productCard.className = 'product-card';
+
+                let priceHTML = '';
+                if (isAvailable) {
+                    if (hasDiscount) {
+                        priceHTML = `
+                            <span class="original-price">₪${originalPrice.toFixed(2)}</span>
+                            <span class="selling-price">₪${salePrice.toFixed(2)}</span>
+                        `;
+                    } else {
+                        priceHTML = `₪${salePrice.toFixed(2)}`;
+                    }
+                } else {
+                    priceHTML = 'نفذ من المخزون';
+                }
 
                 productCard.innerHTML = `
                     ${hasDiscount ? '<div class="discount-label">SALE</div>' : ''}
                     <img src="${product.image}" alt="${product.name}">
                     <h3>${product.name}</h3>
                     <p class="price ${hasDiscount ? 'on-sale' : (isAvailable ? '' : 'unavailable')}">
-                        ${
-                            hasDiscount
-                                ? `<span class="original-price">₪${originalPrice.toFixed(2)}</span>
-                                   <span class="selling-price">₪${salePrice.toFixed(2)}</span>`
-                                : (isAvailable
-                                    ? `₪${salePrice.toFixed(2)}`
-                                    : 'غير متوفر حالياً'
-                                  )
-                        }
+                        ${priceHTML}
                     </p>
                     <button class="add-to-cart ${isAvailable ? '' : 'unavailable'}"
                             data-id="${product.name}"
