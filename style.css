@@ -131,7 +131,7 @@ header.scrolled {
 
 .cart-badge {
   background: var(--white);
-  color: #ffffff;
+color: var(--accent);
   border-radius: var(--radius-full);
   padding: 0.15rem 0.6rem;
   font-size: 0.85rem;
