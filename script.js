@@ -354,10 +354,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (discountedPrice !== null && discountedPrice !== undefined && discountedPrice > 0) {
                         priceHTML = `
                             <span style="text-decoration: line-through; color: var(--gray-400);">₪${discountedPrice.toFixed(2)}</span>
-                            <span style="color: var(--gray-600); font-weight: 700; margin-right: 8px;">نفذ من المخزون</span>
+                            <span style="color: var(--gray-600); font-weight: 700; margin-right: 8px;">sold out</span>
                         `;
                     } else {
-                        priceHTML = 'نفذ من المخزون';
+                        priceHTML = ' sold out ';
                     }
                 }
 
