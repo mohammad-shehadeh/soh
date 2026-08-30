@@ -131,7 +131,7 @@ header.scrolled {
 
 .cart-badge {
   background: var(--white);
-color: var(--accent);
+color: var(--primary);
   border-radius: var(--radius-full);
   padding: 0.15rem 0.6rem;
   font-size: 0.85rem;
@@ -437,7 +437,7 @@ color: var(--accent);
 .add-to-cart {
   margin: 0 1rem 1rem;
   padding: 0.7rem;
-  background: var(--gray-900);
+  background: var(--white);
   color: var(--white);
   border: none;
   border-radius: var(--radius-sm);
