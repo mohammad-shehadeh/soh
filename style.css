@@ -437,7 +437,7 @@ color: var(--primary);
 .add-to-cart {
   margin: 0 1rem 1rem;
   padding: 0.7rem;
-  background: var(--white);
+  background: var(--gray-900);
   color: var(--white);
   border: none;
   border-radius: var(--radius-sm);
@@ -458,8 +458,8 @@ color: var(--primary);
 }
 
 .add-to-cart.unavailable {
-  background: var(--gray-200);
-  color: var(--gray-400);
+  background: var(--red);
+  color: var(--green);
   cursor: not-allowed;
 }
 
