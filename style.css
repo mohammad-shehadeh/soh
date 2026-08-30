@@ -458,8 +458,8 @@ color: var(--primary);
 }
 
 .add-to-cart.unavailable {
-  background: var(--red);
-  color: var(--green);
+  background: var(--gray-200);
+  color: var(--gray-400);
   cursor: not-allowed;
 }
 
