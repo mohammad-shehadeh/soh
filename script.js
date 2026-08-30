@@ -326,29 +326,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isAvailable = product.price !== null && product.price !== undefined && product.price > 0;
                 
                 // السعر الفعلي (للبيع)
-                const salePrice = isAvailable ? product.price : 0;
+                const salePrice = isAvailable ? product.price : null;
                 
-                // السعر الأصلي (قبل الخصم)
-                const originalPrice = product.discountedPrice ?? salePrice;
+                // السعر المخفض (السعر الأصلي)
+                const discountedPrice = product.discountedPrice ?? product.price;
                 
                 // التحقق من وجود خصم
-                const hasDiscount = isAvailable && originalPrice > salePrice;
+                const hasDiscount = isAvailable && discountedPrice > salePrice;
 
                 const productCard = document.createElement('div');
                 productCard.className = 'product-card';
 
                 let priceHTML = '';
+                
                 if (isAvailable) {
+                    // المنتج متوفر
                     if (hasDiscount) {
                         priceHTML = `
-                            <span class="original-price">₪${originalPrice.toFixed(2)}</span>
+                            <span class="original-price">₪${discountedPrice.toFixed(2)}</span>
                             <span class="selling-price">₪${salePrice.toFixed(2)}</span>
                         `;
                     } else {
                         priceHTML = `₪${salePrice.toFixed(2)}`;
                     }
                 } else {
-                    priceHTML = 'نفذ من المخزون';
+                    // المنتج غير متوفر - عرض السعر المخفض مع عبارة "نفذ من المخزون"
+                    if (discountedPrice !== null && discountedPrice !== undefined && discountedPrice > 0) {
+                        priceHTML = `
+                            <span style="text-decoration: line-through; color: var(--gray-400);">₪${discountedPrice.toFixed(2)}</span>
+                            <span style="color: var(--gray-600); font-weight: 700; margin-right: 8px;">نفذ من المخزون</span>
+                        `;
+                    } else {
+                        priceHTML = 'نفذ من المخزون';
+                    }
                 }
 
                 productCard.innerHTML = `
