@@ -36,7 +36,7 @@ const products = [
   {
     "category": "power bank",
     "name": "ثريا كرستال",
-    "price": aaa,
+    "price": null,
     "discountedPrice": 2200,
     "image": "https://wuilt-assets-v2-dev.s3.amazonaws.com/cl2777uly0044396zj2enh2r6_4fcbd7b6-cc4d-4b5c-b255-193930e460b0.jpg"
   },
